@@ -25,7 +25,7 @@ import { PhosphorIcon } from "../Icon/PhosphorIcon"
 
 export interface TextFieldAccessoryProps {
   style: StyleProp<any>
-  status: TextFieldProps["status"]
+  status: "error" | "disabled"
   multiline: boolean
   editable: boolean
 }

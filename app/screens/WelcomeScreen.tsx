@@ -9,7 +9,6 @@ import { useSafeAreaInsetsStyle } from "../utils/useSafeAreaInsetsStyle"
 import { appColors, spacing } from "app/theme"
 import { AppImgs } from "app/assets"
 
-
 interface WelcomeScreenProps extends AppStackScreenProps<"Main"> {}
 
 export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeScreen(_props) {
@@ -26,7 +25,6 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeSc
     rightTx: "common.logOut",
     onRightPress: logout,
   })
-
 
   const $bottomContainerInsets = useSafeAreaInsetsStyle(["bottom"])
 

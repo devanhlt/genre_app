@@ -7,9 +7,9 @@ import { SystemStoreModel } from "./system"
  * A RootStore model.
  */
 export const RootStoreModel = types.model("RootStore").props({
-  commonStore: types.optional(CommonStoreModel, {}), 
-  authStore: types.optional(AuthStoreModel, {}), 
-  systemStore: types.optional(SystemStoreModel, {}), 
+  commonStore: types.optional(CommonStoreModel, {}),
+  authStore: types.optional(AuthStoreModel, {}),
+  systemStore: types.optional(SystemStoreModel, {}),
 })
 
 /**

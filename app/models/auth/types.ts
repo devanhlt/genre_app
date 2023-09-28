@@ -33,5 +33,3 @@ export type UpgradePayload = {
   customerIdGroup?: string
   citizenId?: string
 }
-
-

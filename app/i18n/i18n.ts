@@ -21,17 +21,9 @@ export const isRTL = Localization.isRTL
 I18nManager.allowRTL(isRTL)
 I18nManager.forceRTL(isRTL)
 
-/**
- * Builds up valid keypaths for translations.
- */
-export type TxKeyPath = RecursiveKeyOf<Translations>
-
 // via: https://stackoverflow.com/a/65333050
-type RecursiveKeyOf<TObj extends object> = {
-  [TKey in keyof TObj & (string | number)]: RecursiveKeyOfHandleValue<TObj[TKey], `${TKey}`>
-}[keyof TObj & (string | number)]
-
 type RecursiveKeyOfInner<TObj extends object> = {
+  // eslint-disable-next-line no-use-before-define
   [TKey in keyof TObj & (string | number)]: RecursiveKeyOfHandleValue<
     TObj[TKey],
     `['${TKey}']` | `.${TKey}`
@@ -43,3 +35,12 @@ type RecursiveKeyOfHandleValue<TValue, Text extends string> = TValue extends any
   : TValue extends object
   ? Text | `${Text}${RecursiveKeyOfInner<TValue>}`
   : Text
+
+type RecursiveKeyOf<TObj extends object> = {
+  [TKey in keyof TObj & (string | number)]: RecursiveKeyOfHandleValue<TObj[TKey], `${TKey}`>
+}[keyof TObj & (string | number)]
+
+/**
+ * Builds up valid keypaths for translations.
+ */
+export type TxKeyPath = RecursiveKeyOf<Translations>

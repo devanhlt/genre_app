@@ -1,11 +1,11 @@
-import { Dimensions, Platform, StatusBar } from 'react-native'
+import { Dimensions, Platform, StatusBar } from "react-native"
 
-const { width: deviceWidth, height: deviceHeight } = Dimensions.get('window')
+const { width: deviceWidth, height: deviceHeight } = Dimensions.get("window")
 const [shortDimension, longDimension] =
   deviceWidth < deviceHeight ? [deviceWidth, deviceHeight] : [deviceHeight, deviceWidth]
 const STANDARD_WINDOW = { width: 375, height: 812 }
 
-export const STATUS_BAR_HEIGHT = Platform.OS === 'ios' ? 34 : StatusBar.currentHeight
+export const STATUS_BAR_HEIGHT = Platform.OS === "ios" ? 34 : StatusBar.currentHeight
 const isLargeView = shortDimension >= 600
 const isTabletMode = shortDimension / longDimension > 0.7
 

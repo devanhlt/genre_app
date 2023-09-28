@@ -23,9 +23,7 @@ jest.doMock("react-native", () => {
   )
 })
 
-jest.mock("react-native-mmkv", () =>
-  require("react-native-mmkv/lib/typescript/createMMKV.mock"),
-)
+jest.mock("react-native-mmkv", () => require("react-native-mmkv/lib/typescript/createMMKV.mock"))
 
 jest.mock("i18n-js", () => ({
   currentLocale: () => "en",
@@ -34,7 +32,8 @@ jest.mock("i18n-js", () => ({
   },
 }))
 
-declare const tron // eslint-disable-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+declare const tron
 
 jest.useFakeTimers()
 declare global {

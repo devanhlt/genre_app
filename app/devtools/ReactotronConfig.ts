@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /**
  * This file does the setup for integration with Reactotron, which is a
  * free desktop app for inspecting and debugging your React Native app.
