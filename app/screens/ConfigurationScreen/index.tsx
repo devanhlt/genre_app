@@ -28,7 +28,7 @@ export const ConfigurationScreen: FC<ConfigurationScreenProps> = observer(
     })
 
     return (
-      <Screen preset="auto" contentContainerStyle={$screenContentContainer}>
+      <Screen preset="fixed" contentContainerStyle={$screenContentContainer}>
         <ConfigTabView handleOnTab={handleOnTabPress} activeTabIndex={activeTabIndex} />
       </Screen>
     )

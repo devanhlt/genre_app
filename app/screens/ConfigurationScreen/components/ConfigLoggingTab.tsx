@@ -1,13 +1,25 @@
-import React from "react"
-import { ScrollView } from "react-native"
+import { useStores } from "app/models"
+import React, { useEffect } from "react"
+import { FlatList } from "react-native"
 import ConfigLoggingItem from "./ConfigLoggingItem"
 
 export const ConfigLoggingTab = () => {
+  const { settingStore } = useStores()
+  // initially, kick off a background refresh without the refreshing UI
+  useEffect(() => {
+    ;(async function load() {
+      await settingStore.fetchSettings()
+    })()
+  }, [settingStore])
+
   return (
-    <ScrollView>
-      <ConfigLoggingItem level="0" color="#30f00e" name="Success" />
-      <ConfigLoggingItem level="1" color="#f0f00e" name="Warning" />
-      <ConfigLoggingItem level="2" color="#f00e1a" name="Error" />
-    </ScrollView>
+    <FlatList
+      data={settingStore.getCurrentSettings}
+      extraData={settingStore.settings.length}
+      keyExtractor={(item, index) => `system-tab-${item.logLevel}-${index}`}
+      showsVerticalScrollIndicator={false}
+      ListHeaderComponent={<></>}
+      renderItem={({ item }) => <ConfigLoggingItem setting={item} />}
+    />
   )
 }

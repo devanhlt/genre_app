@@ -1,28 +1,19 @@
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect, useMemo, useRef, useState } from "react"
-import { TextInput, TextStyle, ViewStyle } from "react-native"
+import { TextInput, View, ViewStyle } from "react-native"
 
-import {
-  Button,
-  Icon,
-  Screen,
-  TextField,
-  TextFieldAccessoryProps,
-  Typography,
-} from "app/components"
+import { Button, Icon, Screen, SvgIcon, TextField, TextFieldAccessoryProps } from "app/components"
 import { useStores } from "app/models"
 import { AppStackScreenProps } from "app/navigators"
 import { appColors, iconSizes, spacing } from "app/theme"
+import { responsiveWidth } from "app/utils/screens"
 
 interface LoginScreenProps extends AppStackScreenProps<"LoginScreen"> {}
-
-const ATTEMPTS_COUNT = 2
 
 export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_props) {
   const authPasswordInput = useRef<TextInput>()
   const [isAuthPasswordHidden, setIsAuthPasswordHidden] = useState(true)
   const [isSubmitted, setIsSubmitted] = useState(false)
-  const [attemptsCount, setAttemptsCount] = useState(0)
   const {
     authStore: {
       authEmail,
@@ -45,7 +36,6 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
 
   function login() {
     setIsSubmitted(true)
-    setAttemptsCount(attemptsCount + 1)
 
     if (Object.values(validationErrors).some((v) => !!v)) return
 
@@ -82,20 +72,18 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
     }
   }, [])
 
+  const iconWidth = responsiveWidth(120)
+  const iconHeight = responsiveWidth(120)
+
   return (
     <Screen
       preset="auto"
       contentContainerStyle={$screenContentContainer}
       safeAreaEdges={["top", "bottom"]}
     >
-      <Typography
-        testID="login-heading"
-        tx="loginScreen.signIn"
-        preset="headline01"
-        style={$signIn}
-      />
-      <Typography tx="loginScreen.enterDetails" preset="body02" style={$enterDetails} />
-      {attemptsCount > ATTEMPTS_COUNT && <Typography tx="loginScreen.hint" style={$hint} />}
+      <View style={$logo}>
+        <SvgIcon name="LogoRed" width={iconWidth} height={iconHeight} />
+      </View>
 
       <TextField
         value={authEmail}
@@ -146,17 +134,10 @@ const $screenContentContainer: ViewStyle = {
   paddingHorizontal: spacing.size24,
 }
 
-const $signIn: TextStyle = {
-  marginBottom: spacing.size12,
-}
-
-const $enterDetails: TextStyle = {
-  marginBottom: spacing.size24,
-}
-
-const $hint: TextStyle = {
-  color: appColors.common.characterRedDefault,
-  marginBottom: spacing.size16,
+const $logo: ViewStyle = {
+  justifyContent: "center",
+  alignItems: "center",
+  marginBottom: spacing.size32,
 }
 
 const $textField: ViewStyle = {

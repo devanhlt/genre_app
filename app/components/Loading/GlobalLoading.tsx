@@ -1,5 +1,5 @@
 import { useStores } from "app/models"
-import { appColors } from "app/theme"
+import { appColors, spacing } from "app/theme"
 import { observer } from "mobx-react-lite"
 import * as React from "react"
 import { ActivityIndicator, StyleProp, TextStyle, View, ViewStyle } from "react-native"
@@ -63,13 +63,8 @@ const $overlayStyle: ViewStyle = {
   right: 0,
 }
 const $textStyle: TextStyle = {
-  backgroundColor: appColors.palette.overlay20,
   justifyContent: "center",
   alignItems: "center",
-  position: "absolute",
   zIndex: 10,
-  top: 0,
-  bottom: 0,
-  left: 0,
-  right: 0,
+  marginBottom: spacing.size12,
 }
