@@ -16,6 +16,7 @@ import { useHeader } from "app/utils/useHeader"
 import subDays from "date-fns/subDays"
 import LoggingFilter from "./components/LoggingFilter"
 import LoggingItem from "./components/LoggingItem"
+import { useDebounce } from "app/utils/useDebounce"
 
 interface LoggingScreenProps extends AppStackScreenProps<"LoggingDetail"> {}
 
@@ -27,7 +28,7 @@ export const LoggingScreen: FC<LoggingScreenProps> = function LoggingScreen(prop
   const { systemStore } = useStores()
   const [refreshing, setRefreshing] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
-  const [loggingFiltering] = useState<FilterLoggingPayload>({
+  const [loggingFiltering, setLoggingFiltering] = useState<FilterLoggingPayload>({
     keyword: "",
     pageNumber: 1,
     pageSize: 10,
@@ -35,6 +36,8 @@ export const LoggingScreen: FC<LoggingScreenProps> = function LoggingScreen(prop
     fromDate: subDays(new Date(), 1),
     toDate: new Date(),
   })
+
+  const debouncedSearch = useDebounce(loggingFiltering.keyword, 1000)
 
   // initially, kick off a background refresh without the refreshing UI
   useEffect(() => {
@@ -54,6 +57,16 @@ export const LoggingScreen: FC<LoggingScreenProps> = function LoggingScreen(prop
     }
   }
 
+  async function loadSystem(currentFilter: FilterLoggingPayload) {
+    setIsLoading(true)
+    await systemStore.fetchLoggingSystems(currentFilter)
+    setIsLoading(false)
+  }
+
+  useEffect(() => {
+    loadSystem({ ...loggingFiltering, keyword: debouncedSearch })
+  }, [debouncedSearch])
+
   useHeader({
     leftTx: "screenTitle.loggingTab",
     backgroundColor: appColors.common.bgRed,
@@ -66,6 +79,10 @@ export const LoggingScreen: FC<LoggingScreenProps> = function LoggingScreen(prop
     navigation.navigate("LoggingDetail", { logging: item })
   }
 
+  const onChangeSearchText = (text: string) => {
+    setLoggingFiltering({ ...loggingFiltering, keyword: text })
+  }
+
   const isLstEmpty =
     !systemStore.lstSystemLogging.length || !systemStore.systemsLoggingForList.length
 
@@ -75,7 +92,9 @@ export const LoggingScreen: FC<LoggingScreenProps> = function LoggingScreen(prop
         <SearchField
           placeholder="Type any keyword for searching"
           preset="plat"
+          value={loggingFiltering.keyword}
           containerStyle={$searchInput}
+          onChangeText={onChangeSearchText}
         />
         <TouchableOpacity onPress={() => bottomSheetModalRef.current.present()}>
           <PhosphorIcon name="Funnel" style={$searchFilter} color={appColors.common.bgWhite} />

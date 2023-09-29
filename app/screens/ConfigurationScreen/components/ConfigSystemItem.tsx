@@ -40,7 +40,7 @@ export default function ConfigSystemItem({ system }: ConfigSystemItemProps): JSX
           </View>
         </View>
       </View>
-      <View style={$tagContainer}>
+      {/* <View style={$tagContainer}>
         <View>
           <Typography text="Success" preset="body04" style={$labelText} />
           <Typography
@@ -68,7 +68,7 @@ export default function ConfigSystemItem({ system }: ConfigSystemItemProps): JSX
             style={$totalLogText}
           />
         </View>
-      </View>
+      </View> */}
     </View>
   )
 }
@@ -99,8 +99,8 @@ const $headerContainer: ViewStyle = {
   padding: spacing.size10,
   marginBottom: spacing.size10,
   alignItems: "center",
-  borderBottomColor: appColors.palette.black050,
-  borderBottomWidth: spacing.size02,
+  // borderBottomColor: appColors.palette.black050,
+  // borderBottomWidth: spacing.size02,
 }
 
 const $configBlock: ViewStyle = {
@@ -113,19 +113,19 @@ const $titleText: TextStyle = {
   marginBottom: spacing.size08,
 }
 
-const $tagContainer: ViewStyle = {
-  flex: 1,
-  flexDirection: "row",
-  justifyContent: "space-between",
-  padding: spacing.size10,
-  borderRadius: spacing.size08,
-  marginTop: spacing.size10,
-}
+// const $tagContainer: ViewStyle = {
+//   flex: 1,
+//   flexDirection: "row",
+//   justifyContent: "space-between",
+//   padding: spacing.size10,
+//   borderRadius: spacing.size08,
+//   marginTop: spacing.size10,
+// }
 
-const $labelText: TextStyle = {
-  color: appColors.palette.black600,
-}
+// const $labelText: TextStyle = {
+//   color: appColors.palette.black600,
+// }
 
-const $totalLogText: TextStyle = {
-  textAlign: "center",
-}
+// const $totalLogText: TextStyle = {
+//   textAlign: "center",
+// }

@@ -29,7 +29,7 @@ export default function ConfigLoggingItem({ setting }: ConfigLoggingItemProps): 
     <View style={$viewContainer}>
       <View style={[$headerContainer, { backgroundColor: setting.color }]}>
         <Typography
-          text={`${setting.logLevel}`}
+          text={`Level ${setting.logLevel}`}
           preset="headline02"
           style={$titleText}
           color={appColors.palette.neutral0}

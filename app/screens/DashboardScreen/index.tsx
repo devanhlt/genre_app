@@ -36,8 +36,6 @@ export const DashboardScreen: FC<DashboardScreenProps> = observer(function Dashb
     backgroundColor: appColors.common.bgRed,
   })
 
-  console.log("systemStore:", systemStore)
-
   return (
     <Screen preset="fixed" contentContainerStyle={$screenContentContainer}>
       <FlatList<System>

@@ -23,7 +23,6 @@ export const SettingStoreModel = types
   .actions((self) => ({
     fetchSettings: flow(function* fetchSettings() {
       const response = yield* toGenerator(apiSetting.getSetting())
-      console.log("response", response)
       if (response.kind === "ok") {
         self.setProp("settings", response.logging)
       } else {

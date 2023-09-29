@@ -11,7 +11,6 @@ export interface DashboardSystemItemProps {
 }
 
 export default function DashboardSystemItem({ item }: DashboardSystemItemProps): JSX.Element {
-  console.log("item:", item.getCurrentHeaderColor)
   const headerColor = item.getCurrentHeaderColor
   return (
     <View style={$viewContainer}>
