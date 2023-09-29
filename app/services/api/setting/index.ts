@@ -1,8 +1,9 @@
 import { ApiResponse, ApisauceInstance, create } from "apisauce"
-import { System, SystemSnapshotIn } from "app/models/system/system"
-import Config from "../../config"
-import type { ApiConfig } from "./api.types"
-import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
+
+import { Setting, SettingSnapshotIn } from "app/models/setting/setting"
+import Config from "../../../config"
+import type { ApiConfig } from "../api.types"
+import { GeneralApiProblem, getGeneralApiProblem } from "../apiProblem"
 
 /**
  * Configuring the apisauce instance.
@@ -16,7 +17,7 @@ export const DEFAULT_API_CONFIG: ApiConfig = {
  * Manages all requests to the API. You can use this class to build out
  * various requests that you need to call from your backend API.
  */
-export class Api {
+export class SettingApi {
   apisauce: ApisauceInstance
   config: ApiConfig
 
@@ -37,10 +38,9 @@ export class Api {
   /**
    * Gets a list of system
    */
-  async getSystems(): Promise<{ kind: "ok"; systems: SystemSnapshotIn[] } | GeneralApiProblem> {
+  async getSetting(): Promise<{ kind: "ok"; logging: SettingSnapshotIn[] } | GeneralApiProblem> {
     // make the api call
-    const timestamp = new Date().getTime()
-    const response: ApiResponse<System[]> = await this.apisauce.get(`api/v1/systems?_=${timestamp}`)
+    const response: ApiResponse<Setting[]> = await this.apisauce.get(`api/v1/settings`)
 
     // the typical ways to die when calling an api
     if (!response.ok) {
@@ -48,16 +48,14 @@ export class Api {
       if (problem) return problem
     }
 
-    // transform the data into the format we are expecting
     try {
-      const rawData = response.data
-
+      const rawData = response?.data
       // This is where we transform the data into the shape we expect for our MST model.
-      const systems: SystemSnapshotIn[] = rawData.map((raw) => ({
+      const logging: SettingSnapshotIn[] = rawData.map((raw) => ({
         ...raw,
       }))
 
-      return { kind: "ok", systems }
+      return { kind: "ok", logging }
     } catch (e) {
       if (__DEV__) {
         console.tron.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
@@ -68,4 +66,4 @@ export class Api {
 }
 
 // Singleton instance of the API for convenience
-export const api = new Api()
+export const apiSetting = new SettingApi()

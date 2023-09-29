@@ -1,72 +1,106 @@
 import React from "react"
-import { Button, Pressable, TextStyle, View, ViewStyle } from "react-native"
+import { TextStyle, View, ViewStyle } from "react-native"
 
-import { Typography } from "app/components"
+import { Button, Typography } from "app/components"
+import { Toggle } from "app/components/Toggle"
+import { ToggleProps } from "app/components/Toggle/type"
+import { Setting } from "app/models/setting/setting"
 import { appColors, spacing } from "app/theme"
+import { radius } from "app/theme/radius"
 
 export interface ConfigLoggingItemProps {
-  level: string
-  color: string
-  name?: string
-  baseUrl?: string
-  successValue?: number
-  warningValue?: number
-  errorValue?: number
+  setting?: Setting
 }
 
-export default function ConfigLoggingItem({
-  level,
-  color,
-  name,
-}: ConfigLoggingItemProps): JSX.Element {
-  const blockColor: ViewStyle = { backgroundColor: color }
+function ControlledToggle(props: ToggleProps) {
+  const [value, setValue] = React.useState(props.value || false)
   return (
-    <Pressable style={$viewContainer}>
-      <View>
-        <Typography text={`Log Level ${level}`} preset="body01" style={$titleText} />
-        <Typography text={name ?? "PLACEHOLDER"} preset="headline02" style={$titleText} />
-      </View>
-      <View style={$flexDirectionRow}>
-        <View style={$editBlock}>
-          <Typography text="Color" preset="body01" style={$titleText} />
-          <View style={[$blockStyle, blockColor]} />
-        </View>
-        <View style={$editBlock}>
-          <Typography text="Action" preset="body01" style={$titleText} />
-          <Button title="Edit" color={appColors.components.button.primary} />
-        </View>
-      </View>
-    </Pressable>
+    <Toggle
+      {...props}
+      value={value}
+      onPress={() => setValue(!value)}
+      containerStyle={$toggleContainer}
+    />
   )
 }
 
-const $flexDirectionRow: ViewStyle = {
-  flexDirection: "row",
+export default function ConfigLoggingItem({ setting }: ConfigLoggingItemProps): JSX.Element {
+  return (
+    <View style={$viewContainer}>
+      <View style={[$headerContainer, { backgroundColor: setting.color }]}>
+        <Typography
+          text={`Level ${setting.logLevel}`}
+          preset="headline02"
+          style={$titleText}
+          color={appColors.palette.neutral0}
+        />
+        <Typography
+          text={`${setting.description}`}
+          preset="body03"
+          style={$titleText}
+          color={appColors.palette.neutral0}
+        />
+      </View>
+      <View style={$tagContainer}>
+        <View style={$configBlock}>
+          <Typography text="Receive Log" preset="body01" style={$titleText} />
+          <ControlledToggle variant="switch" />
+        </View>
+        <View style={$configBlock}>
+          <Typography text="Receive Log" preset="body01" style={$titleText} />
+          <ControlledToggle variant="switch" />
+        </View>
+        <View style={$configBlock}>
+          <Typography text="Action" preset="body01" style={$titleText} />
+          <Button text="Edit" preset="tertiary" style={$toggleContainer} />
+        </View>
+      </View>
+    </View>
+  )
 }
 
 const $viewContainer: ViewStyle = {
-  ...$flexDirectionRow,
-  backgroundColor: appColors.palette.neutral100,
+  borderWidth: spacing.size01,
+  borderRadius: spacing.size08,
+  borderColor: appColors.palette.black050,
+  backgroundColor: appColors.common.bgWhite,
+  shadowColor: appColors.palette.neutral800,
+  shadowOffset: { width: 0, height: 12 },
+  shadowOpacity: 0.05,
+  shadowRadius: radius.md,
+  elevation: 16,
+  marginBottom: spacing.size16,
+}
+
+const $toggleContainer: ViewStyle = {
+  height: 50,
+  alignItems: "center",
+  justifyContent: "center",
+}
+
+const $headerContainer: ViewStyle = {
   padding: spacing.size10,
   marginBottom: spacing.size10,
-  borderRadius: spacing.size10,
-  borderColor: appColors.palette.black200,
-  borderWidth: spacing.size01,
-  justifyContent: "space-between",
-}
-
-const $blockStyle: ViewStyle = {
-  width: spacing.size24,
-  height: spacing.size24,
-  borderRadius: spacing.size04,
-  marginTop: spacing.size08,
-}
-
-const $editBlock: ViewStyle = {
   alignItems: "center",
-  marginLeft: spacing.size04,
+  borderBottomColor: appColors.palette.black050,
+  borderBottomWidth: spacing.size02,
+  borderTopRightRadius: spacing.size08,
+  borderTopLeftRadius: spacing.size08,
+}
+
+const $configBlock: ViewStyle = {
+  alignItems: "center",
 }
 
 const $titleText: TextStyle = {
-  color: appColors.palette.black600,
+  marginBottom: spacing.size04,
+}
+
+const $tagContainer: ViewStyle = {
+  flex: 1,
+  flexDirection: "row",
+  justifyContent: "space-between",
+  paddingHorizontal: spacing.size12,
+  paddingVertical: spacing.size16,
+  alignItems: "center",
 }

@@ -1,10 +1,6 @@
 import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../helpers/withSetPropAction"
 
-/**
- * This represents an episode of React Native Radio.
- */
-
 const TypeId = types.model("TypeId", {
   timestamp: types.optional(types.maybeNull(types.number), null),
   date: types.optional(types.maybeNull(types.number), null),

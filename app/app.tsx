@@ -22,7 +22,7 @@ import { useFonts } from "expo-font"
 import React, { useState } from "react"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
 import * as Linking from "expo-linking"
-import { useInitialRootStore } from "./models"
+import { RootStore, useInitialRootStore } from "./models"
 import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary"
 import * as storage from "./utils/storage"
@@ -30,6 +30,7 @@ import { customFontsToLoad } from "./theme"
 import Config from "./config"
 import { SplashScreen } from "./screens"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
+import { GlobalLoading } from "./components/Loading"
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
@@ -72,17 +73,18 @@ function App(props: AppProps) {
 
   const [areFontsLoaded] = useFonts(customFontsToLoad)
 
-  const { rehydrated } = useInitialRootStore(() => {
+  const { rehydrated } = useInitialRootStore((rootStore: RootStore) => {
     // This runs after the root store has been initialized and rehydrated.
 
     // If your initialization scripts run very fast, it's good to show the splash screen for just a bit longer to prevent flicker.
     // Slightly delaying splash screen hiding for better UX; can be customized or removed as needed,
     // Note: (vanilla Android) The splash-screen will not appear if you launch your app via the terminal or Android Studio. Kill the app and launch it normally by tapping on the launcher icon. https://stackoverflow.com/a/69831106
     // Note: (vanilla iOS) You might notice the splash-screen logo change size. This happens in debug/development mode. Try building the app for release.
-    setTimeout(() => {
+    setTimeout(async () => {
       hideSplashScreen()
+      await rootStore.settingStore.fetchSettings()
       setIsReady(true)
-    }, 500)
+    }, 2000)
   })
 
   // Before we show the app, we have to wait for our state to be ready.
@@ -111,6 +113,7 @@ function App(props: AppProps) {
             onStateChange={onNavigationStateChange}
           />
         </ErrorBoundary>
+        <GlobalLoading />
       </BottomSheetModalProvider>
     </SafeAreaProvider>
   )

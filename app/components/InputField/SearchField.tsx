@@ -26,7 +26,18 @@ export interface SearchFieldProps extends Omit<TextFieldProps, "ref"> {
 
 function SearchField(props: SearchFieldProps) {
   const [value, setValue] = React.useState(props.value || "")
-  const onClear = () => setValue("")
+
+  const onClear = () => {
+    setValue("")
+    props?.onChangeText("")
+  }
+
+  const onChangeText = (text: string) => {
+    setValue(text)
+    props?.onChangeText(text)
+  }
+
+
   const $searchPresetsStyles = $searchPresets[props?.preset || "outline"]
   return (
     <TextField
@@ -38,7 +49,7 @@ function SearchField(props: SearchFieldProps) {
         </View>
       )}
       value={value}
-      onChangeText={(text) => setValue(text)}
+      onChangeText={onChangeText}
       onClear={onClear}
     />
   )

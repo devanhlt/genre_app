@@ -1,15 +1,12 @@
 import { api } from "app/services/api"
 import { Instance, SnapshotOut, flow, getType, toGenerator, types } from "mobx-state-tree"
 
+import { apiLogging } from "app/services/api/logging"
+import { FilterLoggingPayload } from "app/services/api/logging/logging.api.types"
 import { withEnvironment } from "../extensions/with-environment"
 import { withSetPropAction } from "../helpers/withSetPropAction"
-import { SystemModel } from "./system"
 import { LoggingModel } from "./logging"
-
-export interface IHospital {
-  code: string
-  name: string
-}
+import { SystemModel } from "./system"
 
 export const SystemStoreModel = types
   .model("SystemStore")
@@ -46,8 +43,10 @@ export const SystemStoreModel = types
       }
     }),
 
-    fetchLoggingSystems: flow(function* fetchSystems() {
-      const response = yield* toGenerator(api.getLogging())
+    fetchLoggingSystems: flow(function* fetchLoggingSystems(
+      loggingFiltering: FilterLoggingPayload,
+    ) {
+      const response = yield* toGenerator(apiLogging.getLogging(loggingFiltering))
       if (response.kind === "ok") {
         self.setProp("lstSystemLogging", response.logging)
       } else {

@@ -1,9 +1,8 @@
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect } from "react"
-import { FlatList, TextStyle, ViewStyle } from "react-native"
+import { FlatList, ViewStyle } from "react-native"
 
-import { Screen, Typography } from "app/components"
-import { Loading } from "app/components/Loading"
+import { Screen } from "app/components"
 import { useStores } from "app/models"
 import { System } from "app/models/system/system"
 import { MainTabScreenProps } from "app/navigators/MainNavigator"
@@ -17,14 +16,11 @@ interface DashboardScreenProps extends MainTabScreenProps<"Dashboard"> {}
 export const DashboardScreen: FC<DashboardScreenProps> = observer(function DashboardScreen(_props) {
   const { systemStore } = useStores()
   const [refreshing, setRefreshing] = React.useState(false)
-  const [isLoading, setIsLoading] = React.useState(false)
 
   // initially, kick off a background refresh without the refreshing UI
   useEffect(() => {
     ;(async function load() {
-      setIsLoading(true)
       await systemStore.fetchSystems()
-      setIsLoading(false)
     })()
   }, [systemStore])
 
@@ -42,35 +38,29 @@ export const DashboardScreen: FC<DashboardScreenProps> = observer(function Dashb
 
   return (
     <Screen preset="fixed" contentContainerStyle={$screenContentContainer}>
-      <Typography text="Systems" preset="headline01" style={$titleText} />
       <FlatList<System>
         data={systemStore.systems}
+        keyExtractor={(item, index) =>
+          `system-${item.totalLogInfo}-${item.totalLogWarn}-${item.totalLogError}-${index}`
+        }
         extraData={systemStore.systems.length}
         refreshing={refreshing}
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={$flatListContentContainer}
         onRefresh={manualRefresh}
-        ListEmptyComponent={isLoading ? <Loading inline /> : <></>}
         ListHeaderComponent={<></>}
-        renderItem={({ item, index }) => (
-          <DashboardSystemItem key={`dashboard-item-${index}`} item={item} />
-        )}
+        renderItem={({ item }) => <DashboardSystemItem item={item} />}
       />
     </Screen>
   )
 })
 
 const $screenContentContainer: ViewStyle = {
-  paddingHorizontal: spacing.size16,
+  paddingHorizontal: spacing.size08,
 }
 
 const $flatListContentContainer: ViewStyle = {
   paddingHorizontal: spacing.size08,
-  paddingTop: spacing.size04,
-  paddingBottom: spacing.size40,
-}
-
-const $titleText: TextStyle = {
-  marginVertical: spacing.size10,
-  marginLeft: spacing.size08,
-  color: appColors.palette.black600,
+  paddingTop: spacing.size16,
+  paddingBottom: spacing.size16,
 }

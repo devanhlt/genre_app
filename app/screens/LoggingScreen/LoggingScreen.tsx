@@ -1,19 +1,22 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
-import React, { FC, useEffect, useRef } from "react"
+import React, { FC, useEffect, useRef, useState } from "react"
 import { FlatList, TouchableOpacity, View, ViewStyle } from "react-native"
 
-import { BottomModal, Screen } from "app/components"
+import { BottomModal, Screen, Typography } from "app/components"
 import { PhosphorIcon } from "app/components/Icon/PhosphorIcon"
 import SearchField from "app/components/InputField/SearchField"
+import { Loading } from "app/components/Loading"
+import { useStores } from "app/models"
+import { Logging } from "app/models/system/logging"
 import { AppStackScreenProps } from "app/navigators"
+import { FilterLoggingPayload } from "app/services/api/logging/logging.api.types"
 import { appColors, spacing } from "app/theme"
+import { delay } from "app/utils/delay"
 import { useHeader } from "app/utils/useHeader"
+import subDays from "date-fns/subDays"
 import LoggingFilter from "./components/LoggingFilter"
 import LoggingItem from "./components/LoggingItem"
-import { useStores } from "app/models"
-import { Loading } from "app/components/Loading"
-import { delay } from "app/utils/delay"
-import { Logging } from "app/models/system/logging"
+import { useDebounce } from "app/utils/useDebounce"
 
 interface LoggingScreenProps extends AppStackScreenProps<"LoggingDetail"> {}
 
@@ -25,22 +28,44 @@ export const LoggingScreen: FC<LoggingScreenProps> = function LoggingScreen(prop
   const { systemStore } = useStores()
   const [refreshing, setRefreshing] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
+  const [loggingFiltering, setLoggingFiltering] = useState<FilterLoggingPayload>({
+    keyword: "",
+    pageNumber: 1,
+    pageSize: 10,
+    pageDraw: 1,
+    fromDate: subDays(new Date(), 1),
+    toDate: new Date(),
+  })
+
+  const debouncedSearch = useDebounce(loggingFiltering.keyword, 1000)
 
   // initially, kick off a background refresh without the refreshing UI
   useEffect(() => {
     ;(async function load() {
       setIsLoading(true)
-      await systemStore.fetchLoggingSystems()
+      await systemStore.fetchLoggingSystems(loggingFiltering)
       setIsLoading(false)
     })()
   }, [systemStore])
 
   // simulate a longer refresh, if the refresh is too fast for UX
   async function manualRefresh() {
-    setRefreshing(true)
-    await Promise.all([systemStore.fetchSystems(), delay(750)])
-    setRefreshing(false)
+    if (!isLoading) {
+      setRefreshing(true)
+      await Promise.all([systemStore.fetchLoggingSystems(loggingFiltering), delay(750)])
+      setRefreshing(false)
+    }
   }
+
+  async function loadSystem(currentFilter: FilterLoggingPayload) {
+    setIsLoading(true)
+    await systemStore.fetchLoggingSystems(currentFilter)
+    setIsLoading(false)
+  }
+
+  useEffect(() => {
+    loadSystem({ ...loggingFiltering, keyword: debouncedSearch })
+  }, [debouncedSearch])
 
   useHeader({
     leftTx: "screenTitle.loggingTab",
@@ -54,30 +79,49 @@ export const LoggingScreen: FC<LoggingScreenProps> = function LoggingScreen(prop
     navigation.navigate("LoggingDetail", { logging: item })
   }
 
+  const onChangeSearchText = (text: string) => {
+    setLoggingFiltering({ ...loggingFiltering, keyword: text })
+  }
+
+  const isLstEmpty =
+    !systemStore.lstSystemLogging.length || !systemStore.systemsLoggingForList.length
+
   return (
     <Screen preset="fixed" contentContainerStyle={$screenContentContainer}>
       <View style={$filterContainer}>
         <SearchField
           placeholder="Type any keyword for searching"
           preset="plat"
+          value={loggingFiltering.keyword}
           containerStyle={$searchInput}
+          onChangeText={onChangeSearchText}
         />
         <TouchableOpacity onPress={() => bottomSheetModalRef.current.present()}>
           <PhosphorIcon name="Funnel" style={$searchFilter} color={appColors.common.bgWhite} />
         </TouchableOpacity>
       </View>
-      <FlatList
-        contentContainerStyle={$listContainer}
-        data={systemStore.systemsLoggingForList}
-        extraData={systemStore.lstSystemLogging?.length}
-        refreshing={refreshing}
-        onRefresh={manualRefresh}
-        ListEmptyComponent={isLoading ? <Loading inline /> : <></>}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ index, item }) => (
-          <LoggingItem key={`logging-item-${index}`} item={item} onPressItem={onPressLoggingItem} />
-        )}
-      />
+      {isLstEmpty && !isLoading && (
+        <View style={$listEmptyContainer}>
+          <Typography text="No data!" />
+        </View>
+      )}
+      {isLoading && <Loading />}
+      {!isLstEmpty && !isLoading && (
+        <FlatList
+          data={systemStore.lstSystemLogging}
+          extraData={systemStore.lstSystemLogging.length}
+          refreshing={refreshing}
+          onRefresh={manualRefresh}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ index, item }) => (
+            <LoggingItem
+              key={`logging-item-${index}`}
+              item={item}
+              onPressItem={onPressLoggingItem}
+            />
+          )}
+        />
+      )}
       <BottomModal ref={bottomSheetModalRef} title="Filter" snapPoints={["70%"]}>
         <LoggingFilter />
       </BottomModal>
@@ -105,4 +149,8 @@ const $searchFilter: ViewStyle = {
   marginLeft: spacing.size16,
 }
 
-const $listContainer: ViewStyle = {}
+const $listEmptyContainer: ViewStyle = {
+  flex: 1,
+  justifyContent: "center",
+  alignItems: "center",
+}
