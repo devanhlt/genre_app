@@ -101,6 +101,10 @@ export interface HeaderProps {
    */
   rightText?: TypographyProps["text"]
   /**
+   * Optional right text style override.
+   */
+  rightTextStyle?: StyleProp<TextStyle>
+  /**
    * Right action text text which is looked up via i18n.
    * Can be used with `onRightPress`. Overrides `rightIcon`.
    */
@@ -134,6 +138,7 @@ interface HeaderActionProps {
   txOptions?: TypographyProps["txOptions"]
   onPress?: TouchableOpacityProps["onPress"]
   ActionComponent?: ReactElement
+  style?: StyleProp<TextStyle>
 }
 
 /**
@@ -157,6 +162,7 @@ export function Header(props: HeaderProps) {
     rightIcon,
     rightIconColor,
     rightText,
+    rightTextStyle,
     rightTx,
     rightTxOptions,
     safeAreaEdges = ["top"],
@@ -210,6 +216,7 @@ export function Header(props: HeaderProps) {
           txOptions={rightTxOptions}
           backgroundColor={backgroundColor}
           ActionComponent={RightActionComponent}
+          style={rightTextStyle}
         />
       </View>
     </View>
@@ -217,7 +224,8 @@ export function Header(props: HeaderProps) {
 }
 
 function HeaderAction(props: HeaderActionProps) {
-  const { backgroundColor, icon, text, tx, txOptions, onPress, ActionComponent, iconColor } = props
+  const { backgroundColor, icon, text, tx, txOptions, onPress, ActionComponent, iconColor, style } =
+    props
 
   const content = tx ? translate(tx, txOptions) : text
 
@@ -231,7 +239,7 @@ function HeaderAction(props: HeaderActionProps) {
         disabled={!onPress}
         activeOpacity={0.8}
       >
-        <Typography text={content} style={$actionText} />
+        <Typography text={content} style={[$actionText, style]} />
       </TouchableOpacity>
     )
   }

@@ -20,6 +20,7 @@ export const iconRegistry = {
   export: require("../../assets/icons/export.png"),
   view: require("../../assets/icons/view.png"),
   hidden: require("../../assets/icons/hidden.png"),
+  system: require("../../assets/icons/system.png"),
 }
 
 export type IconTypes = keyof typeof iconRegistry

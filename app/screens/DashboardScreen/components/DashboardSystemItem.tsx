@@ -1,8 +1,9 @@
 import React from "react"
 import { TextStyle, View, ViewStyle } from "react-native"
 
-import { Typography } from "app/components"
+import { Icon, Typography } from "app/components"
 import Tag from "app/components/Tag"
+import { appColors, spacing } from "app/theme"
 import { System } from "app/models/system/system"
 
 export interface DashboardSystemItemProps {
@@ -12,51 +13,77 @@ export interface DashboardSystemItemProps {
 export default function DashboardSystemItem({ item }: DashboardSystemItemProps): JSX.Element {
   return (
     <View style={$viewContainer}>
-      <Typography text={`System: ${item.systemName}`} preset="body02" style={$titleText} />
-      <Typography text={`Base URL: ${item.baseUrl}`} preset="body02" style={$titleText} />
+      <View style={$titleRow}>
+        <View style={$titleRowTitle}>
+          <Icon icon="system" />
+          <Typography text={item.getSystem.systemName} preset="body02" style={$titleText} />
+        </View>
+        <Tag backgroundColor={"#D2F1D2"} color={"#1CC800"} label="Active" badgeBorderRadius={4} />
+      </View>
       <View style={$tagContainer}>
-        <Tag
-          backgroundColor={"#fff"}
-          label="Success"
-          badgeText={`${item.totalLogInfo}`}
-          badgeTextColor={"#fff"}
-          badgeBackgroundColor={"#388E3C"}
-          badgeBorderRadius={8}
-        />
-        <Tag
-          backgroundColor={"#fff"}
-          label="Warning"
-          badgeText={`${item.totalLogWarn}`}
-          badgeTextColor={"#fff"}
-          badgeBackgroundColor={"#388E3C"}
-          badgeBorderRadius={8}
-        />
-        <Tag
-          backgroundColor={"#fff"}
-          label="Error"
-          badgeText={`${item.totalLogError}`}
-          badgeTextColor={"#fff"}
-          badgeBackgroundColor={"#388E3C"}
-          badgeBorderRadius={8}
-        />
+        <View>
+          <Typography text="Success" preset="body02" style={$labelText} />
+          <Typography
+            text={item.getSystem.totalLogInfo?.toString()}
+            preset="body02"
+            color={appColors.palette.green400}
+          />
+        </View>
+        <View>
+          <Typography text="Warning" preset="body02" style={$labelText} />
+          <Typography
+            text={item.getSystem.totalLogWarn?.toString()}
+            preset="body02"
+            color={appColors.palette.yellow400}
+          />
+        </View>
+        <View>
+          <Typography text="Error" preset="body02" style={$labelText} />
+          <Typography
+            text={item.getSystem.totalLogWarn?.toString()}
+            preset="body02"
+            color={appColors.palette.red400}
+          />
+        </View>
       </View>
     </View>
   )
 }
 
 const $viewContainer: ViewStyle = {
-  backgroundColor: "#388E3C",
-  padding: 10,
-  marginBottom: 10,
-  borderRadius: 10,
+  padding: spacing.size10,
+  marginBottom: spacing.size16,
+  borderRadius: spacing.size10,
+  borderWidth: spacing.size01,
+  borderColor: appColors.palette.black050,
+  backgroundColor: appColors.common.bgWhite,
 }
 
 const $tagContainer: ViewStyle = {
   flex: 1,
-  justifyContent: "space-between",
   flexDirection: "row",
-  marginTop: 10,
+  justifyContent: "space-between",
+  padding: spacing.size10,
+  borderRadius: spacing.size08,
+  marginTop: spacing.size10,
+  backgroundColor: appColors.common.bgGrey,
 }
+
+const $titleRow: ViewStyle = {
+  flexDirection: "row",
+  justifyContent: "space-between",
+}
+
+const $titleRowTitle: ViewStyle = {
+  ...$titleRow,
+  alignItems: "center",
+}
+
 const $titleText: TextStyle = {
-  color: "#fff",
+  color: appColors.palette.red,
+  marginLeft: spacing.size04,
+}
+
+const $labelText: TextStyle = {
+  color: appColors.palette.black600,
 }
