@@ -42,7 +42,12 @@ const vi = {
   },
   mainNavigator: {
     dashboardTab: "Dashboard",
-    logsTab: "Logs",
+    loggingTab: "Logs",
+    configurationTab: "Configuration",
+  },
+  screenTitle: {
+    dashboardTab: "Dashboard",
+    loggingTab: "Logging",
     configurationTab: "Configuration",
   },
 }

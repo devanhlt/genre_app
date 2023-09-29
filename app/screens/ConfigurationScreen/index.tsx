@@ -8,7 +8,7 @@ import { spacing } from "app/theme"
 import { useHeader } from "app/utils/useHeader"
 import { useStores } from "app/models"
 
-interface ConfigurationScreenProps extends MainTabScreenProps<"DashboardScreen"> {}
+interface ConfigurationScreenProps extends MainTabScreenProps<"Configuration"> {}
 
 export const ConfigurationScreen: FC<ConfigurationScreenProps> = observer(
   function ConfigurationScreen(_props) {

@@ -3,35 +3,42 @@ import { TextStyle, View, ViewStyle } from "react-native"
 
 import { Typography } from "app/components"
 import Tag from "app/components/Tag"
+import { System } from "app/models/system/system"
 
 export interface DashboardSystemItemProps {
-  system?: string
-  baseUrl?: string
-  successValue?: number
-  warningValue?: number
-  errorValue?: number
+  item?: System
 }
 
-export default function DashboardSystemItem(): JSX.Element {
+export default function DashboardSystemItem({ item }: DashboardSystemItemProps): JSX.Element {
   return (
     <View style={$viewContainer}>
-      <Typography text="System: EKYC_API" preset="body02" style={$titleText} />
-      <Typography
-        text="Base URL: https://apigw01.generali-life.com.vn:8443/ekyc-api"
-        preset="body02"
-        style={$titleText}
-      />
+      <Typography text={`System: ${item.systemName}`} preset="body02" style={$titleText} />
+      <Typography text={`Base URL: ${item.baseUrl}`} preset="body02" style={$titleText} />
       <View style={$tagContainer}>
         <Tag
           backgroundColor={"#fff"}
           label="Success"
-          badgeText="3"
+          badgeText={`${item.totalLogInfo}`}
           badgeTextColor={"#fff"}
           badgeBackgroundColor={"#388E3C"}
           badgeBorderRadius={8}
         />
-        <Tag backgroundColor={"#fff"} label="Warn" />
-        <Tag backgroundColor={"#fff"} label="Error" />
+        <Tag
+          backgroundColor={"#fff"}
+          label="Warning"
+          badgeText={`${item.totalLogWarn}`}
+          badgeTextColor={"#fff"}
+          badgeBackgroundColor={"#388E3C"}
+          badgeBorderRadius={8}
+        />
+        <Tag
+          backgroundColor={"#fff"}
+          label="Error"
+          badgeText={`${item.totalLogError}`}
+          badgeTextColor={"#fff"}
+          badgeBackgroundColor={"#388E3C"}
+          badgeBorderRadius={8}
+        />
       </View>
     </View>
   )

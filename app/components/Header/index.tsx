@@ -9,7 +9,7 @@ import {
 } from "react-native"
 import { Typography, TypographyProps } from "../Typography"
 import { Icon, IconTypes } from "../Icon"
-import { appColors, iconSizes, spacing } from "app/theme"
+import { appColors, iconSizes, spacing, typography } from "app/theme"
 import { ExtendedEdge, useSafeAreaInsetsStyle } from "app/utils/useSafeAreaInsetsStyle"
 import { isRTL, translate } from "app/i18n"
 
@@ -277,7 +277,9 @@ const $actionTextContainer: ViewStyle = {
 }
 
 const $actionText: TextStyle = {
-  color: appColors.palette.blue500,
+  ...typography.headline02,
+  color: appColors.palette.neutral0,
+  marginLeft: spacing.size16,
 }
 
 const $actionIconContainer: ViewStyle = {
@@ -287,6 +289,8 @@ const $actionIconContainer: ViewStyle = {
   height: "100%",
   paddingHorizontal: spacing.size04,
   zIndex: 2,
+  marginRight: spacing.size08,
+  marginLeft: spacing.size08,
 }
 
 const $actionFillerContainer: ViewStyle = {
