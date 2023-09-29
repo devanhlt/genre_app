@@ -71,7 +71,7 @@ export const regularType: TextStyle = {
   fontWeight: "400",
 }
 
-const mediumType: TextStyle = {
+export const mediumType: TextStyle = {
   fontFamily: Platform.select({
     ios: fonts.sfPro.normal,
     android: fonts.roboto.medium,
@@ -79,12 +79,20 @@ const mediumType: TextStyle = {
   fontWeight: "500",
 }
 
-const semiBoldType: TextStyle = {
+export const semiBoldType: TextStyle = {
   fontFamily: Platform.select({
     ios: fonts.sfPro.normal,
     android: fonts.roboto.bold,
   }),
   fontWeight: "600",
+}
+
+export const boldType: TextStyle = {
+  fontFamily: Platform.select({
+    ios: fonts.sfPro.normal,
+    android: fonts.roboto.bold,
+  }),
+  fontWeight: "700",
 }
 
 export const typography = {

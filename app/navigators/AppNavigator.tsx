@@ -20,6 +20,7 @@ import Config from "../config"
 import { useStores } from "../models"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { MainNavigator, MainTabParamList } from "./MainNavigator"
+import { Logging } from "app/models/system/logging"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -36,8 +37,9 @@ import { MainNavigator, MainTabParamList } from "./MainNavigator"
  */
 export type AppStackParamList = {
   Onboarding?: undefined
+  LoginScreen?: undefined
   Main: NavigatorScreenParams<MainTabParamList>
-  LoginScreen: undefined
+  LoggingDetail?: { logging?: Logging }
 }
 
 /**
@@ -67,6 +69,7 @@ const AppStack = observer(function AppStack() {
       {isAuthenticated ? (
         <>
           <Stack.Screen name="Main" component={MainNavigator} />
+          <Stack.Screen name="LoggingDetail" component={Screens.LoggingDetailScreen} />
         </>
       ) : (
         <>

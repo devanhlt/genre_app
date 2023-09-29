@@ -274,7 +274,7 @@ export const appColors = {
     button: {
       primary: palette.red,
       primaryHover: palette.red300,
-      primaryPress: palette.red500,
+      primaryPress: palette.neutral200,
       secondary: palette.neutral0,
       disabled: palette.neutral200,
     },

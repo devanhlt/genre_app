@@ -1,4 +1,4 @@
-import { Instance, SnapshotOut, flow, getType, types } from "mobx-state-tree"
+import { Instance, SnapshotOut, getType, types } from "mobx-state-tree"
 // import { ENDPOINTS } from "../environment"
 import { withEnvironment } from "../extensions/with-environment"
 import { withSetPropAction } from "../helpers/withSetPropAction"
@@ -35,13 +35,6 @@ export const CommonStoreModel = types
     }
   })
   .actions((self) => ({
-    getHospitalMetadata: flow(function* getHospitalList() {
-      // const api = self.environment?.api
-      // api.setBaseURL(ENDPOINTS.endpointPolicy)
-      // const response = yield* toGenerator(api.get<IHospital>("/api/claims/metadata/hospital"))
-      // console.log("response getHospitalList:", response)
-    }),
-
     /**
      * Handle logout
      * Reset store

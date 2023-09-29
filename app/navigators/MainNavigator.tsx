@@ -1,18 +1,19 @@
 import { BottomTabScreenProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import { CompositeScreenProps } from "@react-navigation/native"
+import { CompositeScreenProps, NavigatorScreenParams } from "@react-navigation/native"
 import { PhosphorIcon } from "app/components/Icon/PhosphorIcon"
 import React from "react"
 import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { translate } from "../i18n"
-import { ConfigurationScreen, DashboardScreen, LogsScreen } from "../screens"
+import { ConfigurationScreen, DashboardScreen } from "../screens"
 import { appColors, spacing, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
+import { LoggingStack, LoggingStackParamList } from "./LoggingNavigator"
 
 export type MainTabParamList = {
-  DashboardScreen: undefined
-  LogsScreen: { queryIndex?: string; itemIndex?: string }
-  ConfigurationScreen: undefined
+  Dashboard: undefined
+  Logging: NavigatorScreenParams<LoggingStackParamList>
+  Configuration: undefined
 }
 
 /**
@@ -44,7 +45,7 @@ export function MainNavigator() {
       }}
     >
       <Tab.Screen
-        name="DashboardScreen"
+        name="Dashboard"
         component={DashboardScreen}
         options={{
           tabBarLabel: translate("mainNavigator.dashboardTab"),
@@ -59,10 +60,10 @@ export function MainNavigator() {
       />
 
       <Tab.Screen
-        name="LogsScreen"
-        component={LogsScreen}
+        name="Logging"
+        component={LoggingStack}
         options={{
-          tabBarLabel: translate("mainNavigator.logsTab"),
+          tabBarLabel: translate("mainNavigator.loggingTab"),
           tabBarIcon: ({ focused, color }) => (
             <PhosphorIcon
               name="Notepad"
@@ -74,7 +75,7 @@ export function MainNavigator() {
       />
 
       <Tab.Screen
-        name="ConfigurationScreen"
+        name="Configuration"
         component={ConfigurationScreen}
         options={{
           tabBarAccessibilityLabel: translate("mainNavigator.configurationTab"),

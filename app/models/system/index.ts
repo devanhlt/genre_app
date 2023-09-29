@@ -4,6 +4,7 @@ import { Instance, SnapshotOut, flow, getType, toGenerator, types } from "mobx-s
 import { withEnvironment } from "../extensions/with-environment"
 import { withSetPropAction } from "../helpers/withSetPropAction"
 import { SystemModel } from "./system"
+import { LoggingModel } from "./logging"
 
 export interface IHospital {
   code: string
@@ -14,6 +15,10 @@ export const SystemStoreModel = types
   .model("SystemStore")
   .props({
     systems: types.array(SystemModel),
+    lstSystemLogging: types.array(LoggingModel),
+    loggingTotalCount: types.optional(types.number, 0),
+    loggingRecordsFiltered: types.optional(types.number, 0),
+    loggingRecordsTotal: types.optional(types.number, 0),
   })
   .extend(withEnvironment) // Extend environment
   // .extend(withRootStore)
@@ -26,6 +31,9 @@ export const SystemStoreModel = types
       get systemsForList() {
         return self.systems
       },
+      get systemsLoggingForList() {
+        return self.lstSystemLogging
+      },
     }
   })
   .actions((self) => ({
@@ -33,6 +41,15 @@ export const SystemStoreModel = types
       const response = yield* toGenerator(api.getSystems())
       if (response.kind === "ok") {
         self.setProp("systems", response.systems)
+      } else {
+        console.tron.error(`Error fetching systems: ${JSON.stringify(response)}`, [])
+      }
+    }),
+
+    fetchLoggingSystems: flow(function* fetchSystems() {
+      const response = yield* toGenerator(api.getLogging())
+      if (response.kind === "ok") {
+        self.setProp("lstSystemLogging", response.logging)
       } else {
         console.tron.error(`Error fetching systems: ${JSON.stringify(response)}`, [])
       }

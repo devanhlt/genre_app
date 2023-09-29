@@ -3,16 +3,16 @@ import React, { FC, useEffect } from "react"
 import { FlatList, ViewStyle } from "react-native"
 
 import { Screen } from "app/components"
+import { Loading } from "app/components/Loading"
+import { useStores } from "app/models"
+import { System } from "app/models/system/system"
 import { MainTabScreenProps } from "app/navigators/MainNavigator"
-import { appColors, spacing, typography } from "app/theme"
+import { appColors, spacing } from "app/theme"
+import { delay } from "app/utils/delay"
 import { useHeader } from "app/utils/useHeader"
 import DashboardSystemItem from "./components/DashboardSystemItem"
-import { useStores } from "app/models"
-import { delay } from "app/utils/delay"
-import { Loading } from "app/components/Loading"
-import { System } from "app/models/system/system"
 
-interface DashboardScreenProps extends MainTabScreenProps<"DashboardScreen"> {}
+interface DashboardScreenProps extends MainTabScreenProps<"Dashboard"> {}
 
 export const DashboardScreen: FC<DashboardScreenProps> = observer(function DashboardScreen(_props) {
   const { systemStore } = useStores()
@@ -36,36 +36,29 @@ export const DashboardScreen: FC<DashboardScreenProps> = observer(function Dashb
   }
 
   useHeader({
-    title: "Dashboard",
-    titleStyle: { ...typography.headline02, color: appColors.palette.neutral0 },
+    leftText: "Dashboard",
     backgroundColor: appColors.common.bgRed,
   })
 
-  console.log("systemStore:", systemStore)
-
   return (
-    <Screen preset="auto" contentContainerStyle={$screenContentContainer}>
+    <Screen preset="fixed" contentContainerStyle={$screenContentContainer}>
       <FlatList<System>
-        data={systemStore.systemsForList}
+        data={systemStore.systems}
         extraData={systemStore.systems.length}
         refreshing={refreshing}
         contentContainerStyle={$flatListContentContainer}
         onRefresh={manualRefresh}
         ListEmptyComponent={isLoading ? <Loading inline /> : <></>}
         ListHeaderComponent={<></>}
-        renderItem={({ item }) => <DashboardSystemItem key={item.guid} />}
+        renderItem={({ item, index }) => (
+          <DashboardSystemItem key={`dashboard-item-${index}`} item={item} />
+        )}
       />
-      <DashboardSystemItem />
-      <DashboardSystemItem />
-      <DashboardSystemItem />
-      <DashboardSystemItem />
-      <DashboardSystemItem />
     </Screen>
   )
 })
 
 const $screenContentContainer: ViewStyle = {
-  paddingVertical: spacing.size16,
   paddingHorizontal: spacing.size16,
 }
 
