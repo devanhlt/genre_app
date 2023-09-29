@@ -42,7 +42,7 @@ const palette = {
 
   // Neutral color
   neutral0: "#FFFFFF",
-  neutral100: "#F5F6F8",
+  neutral100: "#FBFBFB",
   neutral200: "#E5E8ED",
   neutral300: "#BBC3CF",
   neutral400: "#A1ABBB",
@@ -87,7 +87,7 @@ export const appColors = {
      * App UI background
      * Usage for Element container
      */
-    appBackground: palette.neutral0,
+    appBackground: palette.neutral100,
     /**
      * White UI background
      * Usage for Element container

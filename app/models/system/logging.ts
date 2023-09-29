@@ -7,7 +7,7 @@ import { withSetPropAction } from "../helpers/withSetPropAction"
 
 const TypeId = types.model("TypeId", {
   timestamp: types.optional(types.maybeNull(types.number), null),
-  date:types.optional(types.maybeNull(types.number), null),
+  date: types.optional(types.maybeNull(types.number), null),
 })
 
 export const LoggingModel = types

@@ -1,8 +1,8 @@
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect } from "react"
-import { FlatList, ViewStyle } from "react-native"
+import { FlatList, TextStyle, ViewStyle } from "react-native"
 
-import { Screen } from "app/components"
+import { Screen, Typography } from "app/components"
 import { Loading } from "app/components/Loading"
 import { useStores } from "app/models"
 import { System } from "app/models/system/system"
@@ -42,6 +42,7 @@ export const DashboardScreen: FC<DashboardScreenProps> = observer(function Dashb
 
   return (
     <Screen preset="fixed" contentContainerStyle={$screenContentContainer}>
+      <Typography text="Systems" preset="headline01" style={$titleText} />
       <FlatList<System>
         data={systemStore.systems}
         extraData={systemStore.systems.length}
@@ -64,6 +65,12 @@ const $screenContentContainer: ViewStyle = {
 
 const $flatListContentContainer: ViewStyle = {
   paddingHorizontal: spacing.size08,
-  paddingTop: spacing.size16,
-  paddingBottom: spacing.size16,
+  paddingTop: spacing.size04,
+  paddingBottom: spacing.size40,
+}
+
+const $titleText: TextStyle = {
+  marginVertical: spacing.size10,
+  marginLeft: spacing.size08,
+  color: appColors.palette.black600,
 }
