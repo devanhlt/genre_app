@@ -2,11 +2,23 @@ import { api } from "app/services/api"
 import { Instance, SnapshotOut, flow, getType, toGenerator, types } from "mobx-state-tree"
 
 import { apiLogging } from "app/services/api/logging"
-import { FilterLoggingPayload } from "app/services/api/logging/logging.api.types"
+import { subDays } from "date-fns"
 import { withEnvironment } from "../extensions/with-environment"
 import { withSetPropAction } from "../helpers/withSetPropAction"
 import { LoggingModel } from "./logging"
 import { SystemModel } from "./system"
+
+export const LoggingFilterModel = types.model("LoggingFilter", {
+  keyword: types.optional(types.maybeNull(types.string), ""),
+  pageNumber: types.optional(types.maybeNull(types.number), 1),
+  pageSize: types.optional(types.maybeNull(types.number), 10),
+  pageDraw: types.optional(types.maybeNull(types.number), 1),
+  fromDate: types.optional(types.maybeNull(types.Date), subDays(new Date(), 1)),
+  toDate: types.optional(types.maybeNull(types.Date), new Date()),
+  status: types.optional(types.maybeNull(types.string), ""),
+  system: types.optional(types.maybeNull(types.string), ""),
+  logType: types.optional(types.maybeNull(types.string), ""),
+})
 
 export const SystemStoreModel = types
   .model("SystemStore")
@@ -16,6 +28,16 @@ export const SystemStoreModel = types
     loggingTotalCount: types.optional(types.number, 0),
     loggingRecordsFiltered: types.optional(types.number, 0),
     loggingRecordsTotal: types.optional(types.number, 0),
+    loggingFilter: types.optional(LoggingFilterModel, {
+      keyword: "",
+      pageNumber: 1,
+      pageSize: 10,
+      pageDraw: 1,
+      fromDate: subDays(new Date(), 1),
+      toDate: new Date(),
+      status: "",
+      logType: "",
+    }),
   })
   .extend(withEnvironment) // Extend environment
   // .extend(withRootStore)
@@ -31,6 +53,12 @@ export const SystemStoreModel = types
       get systemsLoggingForList() {
         return self.lstSystemLogging
       },
+
+      get getLoggingCurrentFilter() {
+        return {
+          ...self.loggingFilter,
+        }
+      },
     }
   })
   .actions((self) => ({
@@ -44,7 +72,7 @@ export const SystemStoreModel = types
     }),
 
     fetchLoggingSystems: flow(function* fetchLoggingSystems(
-      loggingFiltering: FilterLoggingPayload,
+      loggingFiltering: Instance<typeof LoggingFilterModel>,
     ) {
       const response = yield* toGenerator(apiLogging.getLogging(loggingFiltering))
       if (response.kind === "ok") {
@@ -54,6 +82,22 @@ export const SystemStoreModel = types
       }
     }),
 
+    onChangeLoggingFilter: (loggingFiltering: Instance<typeof LoggingFilterModel>) => {
+      self.setProp("loggingFilter", loggingFiltering)
+    },
+
+    onResetFilter: () => {
+      self.setProp("loggingFilter", {
+        keyword: "",
+        pageNumber: 1,
+        pageSize: 10,
+        pageDraw: 1,
+        fromDate: subDays(new Date(), 1),
+        toDate: new Date(),
+        status: "",
+        logType: "",
+      })
+    },
     /**
      * Handle logout
      * Reset store

@@ -1,4 +1,4 @@
-import { Locale, format, parseISO } from "date-fns"
+import { Locale, format, isValid, parseISO } from "date-fns"
 import I18n from "i18n-js"
 
 import ar from "date-fns/locale/ar-SA"
@@ -18,5 +18,9 @@ export const formatDate = (date: string, dateFormat?: string, options?: Options)
     ...options,
     locale,
   }
-  return format(parseISO(date), dateFormat ?? "MMM dd, yyyy", dateOptions)
+  return format(parseISO(date), dateFormat ?? "yyyy-MM-dd", dateOptions)
+}
+
+export const isValidDate = (date: unknown) => {
+  return isValid(date)
 }

@@ -1,10 +1,12 @@
 import { ApiResponse, ApisauceInstance, create } from "apisauce"
 import { LoggingSnapshotIn } from "app/models/system/logging"
 
+import { LoggingFilterModel } from "app/models/system"
+import { Instance } from "mobx-state-tree"
 import Config from "../../../config"
 import type { ApiConfig } from "../api.types"
 import { GeneralApiProblem, getGeneralApiProblem } from "../apiProblem"
-import { ApiSystemLoggingResponse, FilterLoggingPayload } from "./logging.api.types"
+import { ApiSystemLoggingResponse } from "./logging.api.types"
 
 /**
  * Configuring the apisauce instance.
@@ -40,7 +42,7 @@ export class LoggingApi {
    * Gets a list of system
    */
   async exportLoggingByFilter(
-    filtering: FilterLoggingPayload,
+    filtering:  Instance<typeof LoggingFilterModel>,
   ): Promise<{ kind: "ok"; logging: LoggingSnapshotIn[] } | GeneralApiProblem> {
     // make the api call
 
@@ -76,15 +78,15 @@ export class LoggingApi {
    * Gets a list of system
    */
   async getLogging(
-    filtering: FilterLoggingPayload,
+    filtering: Instance<typeof LoggingFilterModel>,
   ): Promise<{ kind: "ok"; logging: LoggingSnapshotIn[] } | GeneralApiProblem> {
     // make the api call
     const response: ApiResponse<ApiSystemLoggingResponse> = await this.apisauce.get(
       `api/v1/system-logging/search?keyword=${filtering.keyword}&pageDraw=${
         filtering.pageDraw
-      }&pageNumber=${filtering.pageNumber}&pageSize=${
-        filtering.pageSize
-      }&fromDate=${encodeURIComponent(
+      }&pageNumber=${filtering.pageNumber}&logType=${filtering.logType}&system=${
+        filtering.system
+      }&pageSize=${filtering.pageSize}&fromDate=${encodeURIComponent(
         filtering.fromDate.toISOString(),
       )}&toDate=${encodeURIComponent(filtering.toDate.toISOString())}`,
     )

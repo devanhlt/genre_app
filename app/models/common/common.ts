@@ -1,5 +1,4 @@
 import { Instance, SnapshotOut, getType, types } from "mobx-state-tree"
-// import { ENDPOINTS } from "../environment"
 import { withEnvironment } from "../extensions/with-environment"
 import { withSetPropAction } from "../helpers/withSetPropAction"
 
@@ -8,11 +7,6 @@ const Hospital = types.model("Hospital", {
   name: types.optional(types.string, ""),
   id: types.optional(types.string, ""),
 })
-
-export interface IHospital {
-  code: string
-  name: string
-}
 
 export const CommonStoreModel = types
   .model("CommonStore")

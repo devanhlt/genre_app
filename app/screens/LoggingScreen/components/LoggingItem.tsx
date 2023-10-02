@@ -42,16 +42,16 @@ export default function LoggingItem({
         <Typography text={item.systemName} preset="body04" style={$valueText} />
       </View>
 
-      <View style={$rowItem}>
+      {/* <View style={$rowItem}>
         <Typography text="Message:" preset="body04" style={$titleText} />
         <Divider size={spacing.size12} type="vertical" />
         <Typography
-          text={JSON.stringify(JSON.parse(item?.logDetail || "{}"))}
+          text={JSON.stringify(JSON.parse?.(item?.logDetail || "{}"))}
           preset="body02"
           style={$valueText}
           numberOfLines={3}
         />
-      </View>
+      </View> */}
       <View style={$rowItem}>
         <Typography text="Event time:" preset="body04" style={$titleText} />
         <Divider size={spacing.size12} type="vertical" />
