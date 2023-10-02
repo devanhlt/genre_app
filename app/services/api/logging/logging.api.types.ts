@@ -5,15 +5,6 @@
 
 import { Logging } from "app/models/system/logging"
 
-export interface FilterLoggingPayload {
-  keyword: string
-  pageNumber: number
-  pageSize: number
-  pageDraw: number
-  fromDate: Date
-  toDate: Date
-}
-
 export interface ApiSystemLoggingResponse {
   lstSystemLogging: {
     content: Logging[]

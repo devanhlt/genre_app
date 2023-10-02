@@ -7,18 +7,30 @@ import { PhosphorIcon } from "app/components/Icon/PhosphorIcon"
 import SearchField from "app/components/InputField/SearchField"
 import { Loading } from "app/components/Loading"
 import { useStores } from "app/models"
+import { LoggingFilterModel } from "app/models/system"
 import { Logging } from "app/models/system/logging"
 import { AppStackScreenProps } from "app/navigators"
-import { FilterLoggingPayload } from "app/services/api/logging/logging.api.types"
 import { appColors, spacing } from "app/theme"
 import { delay } from "app/utils/delay"
-import { useHeader } from "app/utils/useHeader"
-import subDays from "date-fns/subDays"
-import LoggingFilter from "./components/LoggingFilter"
-import LoggingItem from "./components/LoggingItem"
 import { useDebounce } from "app/utils/useDebounce"
+import { useHeader } from "app/utils/useHeader"
+import { Instance } from "mobx-state-tree"
+import { LoggingFilter } from "./components/LoggingFilter"
+import LoggingItem from "./components/LoggingItem"
 
 interface LoggingScreenProps extends AppStackScreenProps<"LoggingDetail"> {}
+
+export const LoggingFilterTypes = [
+  { id: "", displayName: "ALL" },
+  { id: "INFO", displayName: "INFO" },
+  { id: "WARN", displayName: "WARN" },
+  { id: "ERROR", displayName: "ERROR" },
+]
+
+export const LoggingFilterStatus = [
+  { id: "", displayName: "ALL" },
+  { id: "RESOLVED", displayName: "RESOLVED" },
+]
 
 export const LoggingScreen: FC<LoggingScreenProps> = function LoggingScreen(props) {
   const { navigation } = props
@@ -28,22 +40,18 @@ export const LoggingScreen: FC<LoggingScreenProps> = function LoggingScreen(prop
   const { systemStore } = useStores()
   const [refreshing, setRefreshing] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
-  const [loggingFiltering, setLoggingFiltering] = useState<FilterLoggingPayload>({
-    keyword: "",
-    pageNumber: 1,
-    pageSize: 10,
-    pageDraw: 1,
-    fromDate: subDays(new Date(), 1),
-    toDate: new Date(),
-  })
+  const [searchText, setSearchText] = useState("")
 
-  const debouncedSearch = useDebounce(loggingFiltering.keyword, 1000)
+  const debouncedSearch = useDebounce(searchText, 1000)
 
   // initially, kick off a background refresh without the refreshing UI
   useEffect(() => {
     ;(async function load() {
       setIsLoading(true)
-      await systemStore.fetchLoggingSystems(loggingFiltering)
+      await systemStore.fetchLoggingSystems({
+        ...systemStore.getLoggingCurrentFilter,
+        keyword: searchText,
+      })
       setIsLoading(false)
     })()
   }, [systemStore])
@@ -52,19 +60,25 @@ export const LoggingScreen: FC<LoggingScreenProps> = function LoggingScreen(prop
   async function manualRefresh() {
     if (!isLoading) {
       setRefreshing(true)
-      await Promise.all([systemStore.fetchLoggingSystems(loggingFiltering), delay(750)])
+      await Promise.all([
+        systemStore.fetchLoggingSystems({
+          ...systemStore.getLoggingCurrentFilter,
+          keyword: searchText,
+        }),
+        delay(750),
+      ])
       setRefreshing(false)
     }
   }
 
-  async function loadSystem(currentFilter: FilterLoggingPayload) {
+  async function loadLoggingSystem(currentFilter: Instance<typeof LoggingFilterModel>) {
     setIsLoading(true)
     await systemStore.fetchLoggingSystems(currentFilter)
     setIsLoading(false)
   }
 
   useEffect(() => {
-    loadSystem({ ...loggingFiltering, keyword: debouncedSearch })
+    loadLoggingSystem({ ...systemStore.getLoggingCurrentFilter, keyword: debouncedSearch })
   }, [debouncedSearch])
 
   useHeader({
@@ -80,7 +94,25 @@ export const LoggingScreen: FC<LoggingScreenProps> = function LoggingScreen(prop
   }
 
   const onChangeSearchText = (text: string) => {
-    setLoggingFiltering({ ...loggingFiltering, keyword: text })
+    setSearchText(text)
+  }
+
+  const onClearSearchText = async () => {
+    setSearchText("")
+    await loadLoggingSystem(systemStore.getLoggingCurrentFilter)
+  }
+
+  const onApplyFilter = async (loggingFilter: Instance<typeof LoggingFilterModel>) => {
+    bottomSheetModalRef.current?.close()
+    systemStore.onChangeLoggingFilter({ ...loggingFilter })
+    await loadLoggingSystem(loggingFilter)
+  }
+
+  const onResetFilter = async () => {
+    bottomSheetModalRef.current?.close()
+    systemStore.onResetFilter()
+    setSearchText("")
+    await loadLoggingSystem(systemStore.getLoggingCurrentFilter)
   }
 
   const isLstEmpty =
@@ -92,11 +124,12 @@ export const LoggingScreen: FC<LoggingScreenProps> = function LoggingScreen(prop
         <SearchField
           placeholder="Type any keyword for searching"
           preset="plat"
-          value={loggingFiltering.keyword}
+          value={systemStore.getLoggingCurrentFilter.keyword}
           containerStyle={$searchInput}
           onChangeText={onChangeSearchText}
+          onClear={onClearSearchText}
         />
-        <TouchableOpacity onPress={() => bottomSheetModalRef.current.present()}>
+        <TouchableOpacity onPress={() => bottomSheetModalRef.current?.present()}>
           <PhosphorIcon name="Funnel" style={$searchFilter} color={appColors.common.bgWhite} />
         </TouchableOpacity>
       </View>
@@ -122,8 +155,8 @@ export const LoggingScreen: FC<LoggingScreenProps> = function LoggingScreen(prop
           )}
         />
       )}
-      <BottomModal ref={bottomSheetModalRef} title="Filter" snapPoints={["70%"]}>
-        <LoggingFilter />
+      <BottomModal ref={bottomSheetModalRef} title="Filter" snapPoints={["75%"]}>
+        <LoggingFilter onApplyFilter={onApplyFilter} onResetFilter={onResetFilter} />
       </BottomModal>
     </Screen>
   )
