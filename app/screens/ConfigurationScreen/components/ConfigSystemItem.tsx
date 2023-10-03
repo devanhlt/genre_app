@@ -1,7 +1,7 @@
 import React from "react"
-import { Button, TextStyle, View, ViewStyle } from "react-native"
+import { TextStyle, View, ViewStyle } from "react-native"
 
-import { Typography } from "app/components"
+import { Button, Icon, Typography } from "app/components"
 import { Toggle } from "app/components/Toggle"
 import { ToggleProps } from "app/components/Toggle/type"
 import { System } from "app/models/system/system"
@@ -9,6 +9,7 @@ import { appColors, spacing } from "app/theme"
 import { radius } from "app/theme/radius"
 
 export interface ConfigSystemItemProps {
+  onHandlePressedButton: (system: System) => void
   system?: System
 }
 
@@ -17,28 +18,31 @@ function ControlledToggle(props: ToggleProps) {
   return <Toggle {...props} value={value} onPress={() => setValue(!value)} />
 }
 
-export default function ConfigSystemItem({ system }: ConfigSystemItemProps): JSX.Element {
+export default function ConfigSystemItem({
+  system,
+  onHandlePressedButton,
+}: ConfigSystemItemProps): JSX.Element {
   return (
     <View style={$viewContainer}>
-      <View style={$headerContainer}>
-        <View style={$systemContainer}>
-          <Typography text="System" preset="body01" style={$titleText} />
-          <Typography text={system.systemName} preset="headline02" style={$titleText} />
+      <View style={$systemContainer}>
+        <View style={$titleContainer}>
+          <Icon icon="system" />
+          <Typography text={system.systemName} preset="body02" style={$titleText} />
         </View>
-        <View style={$actionContainer}>
-          <View style={$configBlock}>
-            <Typography
-              text="Receive Log"
-              preset="body01"
-              style={[$titleText, { marginBottom: spacing.size12 }]}
-            />
-            <ControlledToggle variant="switch" />
-          </View>
-          <View style={$configBlock}>
-            <Typography text="Action" preset="body01" style={$titleText} />
-            <Button title="Edit" color={appColors.components.button.primary} />
-          </View>
+        <View style={$configBlock}>
+          <Button
+            text="Edit"
+            preset="secondary"
+            style={$editButton}
+            onPress={() => {
+              onHandlePressedButton(system)
+            }}
+          />
         </View>
+      </View>
+      <View style={$configBlock}>
+        <Typography text="Receive Log" preset="body02" style={$logText} />
+        <ControlledToggle variant="switch" value={system.receiveLog} />
       </View>
       {/* <View style={$tagContainer}>
         <View>
@@ -84,33 +88,44 @@ const $viewContainer: ViewStyle = {
   shadowRadius: radius.md,
   elevation: 16,
   marginBottom: spacing.size16,
+  paddingHorizontal: spacing.size12,
+  paddingVertical: spacing.size12,
 }
 
-const $systemContainer: ViewStyle = {}
-
-const $actionContainer: ViewStyle = {
-  flexDirection: "row",
-  justifyContent: "flex-end",
+const $titleContainer: ViewStyle = {
   flex: 1,
+  flexDirection: "row",
+  alignItems: "center",
 }
 
-const $headerContainer: ViewStyle = {
-  flexDirection: "row",
-  padding: spacing.size10,
-  marginBottom: spacing.size10,
-  alignItems: "center",
-  // borderBottomColor: appColors.palette.black050,
-  // borderBottomWidth: spacing.size02,
+const $systemContainer: ViewStyle = {
+  ...$titleContainer,
+  justifyContent: "space-between",
 }
 
 const $configBlock: ViewStyle = {
-  alignItems: "center",
-  marginStart: spacing.size16,
+  flexDirection: "row",
+  justifyContent: "space-between",
+  marginTop: spacing.size12,
 }
 
 const $titleText: TextStyle = {
+  color: appColors.common.bgRed,
+  marginLeft: spacing.size04,
+}
+
+const $editButton: ViewStyle = {
+  paddingVertical: spacing.size04,
+  paddingLeft: spacing.size12,
+  borderRadius: radius.lg,
+  borderColor: appColors.common.bgRed,
+  marginBottom: spacing.size12,
+}
+
+const $logText: TextStyle = {
+  ...$titleText,
   color: appColors.palette.black600,
-  marginBottom: spacing.size08,
+  marginBottom: spacing.size12,
 }
 
 // const $tagContainer: ViewStyle = {

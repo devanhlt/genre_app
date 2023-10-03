@@ -3,7 +3,7 @@ import React, { useEffect } from "react"
 import { FlatList } from "react-native"
 import ConfigLoggingItem from "./ConfigLoggingItem"
 
-export const ConfigLoggingTab = () => {
+export const ConfigLoggingTab = (): JSX.Element => {
   const { settingStore } = useStores()
   // initially, kick off a background refresh without the refreshing UI
   useEffect(() => {

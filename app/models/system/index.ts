@@ -1,4 +1,4 @@
-import { api } from "app/services/api"
+import { UpdateSystemPayload, api } from "app/services/api"
 import { Instance, SnapshotOut, flow, getType, toGenerator, types } from "mobx-state-tree"
 
 import { apiLogging } from "app/services/api/logging"
@@ -77,6 +77,15 @@ export const SystemStoreModel = types
       const response = yield* toGenerator(apiLogging.getLogging(loggingFiltering))
       if (response.kind === "ok") {
         self.setProp("lstSystemLogging", response.logging)
+      } else {
+        console.tron.error(`Error fetching systems: ${JSON.stringify(response)}`, [])
+      }
+    }),
+
+    setSystem: flow(function* setSystem(updateSystemPayload: UpdateSystemPayload) {
+      const response = yield* toGenerator(api.updateSystem(updateSystemPayload))
+      // eslint-disable-next-line no-empty
+      if (response.kind === "ok") {
       } else {
         console.tron.error(`Error fetching systems: ${JSON.stringify(response)}`, [])
       }

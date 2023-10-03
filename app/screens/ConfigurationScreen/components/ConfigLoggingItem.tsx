@@ -43,11 +43,11 @@ export default function ConfigLoggingItem({ setting }: ConfigLoggingItemProps): 
       </View>
       <View style={$tagContainer}>
         <View style={$configBlock}>
-          <Typography text="Receive Log" preset="body01" style={$titleText} />
+          <Typography text="Send Email" preset="body01" style={$titleText} />
           <ControlledToggle variant="switch" />
         </View>
         <View style={$configBlock}>
-          <Typography text="Receive Log" preset="body01" style={$titleText} />
+          <Typography text="Send SMS" preset="body01" style={$titleText} />
           <ControlledToggle variant="switch" />
         </View>
         <View style={$configBlock}>
