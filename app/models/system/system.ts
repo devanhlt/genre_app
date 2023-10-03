@@ -1,4 +1,5 @@
 import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
+
 import { withRootStore } from "../helpers/withRootStore"
 import { Setting } from "../setting/setting"
 
@@ -21,23 +22,21 @@ export const SystemModel = types
       return self
     },
     get getCurrentHeaderColor() {
-      let color = "#FFFFFF" // White color
       const { settingStore } = self.rootStore
 
       if (self.totalLogError > 0) {
-        const settingLv1 = settingStore?.getCurrentSettings?.find((x: Setting) => x?.logLevel === 2)
-        color = settingLv1?.color || "#D32F2F"
-      } else if (self.totalLogWarn > 0 && self.totalLogError === 0) {
+        const settingLv2 = settingStore?.getCurrentSettings?.find((x: Setting) => x?.logLevel === 2)
+        return settingLv2?.color || "#D32F2F"
+      } else if (self.totalLogWarn > 0) {
         const settingLv1 = settingStore?.getCurrentSettings?.find((x: Setting) => x?.logLevel === 1)
-        color = settingLv1?.color || "#FBC02D"
-      } else if (
-        self.totalLogWarn > 0 ||
-        (self.totalLogError === 0 && self.totalLogWarn === 0 && self.totalLogInfo === 0)
-      ) {
-        const settingLv1 = settingStore?.getCurrentSettings?.find((x: Setting) => x?.logLevel === 0)
-        color = settingLv1?.color || "#388E3C"
+        return settingLv1?.color || "#FBC02D"
+      } else if (self.totalLogInfo > 0) {
+        const settingLv0 = settingStore?.getCurrentSettings?.find((x: Setting) => x?.logLevel === 0)
+        return settingLv0?.color || "#388E3C"
+      } else if (self.totalLogInfo === 0 && self.totalLogError === 0 && self.totalLogWarn === 0) {
+        return "#FBC02D"
       }
-      return color
+      return "#FFFFFF"
     },
   }))
 

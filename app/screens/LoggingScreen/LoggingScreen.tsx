@@ -1,6 +1,6 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { FC, useEffect, useRef, useState } from "react"
-import { FlatList, TouchableOpacity, View, ViewStyle } from "react-native"
+import { FlatList, Share, TouchableOpacity, View, ViewStyle } from "react-native"
 
 import { BottomModal, Screen, Typography } from "app/components"
 import { PhosphorIcon } from "app/components/Icon/PhosphorIcon"
@@ -18,6 +18,11 @@ import { Instance } from "mobx-state-tree"
 import { LoggingFilter } from "./components/LoggingFilter"
 import LoggingItem from "./components/LoggingItem"
 
+import RNFS from "react-native-fs"
+import { jsonToString } from "app/utils/helpers"
+import { endOfDay, startOfDay, subDays } from "date-fns"
+import { observer } from "mobx-react-lite"
+
 interface LoggingScreenProps extends AppStackScreenProps<"LoggingDetail"> {}
 
 export const LoggingFilterTypes = [
@@ -32,7 +37,7 @@ export const LoggingFilterStatus = [
   { id: "RESOLVED", displayName: "RESOLVED" },
 ]
 
-export const LoggingScreen: FC<LoggingScreenProps> = function LoggingScreen(props) {
+export const LoggingScreen: FC<LoggingScreenProps> = observer(function LoggingScreen(props) {
   const { navigation } = props
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
@@ -41,6 +46,8 @@ export const LoggingScreen: FC<LoggingScreenProps> = function LoggingScreen(prop
   const [refreshing, setRefreshing] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
   const [searchText, setSearchText] = useState("")
+  const [fromDate, setFromDate] = useState(startOfDay(subDays(new Date(), 1)))
+  const [toDate, setToDate] = useState(endOfDay(new Date()))
 
   const debouncedSearch = useDebounce(searchText, 1000)
 
@@ -81,38 +88,95 @@ export const LoggingScreen: FC<LoggingScreenProps> = function LoggingScreen(prop
     loadLoggingSystem({ ...systemStore.getLoggingCurrentFilter, keyword: debouncedSearch })
   }, [debouncedSearch])
 
+  const onExportByFilter = async () => {
+    const loggings = await systemStore.exportLogByFilter({
+      ...systemStore.getLoggingCurrentFilter,
+      keyword: debouncedSearch,
+    })
+
+    // TODO move logic code to common file
+    // :warning: on iOS, you cannot write into `RNFS.MainBundlePath`,
+    // but `RNFS.DocumentDirectoryPath` exists on both platforms and is writable
+    const now = new Date().getTime()
+    const path = `${RNFS.DocumentDirectoryPath}/${now.toString()}.log`
+
+    RNFS.writeFile(path, jsonToString(loggings), "utf8")
+      .then(async () => {
+        const result = await Share.share({
+          title: "API Management Logs",
+          url: path,
+        })
+        if (result.action === Share.sharedAction) {
+          if (result.activityType) {
+            // shared with activity type of result.activityType
+          } else {
+            // shared
+          }
+        } else if (result.action === Share.dismissedAction) {
+          // dismissed
+        }
+      })
+      .catch((err) => {
+        console.log(err.message)
+      })
+  }
+
   useHeader({
     leftTx: "screenTitle.loggingTab",
     backgroundColor: appColors.common.bgRed,
     rightIcon: "export",
     rightIconColor: appColors.palette.neutral0,
-    onRightPress: () => null,
+    // Export logging by current filter
+    onRightPress: onExportByFilter,
   })
 
+  // Navigate logging detail
   const onPressLoggingItem = (item: Logging) => {
     navigation.navigate("LoggingDetail", { logging: item })
   }
 
+  // Handle change text search
   const onChangeSearchText = (text: string) => {
     setSearchText(text)
   }
 
   const onClearSearchText = async () => {
     setSearchText("")
-    await loadLoggingSystem(systemStore.getLoggingCurrentFilter)
+    await loadLoggingSystem({
+      ...systemStore.getLoggingCurrentFilter,
+      fromDate: startOfDay(fromDate),
+      toDate: endOfDay(toDate),
+    })
   }
 
+  // Apply filter
   const onApplyFilter = async (loggingFilter: Instance<typeof LoggingFilterModel>) => {
     bottomSheetModalRef.current?.close()
     systemStore.onChangeLoggingFilter({ ...loggingFilter })
-    await loadLoggingSystem(loggingFilter)
+    setFromDate(loggingFilter.fromDate)
+    setToDate(loggingFilter.toDate)
+    await loadLoggingSystem({
+      ...loggingFilter,
+      fromDate: startOfDay(fromDate),
+      toDate: endOfDay(toDate),
+    })
   }
 
+  // Reset filter
   const onResetFilter = async () => {
     bottomSheetModalRef.current?.close()
     systemStore.onResetFilter()
     setSearchText("")
-    await loadLoggingSystem(systemStore.getLoggingCurrentFilter)
+    await loadLoggingSystem({
+      ...systemStore.getLoggingCurrentFilter,
+      fromDate: startOfDay(fromDate),
+      toDate: endOfDay(toDate),
+    })
+  }
+
+  // Open filter
+  const onOpenFilter = async () => {
+    bottomSheetModalRef?.current?.present?.()
   }
 
   const isLstEmpty =
@@ -129,7 +193,7 @@ export const LoggingScreen: FC<LoggingScreenProps> = function LoggingScreen(prop
           onChangeText={onChangeSearchText}
           onClear={onClearSearchText}
         />
-        <TouchableOpacity onPress={() => bottomSheetModalRef.current?.present()}>
+        <TouchableOpacity onPress={onOpenFilter}>
           <PhosphorIcon name="Funnel" style={$searchFilter} color={appColors.common.bgWhite} />
         </TouchableOpacity>
       </View>
@@ -156,11 +220,16 @@ export const LoggingScreen: FC<LoggingScreenProps> = function LoggingScreen(prop
         />
       )}
       <BottomModal ref={bottomSheetModalRef} title="Filter" snapPoints={["75%"]}>
-        <LoggingFilter onApplyFilter={onApplyFilter} onResetFilter={onResetFilter} />
+        <LoggingFilter
+          onApplyFilter={onApplyFilter}
+          onResetFilter={onResetFilter}
+          fromDate={fromDate}
+          toDate={toDate}
+        />
       </BottomModal>
     </Screen>
   )
-}
+})
 
 const $screenContentContainer: ViewStyle = {
   flex: 1,

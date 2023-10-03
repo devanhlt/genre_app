@@ -46,7 +46,7 @@ export default function LoggingItem({
         <Typography text="Message:" preset="body04" style={$titleText} />
         <Divider size={spacing.size12} type="vertical" />
         <Typography
-          text={JSON.stringify(JSON.parse?.(item?.logDetail || "{}"))}
+          text={jsonToString(stringToJson(item?.logDetail || "{}"))}
           preset="body02"
           style={$valueText}
           numberOfLines={3}

@@ -18,17 +18,23 @@ import { Divider } from "app/components/Divider"
 export interface LoggingFilterProps {
   onApplyFilter: (filter?: Instance<typeof LoggingFilterModel>) => void
   onResetFilter: () => void
+  toDate: Date
+  fromDate: Date
 }
 
 export const LoggingFilter: FC<LoggingFilterProps> = observer(function LoggingFilter({
   onApplyFilter = () => null,
   onResetFilter = () => null,
+  toDate,
+  fromDate,
 }) {
   const { systemStore } = useStores()
 
-  const [loggingFilter, setLoggingFilter] = useState<Instance<typeof LoggingFilterModel>>(
-    systemStore.getLoggingCurrentFilter,
-  )
+  const [loggingFilter, setLoggingFilter] = useState<Instance<typeof LoggingFilterModel>>({
+    ...systemStore.getLoggingCurrentFilter,
+    fromDate,
+    toDate,
+  })
 
   const onChangeLogSystem = (systemId: string) => () => {
     setLoggingFilter({ ...loggingFilter, system: systemId })
@@ -71,7 +77,7 @@ export const LoggingFilter: FC<LoggingFilterProps> = observer(function LoggingFi
           <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
-            data={systemStore.systemsForList}
+            data={systemStore.systemsForListFilter}
             extraData={systemStore.systems.length}
             keyExtractor={(item, index) =>
               `system-filter-${item.totalLogInfo}-${item.totalLogWarn}-${item.totalLogError}-${index}`
@@ -187,6 +193,7 @@ export const LoggingFilter: FC<LoggingFilterProps> = observer(function LoggingFi
           text="Reset"
           onPress={handleOnResetFilter}
           preset="secondary"
+          textStyle={$resetTextStyle}
           style={$resetButton}
         />
         <Divider size={spacing.size12} type="vertical" />
@@ -234,6 +241,10 @@ const $applyButton: TextStyle = {
   flex: 1,
 }
 
-const $resetButton: TextStyle = {
+const $resetButton: ViewStyle = {
   flex: 1,
+}
+
+const $resetTextStyle: TextStyle = {
+  color: appColors.common.characterPrimary,
 }
