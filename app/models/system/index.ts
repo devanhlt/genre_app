@@ -1,20 +1,33 @@
-import { UpdateSystemPayload, api } from "app/services/api"
+import { api } from "app/services/api"
+import { endOfDay, startOfDay, subDays } from "date-fns"
 import { Instance, SnapshotOut, flow, getType, toGenerator, types } from "mobx-state-tree"
 
 import { apiLogging } from "app/services/api/logging"
-import { subDays } from "date-fns"
+import { jsonToString } from "app/utils/helpers"
 import { withEnvironment } from "../extensions/with-environment"
 import { withSetPropAction } from "../helpers/withSetPropAction"
-import { LoggingModel } from "./logging"
+import { LoggingModel, LoggingSnapshotIn } from "./logging"
 import { SystemModel } from "./system"
+
+const ALL_SYSTEM = {
+  systemName: "ALL",
+  baseUrl: null,
+  adminEmail: null,
+  adminPhone: null,
+  totalLog: null,
+  totalLogInfo: null,
+  totalLogWarn: null,
+  totalLogError: null,
+  receiveLog: false,
+}
 
 export const LoggingFilterModel = types.model("LoggingFilter", {
   keyword: types.optional(types.maybeNull(types.string), ""),
   pageNumber: types.optional(types.maybeNull(types.number), 1),
   pageSize: types.optional(types.maybeNull(types.number), 10),
   pageDraw: types.optional(types.maybeNull(types.number), 1),
-  fromDate: types.optional(types.maybeNull(types.Date), subDays(new Date(), 1)),
-  toDate: types.optional(types.maybeNull(types.Date), new Date()),
+  fromDate: types.optional(types.maybeNull(types.Date), startOfDay(subDays(new Date(), 1))),
+  toDate: types.optional(types.maybeNull(types.Date), endOfDay(new Date())),
   status: types.optional(types.maybeNull(types.string), ""),
   system: types.optional(types.maybeNull(types.string), ""),
   logType: types.optional(types.maybeNull(types.string), ""),
@@ -33,10 +46,11 @@ export const SystemStoreModel = types
       pageNumber: 1,
       pageSize: 10,
       pageDraw: 1,
-      fromDate: subDays(new Date(), 1),
-      toDate: new Date(),
+      fromDate: startOfDay(subDays(new Date(), 1)),
+      toDate: endOfDay(new Date()),
       status: "",
       logType: "",
+      system: "ALL",
     }),
   })
   .extend(withEnvironment) // Extend environment
@@ -49,6 +63,9 @@ export const SystemStoreModel = types
       },
       get systemsForList() {
         return self.systems
+      },
+      get systemsForListFilter() {
+        return [ALL_SYSTEM].concat(self.systems)
       },
       get systemsLoggingForList() {
         return self.lstSystemLogging
@@ -67,18 +84,43 @@ export const SystemStoreModel = types
       if (response.kind === "ok") {
         self.setProp("systems", response.systems)
       } else {
-        console.tron.error(`Error fetching systems: ${JSON.stringify(response)}`, [])
+        console.tron.error(`Error fetching systems: ${jsonToString(response)}`, [])
       }
     }),
 
     fetchLoggingSystems: flow(function* fetchLoggingSystems(
       loggingFiltering: Instance<typeof LoggingFilterModel>,
     ) {
-      const response = yield* toGenerator(apiLogging.getLogging(loggingFiltering))
+      const currentFilter = { ...loggingFiltering }
+      // Delete system param from the request params if choose all system
+      if (currentFilter.system === ALL_SYSTEM.systemName) {
+        delete currentFilter.system
+      }
+      const response = yield* toGenerator(apiLogging.getLogging(currentFilter))
       if (response.kind === "ok") {
         self.setProp("lstSystemLogging", response.logging)
       } else {
-        console.tron.error(`Error fetching systems: ${JSON.stringify(response)}`, [])
+        console.tron.error(`Error fetching systems: ${jsonToString(response)}`, [])
+      }
+    }),
+
+    exportLogByFilter: flow(function* exportLogByFilter(
+      loggingFiltering: Instance<typeof LoggingFilterModel>,
+    ) {
+      const response = yield* toGenerator(apiLogging.exportLoggingByFilter(loggingFiltering))
+      if (response.kind === "ok") {
+        return response.logging
+      } else {
+        return []
+      }
+    }),
+
+    exportSingleLogDetail: flow(function* exportLogByFilter(logging: LoggingSnapshotIn) {
+      const response = yield* toGenerator(apiLogging.exportSingleLogDetail(logging))
+      if (response.kind === "ok") {
+        return response.data
+      } else {
+        return ""
       }
     }),
 
@@ -101,8 +143,8 @@ export const SystemStoreModel = types
         pageNumber: 1,
         pageSize: 10,
         pageDraw: 1,
-        fromDate: subDays(new Date(), 1),
-        toDate: new Date(),
+        fromDate: startOfDay(subDays(new Date(), 1)),
+        toDate: endOfDay(new Date()),
         status: "",
         logType: "",
       })
