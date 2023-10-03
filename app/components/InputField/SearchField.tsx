@@ -37,7 +37,6 @@ function SearchField(props: SearchFieldProps) {
     props?.onChangeText(text)
   }
 
-
   const $searchPresetsStyles = $searchPresets[props?.preset || "outline"]
   return (
     <TextField

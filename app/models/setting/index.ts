@@ -4,6 +4,7 @@ import { apiSetting } from "app/services/api/setting"
 import { withEnvironment } from "../extensions/with-environment"
 import { withSetPropAction } from "../helpers/withSetPropAction"
 import { SettingModel } from "./setting"
+import { jsonToString } from "app/utils/helpers"
 
 export const SettingStoreModel = types
   .model("SettingStore")
@@ -26,7 +27,7 @@ export const SettingStoreModel = types
       if (response.kind === "ok") {
         self.setProp("settings", response.logging)
       } else {
-        console.tron.error(`Error fetching systems: ${JSON.stringify(response)}`, [])
+        console.tron.error(`Error fetching systems: ${jsonToString(response)}`, [])
       }
     }),
 

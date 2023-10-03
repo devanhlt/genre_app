@@ -1,8 +1,8 @@
 import { ApiResponse, ApisauceInstance, create } from "apisauce"
-import { LoggingSnapshotIn } from "app/models/system/logging"
-
-import { LoggingFilterModel } from "app/models/system"
 import { Instance } from "mobx-state-tree"
+
+import { Logging, LoggingSnapshotIn } from "app/models/system/logging"
+import { LoggingFilterModel } from "app/models/system"
 import Config from "../../../config"
 import type { ApiConfig } from "../api.types"
 import { GeneralApiProblem, getGeneralApiProblem } from "../apiProblem"
@@ -39,14 +39,14 @@ export class LoggingApi {
   }
 
   /**
-   * Gets a list of system
+   * Export logging by current filter
    */
   async exportLoggingByFilter(
-    filtering:  Instance<typeof LoggingFilterModel>,
+    filtering: Instance<typeof LoggingFilterModel>,
   ): Promise<{ kind: "ok"; logging: LoggingSnapshotIn[] } | GeneralApiProblem> {
     // make the api call
 
-    const response: ApiResponse<ApiSystemLoggingResponse> = await this.apisauce.post(
+    const response: ApiResponse<Logging[]> = await this.apisauce.post(
       `api/v1/system-logging/download/files`,
       { ...filtering },
     )
@@ -58,7 +58,7 @@ export class LoggingApi {
     }
 
     try {
-      const rawData = response?.data?.lstSystemLogging?.content
+      const rawData = response?.data
 
       // This is where we transform the data into the shape we expect for our MST model.
       const logging: LoggingSnapshotIn[] = rawData.map((raw) => ({
@@ -66,6 +66,36 @@ export class LoggingApi {
       }))
 
       return { kind: "ok", logging }
+    } catch (e) {
+      if (__DEV__) {
+        console.tron.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
+      }
+      return { kind: "bad-data" }
+    }
+  }
+
+  /**
+   * Export logging by current filter
+   */
+  async exportSingleLogDetail(
+    logging: LoggingSnapshotIn,
+  ): Promise<{ kind: "ok"; data: string } | GeneralApiProblem> {
+    // make the api call
+
+    const response: ApiResponse<string> = await this.apisauce.post(
+      `api/v1/system-logging/download/file`,
+      { ...logging },
+    )
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    try {
+      const rawData = response?.data
+      return { kind: "ok", data: rawData }
     } catch (e) {
       if (__DEV__) {
         console.tron.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
@@ -85,7 +115,7 @@ export class LoggingApi {
       `api/v1/system-logging/search?keyword=${filtering.keyword}&pageDraw=${
         filtering.pageDraw
       }&pageNumber=${filtering.pageNumber}&logType=${filtering.logType}&system=${
-        filtering.system
+        filtering.system ?? ""
       }&pageSize=${filtering.pageSize}&fromDate=${encodeURIComponent(
         filtering.fromDate.toISOString(),
       )}&toDate=${encodeURIComponent(filtering.toDate.toISOString())}`,
