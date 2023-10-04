@@ -40,7 +40,7 @@ export default function ConfigLoggingItem({
       {
         text: "OK",
         onPress: () => {
-          setting.editSettingSendEmail({ ...setting, sendEmail: !setting.sendEmail })
+          setting.editLoggingSendEmail({ ...setting, sendEmail: !setting.sendEmail })
         },
       },
     ])
@@ -55,7 +55,7 @@ export default function ConfigLoggingItem({
       {
         text: "OK",
         onPress: () => {
-          setting.editSettingSendSms({ ...setting, sendSms: !setting.sendSms })
+          setting.editLoggingSendSms({ ...setting, sendSms: !setting.sendSms })
         },
       },
     ])
@@ -95,6 +95,7 @@ export default function ConfigLoggingItem({
           <Typography text="Send Email" preset="body01" style={$titleText} />
           <ControlledToggle
             variant="switch"
+            value={setting.sendEmail}
             onValueChange={() => {
               changeSendEmail(setting)
             }}
@@ -104,6 +105,7 @@ export default function ConfigLoggingItem({
           <Typography text="Send SMS" preset="body01" style={$titleText} />
           <ControlledToggle
             variant="switch"
+            value={setting.sendSms}
             onValueChange={() => {
               changeSendSms(setting)
             }}
