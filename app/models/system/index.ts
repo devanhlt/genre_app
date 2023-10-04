@@ -124,15 +124,6 @@ export const SystemStoreModel = types
       }
     }),
 
-    setSystem: flow(function* setSystem(updateSystemPayload: UpdateSystemPayload) {
-      const response = yield* toGenerator(api.updateSystem(updateSystemPayload))
-      // eslint-disable-next-line no-empty
-      if (response.kind === "ok") {
-      } else {
-        console.tron.error(`Error fetching systems: ${JSON.stringify(response)}`, [])
-      }
-    }),
-
     onChangeLoggingFilter: (loggingFiltering: Instance<typeof LoggingFilterModel>) => {
       self.setProp("loggingFilter", loggingFiltering)
     },

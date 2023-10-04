@@ -1,5 +1,5 @@
 import React from "react"
-import { TextStyle, View, ViewStyle } from "react-native"
+import { Alert, TextStyle, View, ViewStyle } from "react-native"
 
 import { Button, Icon, Typography } from "app/components"
 import { Toggle } from "app/components/Toggle"
@@ -22,6 +22,22 @@ export default function ConfigSystemItem({
   system,
   onHandlePressedButton,
 }: ConfigSystemItemProps): JSX.Element {
+  const confirmAlert = (system: System) => {
+    Alert.alert("Confirm", "Are you sure?", [
+      {
+        text: "Close",
+        onPress: () => null,
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: () => {
+          system.editSystemReceiveLog({ ...system, receiveLog: !system.receiveLog })
+        },
+      },
+    ])
+  }
+
   return (
     <View style={$viewContainer}>
       <View style={$systemContainer}>
@@ -29,50 +45,25 @@ export default function ConfigSystemItem({
           <Icon icon="system" />
           <Typography text={system.systemName} preset="body02" style={$titleText} />
         </View>
-        <View style={$configBlock}>
-          <Button
-            text="Edit"
-            preset="secondary"
-            style={$editButton}
-            onPress={() => {
-              onHandlePressedButton(system)
-            }}
-          />
-        </View>
+        <Button
+          text="Edit"
+          preset="secondary"
+          style={$editButton}
+          onPress={() => {
+            onHandlePressedButton(system)
+          }}
+        />
       </View>
       <View style={$configBlock}>
         <Typography text="Receive Log" preset="body02" style={$logText} />
-        <ControlledToggle variant="switch" value={system.receiveLog} />
+        <ControlledToggle
+          variant="switch"
+          value={system.receiveLog}
+          onValueChange={() => {
+            confirmAlert(system)
+          }}
+        />
       </View>
-      {/* <View style={$tagContainer}>
-        <View>
-          <Typography text="Success" preset="body04" style={$labelText} />
-          <Typography
-            text={`${system.getCurrentSystem.totalLogInfo}`}
-            preset="headline01"
-            color={appColors.palette.green400}
-            style={$totalLogText}
-          />
-        </View>
-        <View>
-          <Typography text="Warning" preset="body04" style={$labelText} />
-          <Typography
-            text={`${system.getCurrentSystem.totalLogWarn}`}
-            preset="headline01"
-            color={appColors.palette.yellow400}
-            style={$totalLogText}
-          />
-        </View>
-        <View>
-          <Typography text="Error" preset="body04" style={$labelText} />
-          <Typography
-            text={`${system.getCurrentSystem.totalLogError}`}
-            preset="headline01"
-            color={appColors.palette.red400}
-            style={$totalLogText}
-          />
-        </View>
-      </View> */}
     </View>
   )
 }
@@ -88,8 +79,6 @@ const $viewContainer: ViewStyle = {
   shadowRadius: radius.md,
   elevation: 16,
   marginBottom: spacing.size16,
-  paddingHorizontal: spacing.size12,
-  paddingVertical: spacing.size12,
 }
 
 const $titleContainer: ViewStyle = {
@@ -99,14 +88,22 @@ const $titleContainer: ViewStyle = {
 }
 
 const $systemContainer: ViewStyle = {
-  ...$titleContainer,
+  flex: 1,
+  flexDirection: "row",
+  alignItems: "center",
   justifyContent: "space-between",
+  borderColor: appColors.palette.black050,
+  borderBottomWidth: spacing.size01,
+  paddingVertical: spacing.size12,
+  paddingHorizontal: spacing.size12,
 }
 
 const $configBlock: ViewStyle = {
   flexDirection: "row",
   justifyContent: "space-between",
   marginTop: spacing.size12,
+  paddingVertical: spacing.size04,
+  paddingHorizontal: spacing.size12,
 }
 
 const $titleText: TextStyle = {
@@ -119,7 +116,6 @@ const $editButton: ViewStyle = {
   paddingLeft: spacing.size12,
   borderRadius: radius.lg,
   borderColor: appColors.common.bgRed,
-  marginBottom: spacing.size12,
 }
 
 const $logText: TextStyle = {
@@ -127,20 +123,3 @@ const $logText: TextStyle = {
   color: appColors.palette.black600,
   marginBottom: spacing.size12,
 }
-
-// const $tagContainer: ViewStyle = {
-//   flex: 1,
-//   flexDirection: "row",
-//   justifyContent: "space-between",
-//   padding: spacing.size10,
-//   borderRadius: spacing.size08,
-//   marginTop: spacing.size10,
-// }
-
-// const $labelText: TextStyle = {
-//   color: appColors.palette.black600,
-// }
-
-// const $totalLogText: TextStyle = {
-//   textAlign: "center",
-// }

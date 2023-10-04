@@ -49,6 +49,11 @@ const en = {
       adminEmail: "Admin email",
       adminPhone: "Admin phone",
     },
+    loggingDetailForm: {
+      logLevel: "Log Level",
+      color: "Color",
+      description: "Description",
+    },
   },
   mainNavigator: {
     dashboardTab: "Dashboard",

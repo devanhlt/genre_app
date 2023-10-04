@@ -1,9 +1,10 @@
 import { ApiResponse, ApisauceInstance, create } from "apisauce"
 
-import { Setting, SettingSnapshotIn } from "app/models/setting/setting"
+import { Setting, SettingSnapshotIn, SettingSnapshotOut } from "app/models/setting/setting"
 import Config from "../../../config"
 import type { ApiConfig } from "../api.types"
 import { GeneralApiProblem, getGeneralApiProblem } from "../apiProblem"
+import { SystemSnapshotOut } from "app/models/system/system"
 
 /**
  * Configuring the apisauce instance.
@@ -38,7 +39,9 @@ export class SettingApi {
   /**
    * Gets a list of system
    */
-  async getSetting(): Promise<{ kind: "ok"; logging: SettingSnapshotIn[] } | GeneralApiProblem> {
+  async getLoggingSetting(): Promise<
+    { kind: "ok"; logging: SettingSnapshotIn[] } | GeneralApiProblem
+  > {
     // make the api call
     const response: ApiResponse<Setting[]> = await this.apisauce.get(`api/v1/settings`)
 
@@ -62,6 +65,48 @@ export class SettingApi {
       }
       return { kind: "bad-data" }
     }
+  }
+
+  /**
+   * Update logging setting
+   */
+  async putLoggingSetting(
+    payload: SettingSnapshotOut,
+  ): Promise<{ kind: "ok"; success: boolean } | GeneralApiProblem> {
+    // make the api call
+
+    const response: ApiResponse<boolean> = await this.apisauce.put(`api/v1/settings/update`, {
+      ...payload,
+    })
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    return { kind: "ok", success: response.data }
+  }
+
+  /**
+   * Update config of a system
+   */
+  async putSystemConfig(
+    payload: SystemSnapshotOut,
+  ): Promise<{ kind: "ok"; success: boolean } | GeneralApiProblem> {
+    // make the api call
+
+    const response: ApiResponse<boolean> = await this.apisauce.put(`api/v1/systems/update`, {
+      ...payload,
+    })
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    return { kind: "ok", success: response.data }
   }
 }
 

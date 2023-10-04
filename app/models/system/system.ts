@@ -1,7 +1,10 @@
-import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
+import { Instance, SnapshotIn, SnapshotOut, flow, toGenerator, types } from "mobx-state-tree"
 
 import { withRootStore } from "../helpers/withRootStore"
 import { Setting } from "../setting/setting"
+import { withSetPropAction } from "../helpers/withSetPropAction"
+import { apiSetting } from "app/services/api/setting"
+import { jsonToString } from "app/utils/helpers"
 
 export const SystemModel = types
   .model("System")
@@ -17,6 +20,30 @@ export const SystemModel = types
     totalLogError: types.optional(types.maybeNull(types.number), null),
     receiveLog: types.optional(types.maybeNull(types.boolean), false),
   })
+  .actions(withSetPropAction)
+  .actions((self) => ({
+    editSystemDetail: flow(function* editSystemDetail(system: Instance<typeof SystemModel>) {
+      const response = yield* toGenerator(apiSetting.putSystemConfig(system))
+      if (response.kind === "ok" && response.success === true) {
+        self.setProp("systemName", system.systemName)
+        self.setProp("baseUrl", system.baseUrl)
+        self.setProp("adminEmail", system.adminEmail)
+        self.setProp("adminPhone", system.adminPhone)
+      } else {
+        console.tron.error(`Error editing system: ${jsonToString(response)}`, [])
+      }
+    }),
+    editSystemReceiveLog: flow(function* editSystemReceiveLog(
+      system: Instance<typeof SystemModel>,
+    ) {
+      const response = yield* toGenerator(apiSetting.putSystemConfig(system))
+      if (response.kind === "ok" && response.success === true) {
+        self.setProp("receiveLog", system.receiveLog)
+      } else {
+        console.tron.error(`Error editing system: ${jsonToString(response)}`, [])
+      }
+    }),
+  }))
   .views((self) => ({
     get getCurrentSystem() {
       return self

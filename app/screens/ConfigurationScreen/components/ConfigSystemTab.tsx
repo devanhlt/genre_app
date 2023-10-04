@@ -6,8 +6,9 @@ import { BottomModal } from "app/components"
 import { ConfigSystemModal } from "./ConfigSystemModal"
 import { System } from "app/models/system/system"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
+import { observer } from "mobx-react-lite"
 
-export const ConfigSystemTab = () => {
+export const ConfigSystemTab = observer(function ConfigSystemTab() {
   const { systemStore } = useStores()
   const [system, setSystem] = useState<System>()
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
@@ -21,6 +22,10 @@ export const ConfigSystemTab = () => {
   const handlePressedButton = (system: System) => {
     setSystem(system)
     bottomSheetModalRef.current.present()
+  }
+
+  const handleSubmit = () => {
+    bottomSheetModalRef.current.dismiss()
   }
 
   return (
@@ -37,9 +42,9 @@ export const ConfigSystemTab = () => {
           <ConfigSystemItem system={item} onHandlePressedButton={handlePressedButton} />
         )}
       />
-      <BottomModal ref={bottomSheetModalRef} title="Details" snapPoints={["60%"]}>
-        <ConfigSystemModal system={system} />
+      <BottomModal ref={bottomSheetModalRef} title="Edit System Configuration" snapPoints={["60%"]}>
+        <ConfigSystemModal system={system} onSubmit={handleSubmit} />
       </BottomModal>
     </Fragment>
   )
-}
+})

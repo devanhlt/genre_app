@@ -1,7 +1,7 @@
 import { ApiResponse, ApisauceInstance, create } from "apisauce"
 import { System, SystemSnapshotIn } from "app/models/system/system"
 import Config from "../../config"
-import type { ApiConfig, UpdateSystemPayload } from "./api.types"
+import type { ApiConfig } from "./api.types"
 import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
 
 /**
@@ -64,25 +64,6 @@ export class Api {
       }
       return { kind: "bad-data" }
     }
-  }
-
-  /**
-   * Update config of a system
-   */
-  async updateSystem(payload: UpdateSystemPayload): Promise<{ kind: "ok" } | GeneralApiProblem> {
-    // make the api call
-
-    const response: ApiResponse<boolean> = await this.apisauce.put(`api/v1/system/update`, {
-      ...payload,
-    })
-
-    // the typical ways to die when calling an api
-    if (!response.ok) {
-      const problem = getGeneralApiProblem(response)
-      if (problem) return problem
-    }
-
-    return { kind: "ok" }
   }
 }
 

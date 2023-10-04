@@ -1,13 +1,14 @@
 import { observer } from "mobx-react-lite"
 import React, { FC, useState } from "react"
-import { ViewStyle } from "react-native"
+import { TouchableOpacity, ViewStyle } from "react-native"
 
-import { appColors, spacing, typography } from "app/theme"
+import { appColors, spacing } from "app/theme"
 import { Screen } from "app/components"
 import { MainTabScreenProps } from "app/navigators/MainNavigator"
 import { useHeader } from "app/utils/useHeader"
 import { useStores } from "app/models"
 import { ConfigTabView } from "./components/ConfigTabView"
+import { PhosphorIcon } from "app/components/Icon/PhosphorIcon"
 
 interface ConfigurationScreenProps extends MainTabScreenProps<"Configuration"> {}
 
@@ -22,9 +23,11 @@ export const ConfigurationScreen: FC<ConfigurationScreenProps> = observer(
     useHeader({
       leftTx: "mainNavigator.configurationTab",
       backgroundColor: appColors.common.bgRed,
-      rightTx: "common.logOut",
-      rightTextStyle: { ...typography.body02, paddingRight: spacing.size10 },
-      onRightPress: logout,
+      RightActionComponent: (
+        <TouchableOpacity onPress={logout}>
+          <PhosphorIcon name="SignOut" color={appColors.common.bgWhite} style={$logoutIcon} />
+        </TouchableOpacity>
+      ),
     })
 
     return (
@@ -38,4 +41,8 @@ export const ConfigurationScreen: FC<ConfigurationScreenProps> = observer(
 const $screenContentContainer: ViewStyle = {
   paddingVertical: 0,
   flex: 1, // for react-native-tab-view to work
+}
+
+const $logoutIcon: ViewStyle = {
+  marginRight: spacing.size12,
 }
