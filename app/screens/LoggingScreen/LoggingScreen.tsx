@@ -1,11 +1,10 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { FC, useEffect, useRef, useState } from "react"
-import { FlatList, Share, TouchableOpacity, View, ViewStyle } from "react-native"
+import { FlatList, RefreshControl, Share, TouchableOpacity, View, ViewStyle } from "react-native"
 
-import { BottomModal, Screen, Typography } from "app/components"
+import { BottomModal, Screen } from "app/components"
 import { PhosphorIcon } from "app/components/Icon/PhosphorIcon"
 import SearchField from "app/components/InputField/SearchField"
-import { Loading } from "app/components/Loading"
 import { useStores } from "app/models"
 import { LoggingFilterModel } from "app/models/system"
 import { Logging } from "app/models/system/logging"
@@ -18,10 +17,11 @@ import { Instance } from "mobx-state-tree"
 import { LoggingFilter } from "./components/LoggingFilter"
 import LoggingItem from "./components/LoggingItem"
 
-import RNFS from "react-native-fs"
+import EmptyListMessage from "app/components/EmptyListMessage"
 import { jsonToString } from "app/utils/helpers"
 import { endOfDay, startOfDay, subDays } from "date-fns"
 import { observer } from "mobx-react-lite"
+import RNFS from "react-native-fs"
 
 interface LoggingScreenProps extends AppStackScreenProps<"LoggingDetail"> {}
 
@@ -197,28 +197,26 @@ export const LoggingScreen: FC<LoggingScreenProps> = observer(function LoggingSc
           <PhosphorIcon name="Funnel" style={$searchFilter} color={appColors.common.bgWhite} />
         </TouchableOpacity>
       </View>
-      {isLstEmpty && !isLoading && (
-        <View style={$listEmptyContainer}>
-          <Typography text="No data!" />
-        </View>
-      )}
-      {isLoading && <Loading />}
-      {!isLstEmpty && !isLoading && (
-        <FlatList
-          data={systemStore.lstSystemLogging}
-          extraData={systemStore.lstSystemLogging.length}
-          refreshing={refreshing}
-          onRefresh={manualRefresh}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ index, item }) => (
-            <LoggingItem
-              key={`logging-item-${index}`}
-              item={item}
-              onPressItem={onPressLoggingItem}
+
+      <FlatList
+        centerContent
+        contentContainerStyle={$flatListContentContainer}
+        data={systemStore.lstSystemLogging}
+        extraData={systemStore.lstSystemLogging.length}
+        refreshControl={
+          !isLstEmpty && (
+            <RefreshControl
+              title={"Thả để cập nhật"}
+              refreshing={refreshing}
+              onRefresh={manualRefresh}
             />
-          )}
-        />
-      )}
+          )
+        }
+        ListEmptyComponent={() => <EmptyListMessage isLoading={isLoading} />}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item, index) => `logging-item-${item.idStr}--${index}`}
+        renderItem={({ item }) => <LoggingItem item={item} onPressItem={onPressLoggingItem} />}
+      />
       <BottomModal ref={bottomSheetModalRef} title="Filter" snapPoints={["75%"]}>
         <LoggingFilter
           onApplyFilter={onApplyFilter}
@@ -251,8 +249,7 @@ const $searchFilter: ViewStyle = {
   marginLeft: spacing.size16,
 }
 
-const $listEmptyContainer: ViewStyle = {
-  flex: 1,
-  justifyContent: "center",
-  alignItems: "center",
+const $flatListContentContainer: ViewStyle = {
+  paddingTop: spacing.size16,
+  paddingBottom: spacing.size16,
 }

@@ -30,9 +30,12 @@ export const CommonStoreModel = types
   })
   .actions((self) => ({
     /**
-     * Handle logout
-     * Reset store
+     * Change global loading
+     *
      */
+    setGlobalLoading(value?: boolean) {
+      self.setProp("globalLoading", !!value)
+    },
     // Call when Instantiated
     afterCreate() {
       console.log("Instantiated " + getType(self).name)

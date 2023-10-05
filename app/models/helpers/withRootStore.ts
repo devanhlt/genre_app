@@ -1,5 +1,5 @@
 import { getRoot, IStateTreeNode } from "mobx-state-tree"
-import { RootStore, RootStoreModel } from "../RootStore"
+import { IRootStore } from "../RootStore"
 
 /**
  * Adds a rootStore property to the node for a convenient
@@ -10,8 +10,8 @@ export const withRootStore = (self: IStateTreeNode) => ({
     /**
      * The root store.
      */
-    get rootStore(): RootStore {
-      return getRoot<typeof RootStoreModel>(self)
+    get rootStore(): IRootStore {
+      return getRoot<IRootStore>(self)
     },
   },
 })

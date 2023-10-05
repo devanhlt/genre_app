@@ -2,13 +2,13 @@ import { observer } from "mobx-react-lite"
 import React, { FC, useState } from "react"
 import { TouchableOpacity, ViewStyle } from "react-native"
 
-import { appColors, spacing } from "app/theme"
 import { Screen } from "app/components"
-import { MainTabScreenProps } from "app/navigators/MainNavigator"
-import { useHeader } from "app/utils/useHeader"
-import { useStores } from "app/models"
-import { ConfigTabView } from "./components/ConfigTabView"
 import { PhosphorIcon } from "app/components/Icon/PhosphorIcon"
+import { useStores } from "app/models"
+import { MainTabScreenProps } from "app/navigators/MainNavigator"
+import { appColors, spacing } from "app/theme"
+import { useHeader } from "app/utils/useHeader"
+import { ConfigTabView } from "./components/ConfigTabView"
 
 interface ConfigurationScreenProps extends MainTabScreenProps<"Configuration"> {}
 

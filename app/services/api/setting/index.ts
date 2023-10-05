@@ -70,7 +70,7 @@ export class SettingApi {
   /**
    * Update logging setting
    */
-  async putLoggingSetting(
+  async updateLoggingSetting(
     payload: SettingSnapshotOut,
   ): Promise<{ kind: "ok"; success: boolean } | GeneralApiProblem> {
     // make the api call

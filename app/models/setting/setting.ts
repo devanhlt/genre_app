@@ -1,7 +1,6 @@
-import { Instance, SnapshotIn, SnapshotOut, flow, toGenerator, types } from "mobx-state-tree"
+/* eslint-disable no-use-before-define */
+import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../helpers/withSetPropAction"
-import { apiSetting } from "app/services/api/setting"
-import { jsonToString } from "app/utils/helpers"
 
 export const SettingModel = types
   .model("LoggingModel")
@@ -14,36 +13,12 @@ export const SettingModel = types
   })
   .actions(withSetPropAction)
   .actions((self) => ({
-    editLoggingDetail: flow(function* editSystemDetail(setting: Instance<typeof SettingModel>) {
-      const response = yield* toGenerator(apiSetting.putLoggingSetting(setting))
-      if (response.kind === "ok" && response.success === true) {
-        self.setProp("logLevel", setting.logLevel)
-        self.setProp("description", setting.description)
-        self.setProp("color", setting.color)
-      } else {
-        console.tron.error(`Error editing system: ${jsonToString(response)}`, [])
-      }
-    }),
-    editLoggingSendEmail: flow(function* editSystemReceiveLog(
-      setting: Instance<typeof SettingModel>,
-    ) {
-      const response = yield* toGenerator(apiSetting.putLoggingSetting(setting))
-      if (response.kind === "ok" && response.success === true) {
-        self.setProp("sendEmail", setting.sendEmail)
-      } else {
-        console.tron.error(`Error editing system: ${jsonToString(response)}`, [])
-      }
-    }),
-    editLoggingSendSMS: flow(function* editSystemReceiveLog(
-      setting: Instance<typeof SettingModel>,
-    ) {
-      const response = yield* toGenerator(apiSetting.putLoggingSetting(setting))
-      if (response.kind === "ok" && response.success === true) {
-        self.setProp("sendSms", setting.sendSms)
-      } else {
-        console.tron.error(`Error editing system: ${jsonToString(response)}`, [])
-      }
-    }),
+    onUpdate(setting: Setting) {
+      self.setProp("color", setting.color)
+      self.setProp("description", setting.description)
+      self.setProp("sendEmail", setting.sendEmail)
+      self.setProp("sendSms", setting.sendSms)
+    },
   }))
   .views((self) => ({
     get getColor() {

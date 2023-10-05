@@ -3,34 +3,24 @@ import { Alert, TextStyle, View, ViewStyle } from "react-native"
 
 import { Button, Typography } from "app/components"
 import { Toggle } from "app/components/Toggle"
-import { ToggleProps } from "app/components/Toggle/type"
 import { Setting } from "app/models/setting/setting"
 import { appColors, spacing } from "app/theme"
 import { radius } from "app/theme/radius"
 import { responsiveHeight, responsiveWidth } from "app/utils/screens"
+import { observer } from "mobx-react-lite"
 
 export interface ConfigLoggingItemProps {
-  onHandlePressedButton: (setting: Setting) => void
+  onEdit: (setting: Setting) => void
+  onUpdate: (setting: Setting) => void
   setting?: Setting
 }
 
-function ControlledToggle(props: ToggleProps) {
-  const [value, setValue] = React.useState(props.value || false)
-  return (
-    <Toggle
-      {...props}
-      value={value}
-      onPress={() => setValue(!value)}
-      containerStyle={$toggleContainer}
-    />
-  )
-}
-
-export default function ConfigLoggingItem({
-  onHandlePressedButton,
+export default observer(function ConfigLoggingItem({
+  onEdit,
+  onUpdate,
   setting,
 }: ConfigLoggingItemProps): JSX.Element {
-  const changeSendEmail = (setting: Setting) => {
+  const onToggleSendEmail = () => {
     Alert.alert("Confirm", "Are you sure?", [
       {
         text: "Close",
@@ -40,12 +30,13 @@ export default function ConfigLoggingItem({
       {
         text: "OK",
         onPress: () => {
-          setting.editLoggingSendEmail({ ...setting, sendEmail: !setting.sendEmail })
+          onUpdate({ ...setting, sendEmail: !setting.sendEmail })
         },
       },
     ])
   }
-  const changeSendSms = (setting: Setting) => {
+
+  const onToggleSendSms = () => {
     Alert.alert("Confirm", "Are you sure?", [
       {
         text: "Close",
@@ -55,11 +46,14 @@ export default function ConfigLoggingItem({
       {
         text: "OK",
         onPress: () => {
-          setting.editLoggingSendSms({ ...setting, sendSms: !setting.sendSms })
+          onUpdate({ ...setting, sendSms: !setting.sendSms })
         },
       },
     ])
   }
+
+  const handleEditButton = () => onEdit(setting)
+
   return (
     <View style={$viewContainer}>
       <View style={$headerContainer}>
@@ -77,14 +71,7 @@ export default function ConfigLoggingItem({
             color={appColors.palette.neutral0}
           />
         </View>
-        <Button
-          text="Edit"
-          preset="secondary"
-          style={$editButton}
-          onPress={() => {
-            onHandlePressedButton(setting)
-          }}
-        />
+        <Button text="Edit" preset="secondary" style={$editButton} onPress={handleEditButton} />
       </View>
       <View style={$tagContainer}>
         <View style={$configBlock}>
@@ -93,28 +80,16 @@ export default function ConfigLoggingItem({
         </View>
         <View style={$configBlock}>
           <Typography text="Send Email" preset="body01" style={$titleText} />
-          <ControlledToggle
-            variant="switch"
-            value={setting.sendEmail}
-            onValueChange={() => {
-              changeSendEmail(setting)
-            }}
-          />
+          <Toggle variant="switch" value={setting.sendEmail} onValueChange={onToggleSendEmail} />
         </View>
         <View style={$configBlock}>
           <Typography text="Send SMS" preset="body01" style={$titleText} />
-          <ControlledToggle
-            variant="switch"
-            value={setting.sendSms}
-            onValueChange={() => {
-              changeSendSms(setting)
-            }}
-          />
+          <Toggle variant="switch" value={setting.sendSms} onValueChange={onToggleSendSms} />
         </View>
       </View>
     </View>
   )
-}
+})
 
 const $viewContainer: ViewStyle = {
   borderWidth: spacing.size01,
@@ -127,11 +102,6 @@ const $viewContainer: ViewStyle = {
   shadowRadius: radius.md,
   elevation: 16,
   marginBottom: spacing.size16,
-}
-
-const $toggleContainer: ViewStyle = {
-  alignItems: "center",
-  justifyContent: "center",
 }
 
 const $colorContainer: ViewStyle = {

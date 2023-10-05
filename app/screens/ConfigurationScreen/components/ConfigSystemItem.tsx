@@ -3,26 +3,23 @@ import { Alert, TextStyle, View, ViewStyle } from "react-native"
 
 import { Button, Icon, Typography } from "app/components"
 import { Toggle } from "app/components/Toggle"
-import { ToggleProps } from "app/components/Toggle/type"
 import { System } from "app/models/system/system"
 import { appColors, spacing } from "app/theme"
 import { radius } from "app/theme/radius"
+import { observer } from "mobx-react-lite"
 
 export interface ConfigSystemItemProps {
-  onHandlePressedButton: (system: System) => void
+  onEdit: (system: System) => void
+  onUpdate: (system: System) => void
   system?: System
 }
 
-function ControlledToggle(props: ToggleProps) {
-  const [value, setValue] = React.useState(props.value || false)
-  return <Toggle {...props} value={value} onPress={() => setValue(!value)} />
-}
-
-export default function ConfigSystemItem({
+const ConfigSystemItem = observer(function ConfigSystemItem({
   system,
-  onHandlePressedButton,
+  onEdit,
+  onUpdate,
 }: ConfigSystemItemProps): JSX.Element {
-  const confirmAlert = (system: System) => {
+  const onToggleReceiveLog = () => {
     Alert.alert("Confirm", "Are you sure?", [
       {
         text: "Close",
@@ -31,42 +28,37 @@ export default function ConfigSystemItem({
       },
       {
         text: "OK",
-        onPress: () => {
-          system.editSystemReceiveLog({ ...system, receiveLog: !system.receiveLog })
-        },
+        onPress: () => onUpdate?.({ ...system, receiveLog: !system.receiveLog }),
       },
     ])
   }
+
+  const handleEditButton = () => onEdit(system)
 
   return (
     <View style={$viewContainer}>
       <View style={$systemContainer}>
         <View style={$titleContainer}>
           <Icon icon="system" />
-          <Typography text={system.systemName} preset="body02" style={$titleText} />
+          <Typography
+            text={system.getCurrentSystem.systemName}
+            preset="body02"
+            style={$titleText}
+          />
         </View>
-        <Button
-          text="Edit"
-          preset="secondary"
-          style={$editButton}
-          onPress={() => {
-            onHandlePressedButton(system)
-          }}
-        />
+        <Button text="Edit" preset="secondary" style={$editButton} onPress={handleEditButton} />
       </View>
       <View style={$configBlock}>
         <Typography text="Receive Log" preset="body02" style={$logText} />
-        <ControlledToggle
+        <Toggle
           variant="switch"
-          value={system.receiveLog}
-          onValueChange={() => {
-            confirmAlert(system)
-          }}
+          value={system.getCurrentSystem.receiveLog}
+          onValueChange={onToggleReceiveLog}
         />
       </View>
     </View>
   )
-}
+})
 
 const $viewContainer: ViewStyle = {
   borderWidth: spacing.size01,
@@ -123,3 +115,5 @@ const $logText: TextStyle = {
   color: appColors.palette.black600,
   marginBottom: spacing.size12,
 }
+
+export default ConfigSystemItem

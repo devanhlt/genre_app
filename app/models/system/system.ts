@@ -1,10 +1,8 @@
-import { Instance, SnapshotIn, SnapshotOut, flow, toGenerator, types } from "mobx-state-tree"
+/* eslint-disable no-use-before-define */
+import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
 
 import { withRootStore } from "../helpers/withRootStore"
-import { Setting } from "../setting/setting"
 import { withSetPropAction } from "../helpers/withSetPropAction"
-import { apiSetting } from "app/services/api/setting"
-import { jsonToString } from "app/utils/helpers"
 
 export const SystemModel = types
   .model("System")
@@ -21,29 +19,6 @@ export const SystemModel = types
     receiveLog: types.optional(types.maybeNull(types.boolean), false),
   })
   .actions(withSetPropAction)
-  .actions((self) => ({
-    editSystemDetail: flow(function* editSystemDetail(system: Instance<typeof SystemModel>) {
-      const response = yield* toGenerator(apiSetting.putSystemConfig(system))
-      if (response.kind === "ok" && response.success === true) {
-        self.setProp("systemName", system.systemName)
-        self.setProp("baseUrl", system.baseUrl)
-        self.setProp("adminEmail", system.adminEmail)
-        self.setProp("adminPhone", system.adminPhone)
-      } else {
-        console.tron.error(`Error editing system: ${jsonToString(response)}`, [])
-      }
-    }),
-    editSystemReceiveLog: flow(function* editSystemReceiveLog(
-      system: Instance<typeof SystemModel>,
-    ) {
-      const response = yield* toGenerator(apiSetting.putSystemConfig(system))
-      if (response.kind === "ok" && response.success === true) {
-        self.setProp("receiveLog", system.receiveLog)
-      } else {
-        console.tron.error(`Error editing system: ${jsonToString(response)}`, [])
-      }
-    }),
-  }))
   .views((self) => ({
     get getCurrentSystem() {
       return self
@@ -52,18 +27,24 @@ export const SystemModel = types
       const { settingStore } = self.rootStore
 
       if (self.totalLogError > 0) {
-        const settingLv2 = settingStore?.getCurrentSettings?.find((x: Setting) => x?.logLevel === 2)
-        return settingLv2?.color || "#D32F2F"
+        return settingStore.getLogLevel2?.color || "#D32F2F"
       } else if (self.totalLogWarn > 0) {
-        const settingLv1 = settingStore?.getCurrentSettings?.find((x: Setting) => x?.logLevel === 1)
-        return settingLv1?.color || "#FBC02D"
+        return settingStore.getLogLevel1?.color || "#FBC02D"
       } else if (self.totalLogInfo > 0) {
-        const settingLv0 = settingStore?.getCurrentSettings?.find((x: Setting) => x?.logLevel === 0)
-        return settingLv0?.color || "#388E3C"
+        return settingStore.getLogLevel0?.color || "#388E3C"
       } else if (self.totalLogInfo === 0 && self.totalLogError === 0 && self.totalLogWarn === 0) {
-        return "#FBC02D"
+        return settingStore.getLogLevel1?.color || "#FBC02D"
       }
       return "#FFFFFF"
+    },
+  }))
+  .actions((self) => ({
+    onUpdate(system: System) {
+      self.setProp("systemName", system.systemName)
+      self.setProp("baseUrl", system.baseUrl)
+      self.setProp("adminEmail", system.adminEmail)
+      self.setProp("adminPhone", system.adminPhone)
+      self.setProp("receiveLog", system.receiveLog)
     },
   }))
 

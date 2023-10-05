@@ -1,55 +1,62 @@
-import { TextStyle, View, ViewStyle } from "react-native"
 import React, { useState } from "react"
+import { TextStyle, View, ViewStyle } from "react-native"
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
+import { SafeAreaView } from "react-native-safe-area-context"
+
 import { Button, TextField } from "app/components"
 import { spacing } from "app/theme"
 import { Setting } from "app/models/setting/setting"
+import { observer } from "mobx-react-lite"
 
 export interface ConfigLoggingModalProps {
   setting: Setting
-  onSubmit: () => void
+  onSubmit: (setting: Setting) => void
 }
 
-export const ConfigLoggingModal = ({ setting, onSubmit }: ConfigLoggingModalProps): JSX.Element => {
-  const [logLevel, setLogLevel] = useState<string>(setting.logLevel.toString())
-  const [color, setColor] = useState<string>(setting.color)
-  const [description, setDescription] = useState<string>(setting.description)
+export const ConfigLoggingModal = observer(
+  ({ setting, onSubmit }: ConfigLoggingModalProps): JSX.Element => {
+    const [color, setColor] = useState<string>(setting.color)
+    const [description, setDescription] = useState<string>(setting.description)
 
-  const updateLoggingConfig = (setting: Setting) => {
-    setting?.editLoggingDetail({ ...setting, logLevel: parseInt(logLevel), color, description })
-    onSubmit()
-  }
+    const updateLoggingConfig = () => {
+      onSubmit({ ...setting, color, description })
+    }
 
-  return (
-    <View style={$form}>
-      <TextField
-        labelTx="configScreen.loggingDetailForm.logLevel"
-        value={logLevel}
-        onChangeText={setLogLevel}
-        clearRightAccessory={false}
-      />
-      <TextField
-        labelTx="configScreen.loggingDetailForm.color"
-        value={color}
-        onChangeText={setColor}
-        clearRightAccessory={false}
-      />
-      <TextField
-        labelTx="configScreen.loggingDetailForm.description"
-        value={description}
-        onChangeText={setDescription}
-        clearRightAccessory={false}
-      />
-      <View style={$bottomAction}>
-        <Button
-          tx="common.save"
-          style={$saveButton}
-          onPress={() => {
-            updateLoggingConfig(setting)
-          }}
-        />
+    return (
+      <View style={$modalContainer}>
+        <KeyboardAwareScrollView>
+          <View style={$form}>
+            <TextField
+              labelTx="configScreen.loggingDetailForm.logLevel"
+              value={`${setting.logLevel}`}
+              // onChangeText={setLogLevel}
+              clearRightAccessory={false}
+              editable={false}
+            />
+            <TextField
+              labelTx="configScreen.loggingDetailForm.color"
+              value={color}
+              onChangeText={setColor}
+              clearRightAccessory={false}
+            />
+            <TextField
+              labelTx="configScreen.loggingDetailForm.description"
+              value={description}
+              onChangeText={setDescription}
+              clearRightAccessory={false}
+            />
+          </View>
+        </KeyboardAwareScrollView>
+        <Button tx="common.save" onPress={updateLoggingConfig} style={$saveButton} />
+        <SafeAreaView edges={["bottom"]} />
       </View>
-    </View>
-  )
+    )
+  },
+)
+
+const $modalContainer: ViewStyle = {
+  flex: 1,
+  marginHorizontal: spacing.size12,
 }
 
 const $form: ViewStyle = {
@@ -58,11 +65,4 @@ const $form: ViewStyle = {
   gap: spacing.size12,
 }
 
-const $bottomAction: TextStyle = {
-  flexDirection: "row",
-}
-
-const $saveButton: TextStyle = {
-  marginTop: spacing.size24,
-  flex: 1,
-}
+const $saveButton: TextStyle = {}
