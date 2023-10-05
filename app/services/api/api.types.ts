@@ -35,3 +35,15 @@ export interface ApiConfig {
    */
   timeout: number
 }
+
+export interface UpdateSystemPayload {
+  adminEmail: string
+  adminPhone: string
+  baseUrl: string
+  receiveLog: boolean
+  systemName: string
+  totalLog: number
+  totalLogError: number
+  totalLogInfo: number
+  totalLogWarn: number
+}

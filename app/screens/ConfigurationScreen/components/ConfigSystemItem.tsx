@@ -1,77 +1,64 @@
 import React from "react"
-import { Button, TextStyle, View, ViewStyle } from "react-native"
+import { Alert, TextStyle, View, ViewStyle } from "react-native"
 
-import { Typography } from "app/components"
+import { Button, Icon, Typography } from "app/components"
 import { Toggle } from "app/components/Toggle"
-import { ToggleProps } from "app/components/Toggle/type"
 import { System } from "app/models/system/system"
 import { appColors, spacing } from "app/theme"
 import { radius } from "app/theme/radius"
+import { observer } from "mobx-react-lite"
 
 export interface ConfigSystemItemProps {
+  onEdit: (system: System) => void
+  onUpdate: (system: System) => void
   system?: System
 }
 
-function ControlledToggle(props: ToggleProps) {
-  const [value, setValue] = React.useState(props.value || false)
-  return <Toggle {...props} value={value} onPress={() => setValue(!value)} />
-}
+const ConfigSystemItem = observer(function ConfigSystemItem({
+  system,
+  onEdit,
+  onUpdate,
+}: ConfigSystemItemProps): JSX.Element {
+  const onToggleReceiveLog = () => {
+    Alert.alert("Confirm", "Are you sure?", [
+      {
+        text: "Close",
+        onPress: () => null,
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: () => onUpdate?.({ ...system, receiveLog: !system.receiveLog }),
+      },
+    ])
+  }
 
-export default function ConfigSystemItem({ system }: ConfigSystemItemProps): JSX.Element {
+  const handleEditButton = () => onEdit(system)
+
   return (
     <View style={$viewContainer}>
-      <View style={$headerContainer}>
-        <View style={$systemContainer}>
-          <Typography text="System" preset="body01" style={$titleText} />
-          <Typography text={system.systemName} preset="headline02" style={$titleText} />
+      <View style={$systemContainer}>
+        <View style={$titleContainer}>
+          <Icon icon="system" />
+          <Typography
+            text={system.getCurrentSystem.systemName}
+            preset="body02"
+            style={$titleText}
+          />
         </View>
-        <View style={$actionContainer}>
-          <View style={$configBlock}>
-            <Typography
-              text="Receive Log"
-              preset="body01"
-              style={[$titleText, { marginBottom: spacing.size12 }]}
-            />
-            <ControlledToggle variant="switch" />
-          </View>
-          <View style={$configBlock}>
-            <Typography text="Action" preset="body01" style={$titleText} />
-            <Button title="Edit" color={appColors.components.button.primary} />
-          </View>
-        </View>
+        <Button text="Edit" preset="secondary" style={$editButton} onPress={handleEditButton} />
       </View>
-      {/* <View style={$tagContainer}>
-        <View>
-          <Typography text="Success" preset="body04" style={$labelText} />
-          <Typography
-            text={`${system.getCurrentSystem.totalLogInfo}`}
-            preset="headline01"
-            color={appColors.palette.green400}
-            style={$totalLogText}
-          />
-        </View>
-        <View>
-          <Typography text="Warning" preset="body04" style={$labelText} />
-          <Typography
-            text={`${system.getCurrentSystem.totalLogWarn}`}
-            preset="headline01"
-            color={appColors.palette.yellow400}
-            style={$totalLogText}
-          />
-        </View>
-        <View>
-          <Typography text="Error" preset="body04" style={$labelText} />
-          <Typography
-            text={`${system.getCurrentSystem.totalLogError}`}
-            preset="headline01"
-            color={appColors.palette.red400}
-            style={$totalLogText}
-          />
-        </View>
-      </View> */}
+      <View style={$configBlock}>
+        <Typography text="Receive Log" preset="body02" style={$logText} />
+        <Toggle
+          variant="switch"
+          value={system.getCurrentSystem.receiveLog}
+          onValueChange={onToggleReceiveLog}
+        />
+      </View>
     </View>
   )
-}
+})
 
 const $viewContainer: ViewStyle = {
   borderWidth: spacing.size01,
@@ -86,46 +73,47 @@ const $viewContainer: ViewStyle = {
   marginBottom: spacing.size16,
 }
 
-const $systemContainer: ViewStyle = {}
-
-const $actionContainer: ViewStyle = {
-  flexDirection: "row",
-  justifyContent: "flex-end",
+const $titleContainer: ViewStyle = {
   flex: 1,
+  flexDirection: "row",
+  alignItems: "center",
 }
 
-const $headerContainer: ViewStyle = {
+const $systemContainer: ViewStyle = {
+  flex: 1,
   flexDirection: "row",
-  padding: spacing.size10,
-  marginBottom: spacing.size10,
   alignItems: "center",
-  // borderBottomColor: appColors.palette.black050,
-  // borderBottomWidth: spacing.size02,
+  justifyContent: "space-between",
+  borderColor: appColors.palette.black050,
+  borderBottomWidth: spacing.size01,
+  paddingVertical: spacing.size12,
+  paddingHorizontal: spacing.size12,
 }
 
 const $configBlock: ViewStyle = {
-  alignItems: "center",
-  marginStart: spacing.size16,
+  flexDirection: "row",
+  justifyContent: "space-between",
+  marginTop: spacing.size12,
+  paddingVertical: spacing.size04,
+  paddingHorizontal: spacing.size12,
 }
 
 const $titleText: TextStyle = {
-  color: appColors.palette.black600,
-  marginBottom: spacing.size08,
+  color: appColors.common.bgRed,
+  marginLeft: spacing.size04,
 }
 
-// const $tagContainer: ViewStyle = {
-//   flex: 1,
-//   flexDirection: "row",
-//   justifyContent: "space-between",
-//   padding: spacing.size10,
-//   borderRadius: spacing.size08,
-//   marginTop: spacing.size10,
-// }
+const $editButton: ViewStyle = {
+  paddingVertical: spacing.size04,
+  paddingLeft: spacing.size12,
+  borderRadius: radius.lg,
+  borderColor: appColors.common.bgRed,
+}
 
-// const $labelText: TextStyle = {
-//   color: appColors.palette.black600,
-// }
+const $logText: TextStyle = {
+  ...$titleText,
+  color: appColors.palette.black600,
+  marginBottom: spacing.size12,
+}
 
-// const $totalLogText: TextStyle = {
-//   textAlign: "center",
-// }
+export default ConfigSystemItem

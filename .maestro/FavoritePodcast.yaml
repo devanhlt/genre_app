@@ -34,5 +34,4 @@ env:
 - tapOn:
     text: ${FAVORITES_TEXT}
 - assertVisible: ${TITLE}
-
 # @demo remove-file

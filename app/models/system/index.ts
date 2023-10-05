@@ -8,6 +8,7 @@ import { withEnvironment } from "../extensions/with-environment"
 import { withSetPropAction } from "../helpers/withSetPropAction"
 import { LoggingModel, LoggingSnapshotIn } from "./logging"
 import { SystemModel } from "./system"
+import { apiSetting } from "app/services/api/setting"
 
 const ALL_SYSTEM = {
   systemName: "ALL",
@@ -38,6 +39,7 @@ export const SystemStoreModel = types
   .props({
     systems: types.array(SystemModel),
     lstSystemLogging: types.array(LoggingModel),
+    isLoadingSystem: false,
     loggingTotalCount: types.optional(types.number, 0),
     loggingRecordsFiltered: types.optional(types.number, 0),
     loggingRecordsTotal: types.optional(types.number, 0),
@@ -58,9 +60,6 @@ export const SystemStoreModel = types
   .actions(withSetPropAction)
   .views((self) => {
     return {
-      get isGlobalLoading() {
-        return self
-      },
       get systemsForList() {
         return self.systems
       },
@@ -76,16 +75,21 @@ export const SystemStoreModel = types
           ...self.loggingFilter,
         }
       },
+      get isEmptySystem() {
+        return !self.systems.length
+      },
     }
   })
   .actions((self) => ({
     fetchSystems: flow(function* fetchSystems() {
+      self.setProp("isLoadingSystem", true)
       const response = yield* toGenerator(api.getSystems())
       if (response.kind === "ok") {
         self.setProp("systems", response.systems)
       } else {
         console.tron.error(`Error fetching systems: ${jsonToString(response)}`, [])
       }
+      self.setProp("isLoadingSystem", false)
     }),
 
     fetchLoggingSystems: flow(function* fetchLoggingSystems(
@@ -140,6 +144,17 @@ export const SystemStoreModel = types
         logType: "",
       })
     },
+
+    /**
+     * Update a system
+     * Return true if success
+     *
+     */
+    updateSystemConfig: flow(function* editSystemDetail(system: Instance<typeof SystemModel>) {
+      const response = yield* toGenerator(apiSetting.putSystemConfig(system))
+      return response.kind === "ok" && response.success
+    }),
+
     /**
      * Handle logout
      * Reset store

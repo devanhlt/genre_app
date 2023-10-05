@@ -4,6 +4,8 @@ const en = {
     cancel: "Cancel",
     back: "Back",
     logOut: "Log Out",
+    save: "Save",
+    edit: "Edit",
   },
   welcomeScreen: {
     postscript:
@@ -39,6 +41,19 @@ const en = {
     passwordFieldPlaceholder: "Super secret password here",
     tapToSignIn: "Tap to sign in!",
     hint: "Hint: you can use any email address and your favorite password :)",
+  },
+  configScreen: {
+    systemDetailForm: {
+      systemName: "System name",
+      baseURL: "Base URL",
+      adminEmail: "Admin email",
+      adminPhone: "Admin phone",
+    },
+    loggingDetailForm: {
+      logLevel: "Log Level",
+      color: "Color",
+      description: "Description",
+    },
   },
   mainNavigator: {
     dashboardTab: "Dashboard",

@@ -1,8 +1,8 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { AuthStoreModel } from "./auth"
-import { CommonStoreModel } from "./common"
-import { SystemStoreModel } from "./system"
-import { SettingStoreModel } from "./setting"
+import { AuthStore, AuthStoreModel } from "./auth"
+import { CommonStore, CommonStoreModel } from "./common"
+import { SettingStore, SettingStoreModel } from "./setting"
+import { SystemStore, SystemStoreModel } from "./system"
 
 /**
  * A RootStore model.
@@ -18,7 +18,12 @@ export const RootStoreModel = types.model("RootStore").props({
  * The RootStore instance.
  */
 export interface RootStore extends Instance<typeof RootStoreModel> {}
-/**
- * The data of a RootStore.
- */
+
+export interface IRootStore {
+  commonStore: CommonStore
+  authStore: AuthStore
+  systemStore: SystemStore
+  settingStore: SettingStore
+}
+
 export interface RootStoreSnapshot extends SnapshotOut<typeof RootStoreModel> {}

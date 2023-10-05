@@ -1,4 +1,4 @@
-import { Typography } from "app/components"
+import { Typography } from "../Typography"
 import { PhosphorIcon } from "app/components/Icon/PhosphorIcon"
 import { appColors } from "app/theme"
 import { responsiveHeight } from "app/utils/screens"

@@ -11,7 +11,6 @@ import { jsonToString } from "app/utils/helpers"
 import { useHeader } from "app/utils/useHeader"
 import LoggingDetailItem from "./components/LoggingDetailItem"
 
-
 interface LoggingDetailScreenProps extends AppStackScreenProps<"LoggingDetail"> {}
 
 export const LoggingDetailScreen: FC<LoggingDetailScreenProps> = observer(

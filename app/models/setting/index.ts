@@ -19,16 +19,37 @@ export const SettingStoreModel = types
       get getCurrentSettings() {
         return self.settings
       },
+      get getLogLevel0() {
+        return self?.settings?.find((x) => x?.logLevel === 0)
+      },
+      get getLogLevel1() {
+        return self?.settings?.find((x) => x?.logLevel === 1)
+      },
+      get getLogLevel2() {
+        return self?.settings?.find((x) => x?.logLevel === 2)
+      },
     }
   })
   .actions((self) => ({
     fetchSettings: flow(function* fetchSettings() {
-      const response = yield* toGenerator(apiSetting.getSetting())
+      const response = yield* toGenerator(apiSetting.getLoggingSetting())
       if (response.kind === "ok") {
         self.setProp("settings", response.logging)
       } else {
         console.tron.error(`Error fetching systems: ${jsonToString(response)}`, [])
       }
+    }),
+
+    /**
+     * Update a system
+     * Return true if success
+     *
+     */
+    updateLoggingSetting: flow(function* updateLoggingSetting(
+      setting: Instance<typeof SettingModel>,
+    ) {
+      const response = yield* toGenerator(apiSetting.updateLoggingSetting(setting))
+      return response.kind === "ok" && response.success
     }),
 
     /**

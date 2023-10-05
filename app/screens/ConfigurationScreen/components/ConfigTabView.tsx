@@ -12,23 +12,17 @@ const renderScene = SceneMap({
   logging: ConfigLoggingTab,
 })
 
-const indicatorContainer: ViewStyle = {
-  backgroundColor: appColors.common.bgRed,
-  borderBottomColor: appColors.palette.neutral0,
-  borderBottomWidth: 1,
-}
-
 const renderTabBar = (props) => {
   return (
     <View>
       <TabBar
         {...props}
-        style={{ marginBottom: spacing.size12 }}
-        indicatorStyle={{ backgroundColor: appColors.palette.neutral0 }}
-        indicatorContainerStyle={indicatorContainer}
+        style={$tabBarStyle}
+        indicatorStyle={$tabBarIndicatorStyle}
+        indicatorContainerStyle={$indicatorContainer}
         renderLabel={({ route }) => (
           <View>
-            <Typography style={{ color: appColors.palette.neutral0 }}>{route.title}</Typography>
+            <Typography preset="body03" color={appColors.palette.neutral0} text={route.title} />
           </View>
         )}
       />
@@ -51,17 +45,30 @@ export const ConfigTabView = ({ handleOnTab, activeTabIndex }) => {
 
   return (
     <TabView
+      sceneContainerStyle={$sceneContainerStyle}
       navigationState={{ index, routes }}
       renderScene={renderScene}
       renderTabBar={renderTabBar}
       onIndexChange={handleOnTab}
-      sceneContainerStyle={$scene}
       initialLayout={{ width: layout.width }}
       lazy={false}
     />
   )
 }
 
-const $scene: ViewStyle = {
+const $sceneContainerStyle: ViewStyle = {
   paddingHorizontal: spacing.size16,
+}
+
+const $tabBarStyle: ViewStyle = {
+  marginBottom: spacing.size12,
+}
+const $tabBarIndicatorStyle: ViewStyle = {
+  backgroundColor: appColors.palette.neutral0,
+}
+
+const $indicatorContainer: ViewStyle = {
+  backgroundColor: appColors.common.bgRed,
+  borderBottomColor: appColors.palette.neutral0,
+  borderBottomWidth: 1,
 }

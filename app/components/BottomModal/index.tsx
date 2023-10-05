@@ -18,7 +18,7 @@ interface BottomModalProps extends BottomSheetModalProps {
 }
 
 export const BottomModal = forwardRef<BottomSheetModalMethods, BottomModalProps>(
-  function LoggingScreen(props, ref) {
+  function BottomModal(props, ref) {
     const {
       style: $containerStyleOverride,
       contentStyle: $contentStyleOverride,
