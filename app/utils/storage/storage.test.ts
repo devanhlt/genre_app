@@ -1,41 +1,35 @@
 import { MMKV } from "react-native-mmkv"
-import { load, loadString, save, saveString, clear, remove } from "./storage"
 
-export const storage = new MMKV()
+describe("MMKV Storage", () => {
+  let storage: MMKV
 
-// fixtures
-const VALUE_OBJECT = { x: 1 }
-const VALUE_STRING = JSON.stringify(VALUE_OBJECT)
+  beforeAll(() => {
+    storage = new MMKV()
+  })
 
-beforeEach(() => (storage.getString as jest.Mock).mockReturnValue(Promise.resolve(VALUE_STRING)))
-afterEach(() => jest.clearAllMocks())
+  it("functions correctly", () => {
+    storage.set("testString", "value")
+    storage.set("testNumber", 99)
+    storage.set("testBoolean", false)
 
-test("load", () => {
-  const value = load("something")
-  expect(value).toEqual(JSON.parse(VALUE_STRING))
-})
+    expect(storage.getString("testString")).toStrictEqual("value")
+    expect(storage.getNumber("testString")).toBeUndefined()
+    expect(storage.getBoolean("testString")).toBeUndefined()
+    expect(storage.getString("testNumber")).toBeUndefined()
+    expect(storage.getNumber("testNumber")).toStrictEqual(99)
+    expect(storage.getBoolean("testNumber")).toBeUndefined()
+    expect(storage.getString("testBoolean")).toBeUndefined()
+    expect(storage.getNumber("testBoolean")).toBeUndefined()
+    expect(storage.getBoolean("testBoolean")).toStrictEqual(false)
+    expect(storage.getAllKeys()).toEqual(
+      expect.arrayContaining(["testString", "testNumber", "testBoolean"]),
+    )
 
-test("loadString", () => {
-  const value = loadString("something")
-  expect(value).toEqual(VALUE_STRING)
-})
+    storage.delete("testBoolean")
+    expect(storage.contains("testBoolean")).toBeFalsy()
+    expect(storage.getAllKeys()).toEqual(expect.arrayContaining(["testString", "testNumber"]))
 
-test("save", () => {
-  save("something", VALUE_OBJECT)
-  expect(save).toHaveBeenCalledWith("something", VALUE_STRING)
-})
-
-test("saveString", () => {
-  saveString("something", VALUE_STRING)
-  expect(saveString).toHaveBeenCalledWith("something", VALUE_STRING)
-})
-
-test("remove", () => {
-  remove("something")
-  expect(remove).toHaveBeenCalledWith("something")
-})
-
-test("clear", () => {
-  clear()
-  expect(clear).toHaveBeenCalledWith()
+    storage.clearAll()
+    expect(storage.toString()).toStrictEqual("MMKV (mmkv.default): []")
+  })
 })

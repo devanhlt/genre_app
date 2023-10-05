@@ -23,7 +23,7 @@ jest.doMock("react-native", () => {
   )
 })
 
-jest.mock("react-native-mmkv", () => require("react-native-mmkv/lib/typescript/createMMKV.mock"))
+// jest.mock("react-native-mmkv", () => require("react-native-mmkv/lib/typescript/createMMKV.mock"))
 
 jest.mock("i18n-js", () => ({
   currentLocale: () => "en",

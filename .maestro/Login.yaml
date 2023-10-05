@@ -9,11 +9,10 @@ appId: com.apimanagement # the app id of the app we want to test
 ---
 - clearState # clears the state of our app (navigation and authentication)
 - launchApp # launches the app
-- assertVisible: "Sign In"
+- assertVisible: "Tap to sign in!"
 - tapOn:
     text: "Tap to sign in!"
-- assertVisible: "Your app, almost ready for launch!"
-- tapOn:
-    text: "Let's go!"
-- assertVisible: "Components to jump start your project!"
-# @demo remove-file
+- assertVisible: "Dashboard"
+# - tapOn:
+#     text: "Let's go!"
+# - assertVisible: "Components to jump start your project!"
