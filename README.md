@@ -1,7 +1,5 @@
 # Mobile App!
 
-# FIX
-
 ## Important for Xcode 15
 
 Issue: .../ios/Pods/boost/boost/container_hash/hash.hpp:131:33 No template named 'unary_function' in namespace 'std'; did you mean '\_\_unary_function'?
@@ -23,6 +21,10 @@ Solution 1: Edit Podfile:
 Solution 2:
 Select Pods > Build Settings > In Apple Clang - Preprocessing section > under Macro section > Add "\_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION" in Release & Debug
 
+
+
+## Quick Start
+
 Currently includes:
 
 - React Native
@@ -31,12 +33,8 @@ Currently includes:
 - TypeScript
 - And more!
 
-## Quick Start
-
-The Ignite boilerplate project's structure will look similar to this:
-
 ```
-PVC
+APIManagement
 ├── app
 │   ├── components
 │   ├── config
@@ -62,20 +60,13 @@ PVC
 │   ├── gradlew.bat
 │   ├── keystores
 │   └── settings.gradle
-├── ignite
-│   └── templates
-|       |── app-icon
-│       ├── component
-│       ├── model
-│       ├── navigator
-│       └── screen
 ├── index.js
 ├── ios
-│   ├── PVC
-│   ├── PVC-tvOS
-│   ├── PVC-tvOSTests
-│   ├── PVC.xcodeproj
-│   └── PVCTests
+│   ├── APIManagement
+│   ├── APIManagement-tvOS
+│   ├── APIManagement-tvOSTests
+│   ├── APIManagement.xcodeproj
+│   └── APIManagementTests
 ├── .env
 └── package.json
 
@@ -127,19 +118,15 @@ This is a great place to put miscellaneous helpers and utilities. Things like da
 
 **app.tsx** This is the entry point to your app. This is where you will find the main App component which renders the rest of the application.
 
-### ./ignite directory
-
-The `ignite` directory stores all things Ignite, including CLI and boilerplate items. Here you will find templates you can customize to help you get started with React Native.
-
 ### ./test directory
 
 This directory will hold your Jest configs and mocks.
 
 ## Running Detox end-to-end tests
 
-Read [Detox setup instructions](./detox/README.md).
+## Running Maestro end-to-end tests
 
-# Theming PVC Apps
+# Theming Apps
 
 Theming involves creating a consistent look & feel across your application. It's a collection of style attributes and building blocks that are used everywhere.
 
@@ -152,7 +139,7 @@ In `app/themes/colors.ts`, we define a palette of colors and the semantic names 
 The palette color names are meant to be semantically neutral names matching the color. For example, `neutral100` defines a neutral color, but has no specific semantic meaning for its use. If you find yourself using a color in multiple places for the same purpose (e.g. background, border, text), define a semantic color and replace the palette color usage with the semantic one. For example, if you are styling all your text field components with a border of `colors.accent100`, define a semantic color such as `textFieldBorder` that is set to `accent100`. You would then use `colors.textFieldBorder` in your components in place of the `colors.accent100` color.
 
 ```tsx
-<Text color={colors.systems.characterBlueDefault}>
+<Text color={colors.common.characterBlueDefault}>
 ```
 
 ## Fonts & Typography
@@ -192,36 +179,36 @@ Keep in mind that when utilizing custom fonts, it is a better user experience to
 
 ### Typography
 
-Since we use the `Text` component to encapsulate almost all text within an ignite app, the semantic names are essentially presets. As with all presets, they should only be created where there's a consistent pattern of usage across the app. To do this you'd add a new preset to the `Text` component with the associated styles. For one-off cases, it's recommended to use the `size` and `weight` props on the `Text` component.
+Since we use the `Typography` component to encapsulate almost all text within an ignite app, the semantic names are essentially presets. As with all presets, they should only be created where there's a consistent pattern of usage across the app. To do this you'd add a new preset to the `Typography` component with the associated styles. For one-off cases, it's recommended to use the `size` and `weight` props on the `Typography` component.
 
 ```tsx
-<Text preset="body02" text="body02 - Cillum eu laboris in labore" />
+<Typography preset="body02" text="body02 - Cillum eu laboris in labore" />
 
-<Text preset="body03" text="body03 - Cillum eu laboris in labore" />
+<Typography preset="body03" text="body03 - Cillum eu laboris in labore" />
 
-<Text preset="body04" text="body04 - Cillum eu laboris in labore" />
+<Typography preset="body04" text="body04 - Cillum eu laboris in labore" />
 
- <Text preset="headline01" text="headline01 - Cillum eu laboris in labore" />
+ <Typography preset="headline01" text="headline01 - Cillum eu laboris in labore" />
 
- <Text preset="headline02" text="headline02 - Cillum eu laboris in labore" />
+ <Typography preset="headline02" text="headline02 - Cillum eu laboris in labore" />
 
- <Text preset="label01" text="label01 - Cillum eu laboris in labore" />
+ <Typography preset="label01" text="label01 - Cillum eu laboris in labore" />
 
- <Text preset="label02" text="label02 - Cillum eu laboris in labore" />
+ <Typography preset="label02" text="label02 - Cillum eu laboris in labore" />
 
- <Text preset="label03" text="label03 - Cillum eu laboris in labore" />
+ <Typography preset="label03" text="label03 - Cillum eu laboris in labore" />
 
- <Text preset="link01" text="link01 - Cillum eu laboris in labore" />
+ <Typography preset="link01" text="link01 - Cillum eu laboris in labore" />
 
- <Text preset="link02" text="link02 - Cillum eu laboris in labore" />
+ <Typography preset="link02" text="link02 - Cillum eu laboris in labore" />
 
- <Text preset="support01" text="support01 - Cillum eu laboris in labore" />
+ <Typography preset="support01" text="support01 - Cillum eu laboris in labore" />
 
- <Text preset="support02" text="support02 - Cillum eu laboris in labore" />
+ <Typography preset="support02" text="support02 - Cillum eu laboris in labore" />
 
- <Text preset="title01" text="title01 - Cillum eu laboris in labore" />
+ <Typography preset="title01" text="title01 - Cillum eu laboris in labore" />
 
- <Text preset="title02" text="title02 - Cillum eu laboris in labore" />
+ <Typography preset="title02" text="title02 - Cillum eu laboris in labore" />
 ```
 
 ## Timings
@@ -273,7 +260,7 @@ Which type of scale you use is based on the design.
 
 Try to stick with your scale and not use custom values if possible, as consistent spacing will give your app a very polished look and feel.
 
-# Styling PVC apps
+# Styling apps
 
 Ignite's approach to styling individual components is, like many other things in Ignite, straightforward and direct.
 
@@ -851,7 +838,7 @@ function ControlledTextField(props: TextFieldProps) {
 />
 ```
 
-## OTPField
+## TODO OTPField
 
 ```tsx
 import OTPField from "app/components/OTPField"
@@ -889,7 +876,7 @@ Similar to props of the `TextField` component and:
 
 The `preset` prop is one of the different types of search field presets.
 
-## NumberField
+## TODO NumberField
 
 ```tsx
 import NumberField from "app/components/NumberField"
@@ -1207,7 +1194,7 @@ The `checkboxIcon` is a prop for the checkbox variant that allows you to customi
 <Toggle variant="checkbox" checkboxIcon="ladybug" />
 ```
 
-## Stepper
+## TODO Stepper
 
 ```tsx
 import Stepper from "app/components/Stepper"
@@ -1342,18 +1329,4 @@ The `iconSize` optional prop is the icon size to use for the icon.
 
 ```tsx
 <Tag iconSize={20} />
-```
-
-# Custom Components
-
-Ignite includes a generator for creating custom components. If the built in components don't fit your needs, you can create your own.
-
-`npx ignite-cli generate component MyCustomButton`
-
-Running the generator will create a new component in the `components` directory.
-
-```
--- app
-  -- components
-    -- MyCustomButton.tsx
 ```
