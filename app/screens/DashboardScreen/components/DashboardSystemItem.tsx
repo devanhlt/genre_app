@@ -65,7 +65,7 @@ const $viewContainer: ViewStyle = {
   shadowOffset: { width: 0, height: 12 },
   shadowOpacity: 0.1,
   shadowRadius: radius.md,
-  elevation: 16,
+  elevation: 1,
   marginBottom: spacing.size16,
 }
 
