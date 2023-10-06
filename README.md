@@ -1,4 +1,4 @@
-# API Management Mobile A
+# API Management Mobile App
 
 ## Important for Xcode 15
 
