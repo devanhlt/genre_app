@@ -21,8 +21,6 @@ Solution 1: Edit Podfile:
 Solution 2:
 Select Pods > Build Settings > In Apple Clang - Preprocessing section > under Macro section > Add "\_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION" in Release & Debug
 
-
-
 ## Quick Start
 
 Currently includes:
@@ -71,6 +69,21 @@ APIManagement
 └── package.json
 
 ```
+
+### Start guide
+
+Require NodeJS >=16.
+
+1. Clone the repo:
+   `git clone https://git.generali-life.com.vn/dattran/api-management-mobile.git`
+2. Install dependencies:
+   `yarn install`
+3. To start iOS:
+   - `cd ios && pod install`
+   - `yarn ios`
+4. To start Android:
+   - `yarn android`
+   - Note: Mac ARM has to install arm Android image to run simulator.
 
 ### ./app directory
 
@@ -125,6 +138,15 @@ This directory will hold your Jest configs and mocks.
 ## Running Detox end-to-end tests
 
 ## Running Maestro end-to-end tests
+
+Install maestro:
+`curl -Ls "https://get.maestro.mobile.dev" | bash`
+
+Run maestro studio:
+`yarn test:studio`
+
+Run maestro:
+`yarn test:maestro`
 
 # Theming Apps
 
@@ -838,16 +860,6 @@ function ControlledTextField(props: TextFieldProps) {
 />
 ```
 
-## TODO OTPField
-
-```tsx
-import OTPField from "app/components/OTPField"
-```
-
-```tsx
-<OTPField cellCount={6} size={44} />
-```
-
 ### Props
 
 #### `cellCount?: number`
@@ -875,16 +887,6 @@ Similar to props of the `TextField` component and:
 #### `preset`
 
 The `preset` prop is one of the different types of search field presets.
-
-## TODO NumberField
-
-```tsx
-import NumberField from "app/components/NumberField"
-```
-
-```tsx
-<NumberField label="Controlled NumberField" helper="Support text" />
-```
 
 ### Props
 
@@ -1192,76 +1194,6 @@ The `checkboxIcon` is a prop for the checkbox variant that allows you to customi
 
 ```tsx
 <Toggle variant="checkbox" checkboxIcon="ladybug" />
-```
-
-## TODO Stepper
-
-```tsx
-import Stepper from "app/components/Stepper"
-```
-
-```tsx
-<Stepper step={1} totalStep={4} />
-<Stepper step={2} totalStep={5} size={64} width={spacing.size12} />
-<Stepper step={3} totalStep={5} size={96} width={spacing.size16} />
-```
-
-### Props
-
-#### `step`
-
-The `step` requried prop is current step to display for the `Stepper`.
-
-```tsx
-<Stepper step={1} totalStep={4} />
-```
-
-#### `totalStep`
-
-The `step` requried prop is total step to display for the `Stepper`.
-
-```tsx
-<Stepper step={1} totalStep={4} />
-```
-
-#### `size`
-
-The `step` optional prop is size to display for the `Stepper`.
-
-```tsx
-<Stepper step={1} totalStep={4} size={56} />
-```
-
-#### `width`
-
-The `step` optional prop is the thickness of the progress line.
-
-```tsx
-<Stepper width={8} />
-```
-
-#### `style`
-
-The `style` optional prop is an object with overrides for this component. You can use style overrides with presets.
-
-```tsx
-<Stepper style={{ marginEnd: spacing.size16 }} />
-```
-
-#### `labelStyle`
-
-The `labelStyle` prop is a `StyleProp<ViewStyle>` object that is applied to the label.
-
-```tsx
-<Stepper labelStyle={{ marginEnd: spacing.size16 }} />
-```
-
-#### `circleInnerStyle`
-
-The `circleInnerStyle` prop is a `StyleProp<ViewStyle>` object that is applied to the label.
-
-```tsx
-<Stepper circleInnerStyle={{ marginEnd: spacing.size16 }} />
 ```
 
 ## Tag
