@@ -4,50 +4,59 @@ import { TextInput, View, ViewStyle } from "react-native"
 
 import { Button, Icon, Screen, SvgIcon, TextField, TextFieldAccessoryProps } from "app/components"
 import { useStores } from "app/models"
+import { AuthRequestModel } from "app/models/auth/types"
 import { AppStackScreenProps } from "app/navigators"
 import { appColors, iconSizes, spacing } from "app/theme"
 import { responsiveWidth } from "app/utils/screens"
 
 interface LoginScreenProps extends AppStackScreenProps<"LoginScreen"> {}
 
+/**
+ * Define icon sizes
+ */
+const iconWidth = responsiveWidth(120)
+const iconHeight = responsiveWidth(120)
+
+/**
+ * Validation authenticated field
+ * @param auth AuthModel
+ * @returns
+ */
+function validationErrors(auth: AuthRequestModel) {
+  return {
+    username: (function () {
+      if (!auth.username?.length) return "can't be blank"
+      return ""
+    })(),
+    password: (function () {
+      if (!auth.password?.length) return "can't be blank"
+      return ""
+    })(),
+  }
+}
+
 export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_props) {
   const authPasswordInput = useRef<TextInput>()
   const [isAuthPasswordHidden, setIsAuthPasswordHidden] = useState(true)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const {
-    authStore: {
-      authEmail,
-      authPassword,
-      setAuthEmail,
-      setAuthPassword,
-      setAuthToken,
-      validationErrors,
-    },
+    authStore: { username, loginWithUsernameAndPassword },
+    commonStore,
   } = useStores()
+
+  const [auth, setAuth] = useState<AuthRequestModel>({
+    username,
+    password: "Dnt@26051996",
+  })
 
   useEffect(() => {
     // Here is where you could fetch credentials from keychain or storage
     // and pre-fill the form fields.
-    setAuthEmail("test@generali.com.vn")
-    setAuthPassword("123456")
   }, [])
 
-  const errors: typeof validationErrors = isSubmitted ? validationErrors : ({} as any)
+  const authValidationErrors = useMemo(() => validationErrors(auth), [auth])
 
-  function login() {
-    setIsSubmitted(true)
-
-    if (Object.values(validationErrors).some((v) => !!v)) return
-
-    // Make a request to your server to get an authentication token.
-    // If successful, reset the fields and set the token.
-    setIsSubmitted(false)
-    setAuthPassword("")
-    setAuthEmail("")
-
-    // We'll mock this with a fake token.
-    setAuthToken(String(Date.now()))
-  }
+  const errors: typeof authValidationErrors = isSubmitted ? authValidationErrors : ({} as any)
 
   const PasswordRightAccessory = useMemo(
     () =>
@@ -65,15 +74,46 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
     [isAuthPasswordHidden],
   )
 
+  /**
+   * That is called cleanup when the component unmounts
+   */
   useEffect(() => {
     return () => {
-      setAuthPassword("")
-      setAuthEmail("")
+      setAuth({ username: "", password: "" })
     }
   }, [])
 
-  const iconWidth = responsiveWidth(120)
-  const iconHeight = responsiveWidth(120)
+  /**
+   * Callback that is called when the text input's username changes.
+   * Changed text is passed as an argument to the callback handler.
+   */
+  const onChangeUsername = (username: string) => setAuth({ ...auth, username })
+
+  /**
+   * Callback that is called when the text input's password changes.
+   * Changed text is passed as an argument to the callback handler.
+   */
+  const onChangePassword = (password: string) => setAuth({ ...auth, password })
+
+  /**
+   * Callback that is called when submit button is pressed.
+   */
+  async function onLogin() {
+    setIsSubmitted(true)
+
+    if (Object.values(authValidationErrors).some((v) => !!v)) return
+
+    // Trigger full screen loading.
+    commonStore.setGlobalLoading(true)
+
+    // Make a request to your server to get an authentication token.
+    await loginWithUsernameAndPassword(auth)
+
+    commonStore.setGlobalLoading(false)
+    // If successful, reset the fields and set the token.
+    setIsSubmitted(false)
+    // We'll mock this with a fake token.
+  }
 
   return (
     <Screen
@@ -86,24 +126,27 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       </View>
 
       <TextField
-        value={authEmail}
-        onChangeText={setAuthEmail}
+        value={auth.username}
+        id="auth-username"
+        testID="auth-username"
+        onChangeText={onChangeUsername}
         containerStyle={$textField}
         autoCapitalize="none"
-        autoComplete="email"
         autoCorrect={false}
-        keyboardType="email-address"
-        labelTx="loginScreen.emailFieldLabel"
-        placeholderTx="loginScreen.emailFieldPlaceholder"
-        helper={errors?.authEmail}
-        status={errors?.authEmail ? "error" : undefined}
+        keyboardType="default"
+        labelTx="loginScreen.usernameFieldLabel"
+        placeholderTx="loginScreen.usernameFieldPlaceholder"
+        helper={errors?.username}
+        status={errors?.username ? "error" : undefined}
         onSubmitEditing={() => authPasswordInput.current?.focus()}
       />
 
       <TextField
         ref={authPasswordInput}
-        value={authPassword}
-        onChangeText={setAuthPassword}
+        id="auth-password"
+        testID="auth-password"
+        value={auth.password}
+        onChangeText={onChangePassword}
         containerStyle={$textField}
         autoCapitalize="none"
         autoComplete="password"
@@ -111,9 +154,9 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         secureTextEntry={isAuthPasswordHidden}
         labelTx="loginScreen.passwordFieldLabel"
         placeholderTx="loginScreen.passwordFieldPlaceholder"
-        helper={errors?.authPassword}
-        status={errors?.authPassword ? "error" : undefined}
-        onSubmitEditing={login}
+        helper={errors?.password}
+        status={errors?.password ? "error" : undefined}
+        onSubmitEditing={onLogin}
         clearRightAccessory={false}
         RightAccessory={PasswordRightAccessory}
       />
@@ -123,7 +166,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         tx="loginScreen.tapToSignIn"
         style={$tapButton}
         preset="primary"
-        onPress={login}
+        onPress={onLogin}
       />
     </Screen>
   )
@@ -138,6 +181,7 @@ const $logo: ViewStyle = {
   justifyContent: "center",
   alignItems: "center",
   marginBottom: spacing.size32,
+  height: iconHeight,
 }
 
 const $textField: ViewStyle = {

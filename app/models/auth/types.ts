@@ -16,20 +16,14 @@ export interface AuthenticateResponse {
   status: number
 }
 
-export interface UserInfo {
-  name: string
-  email: string
+export type AuthRequestModel = {
+  username: string
+  password: string
 }
 
-export type UpgradePayload = {
-  id: number
-  name: string
-  userId: string
-  phone: string
-  otpCode: string
-  otpId: number
-  customerId: string
-  generaliPhone: string
-  customerIdGroup?: string
-  citizenId?: string
+export type AuthResponseModel = {
+  accessToken: string
+  tokenType: string
+  expiresIn: number
+  message: string
 }

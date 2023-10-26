@@ -1,10 +1,10 @@
 import { useStores } from "app/models"
-import { appColors, spacing } from "app/theme"
+import { appColors } from "app/theme"
+import { deviceHeight, deviceWidth } from "app/utils/screens"
 import { observer } from "mobx-react-lite"
 import * as React from "react"
-import { ActivityIndicator, StyleProp, TextStyle, View, ViewStyle } from "react-native"
-import { Typography } from "../Typography"
-import { deviceHeight, deviceWidth } from "app/utils/screens"
+import { StyleProp, View, ViewStyle } from "react-native"
+import { AnimatedLoading } from "./AnimatedLoading"
 
 interface GlobalLoadingProps {
   viewStyle?: StyleProp<ViewStyle>
@@ -16,7 +16,7 @@ interface GlobalLoadingProps {
 const testID = "GenAPIManagement-Global-Loading"
 
 export const GlobalLoading = observer(function GlobalLoading(props: GlobalLoadingProps) {
-  const { viewStyle: $viewStyleOverride, color = "blue", animating = true, ...rest } = props
+  const { viewStyle: $viewStyleOverride } = props
 
   const {
     commonStore: { isGlobalLoading },
@@ -30,8 +30,7 @@ export const GlobalLoading = observer(function GlobalLoading(props: GlobalLoadin
     return (
       <View style={[$containerStyle, $viewStyleOverride]} testID={testID} pointerEvents="box-none">
         <View style={$overlayStyle}>
-          <Typography style={$textStyle} preset="body01" text="Vui lòng chờ..." />
-          <ActivityIndicator color={color} animating={animating} {...rest} />
+          <AnimatedLoading />
         </View>
       </View>
     )
@@ -61,10 +60,4 @@ const $overlayStyle: ViewStyle = {
   bottom: 0,
   left: 0,
   right: 0,
-}
-const $textStyle: TextStyle = {
-  justifyContent: "center",
-  alignItems: "center",
-  zIndex: 10,
-  marginBottom: spacing.size12,
 }

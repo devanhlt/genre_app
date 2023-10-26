@@ -10,7 +10,7 @@ import {
 import { Typography, TypographyProps } from "../Typography"
 import { Icon, IconTypes } from "../Icon"
 import { appColors, iconSizes, spacing, typography } from "app/theme"
-import { ExtendedEdge, useSafeAreaInsetsStyle } from "app/utils/useSafeAreaInsetsStyle"
+import { ExtendedEdge, useSafeAreaInsetsStyle } from "app/hooks/useSafeAreaInsetsStyle"
 import { isRTL, translate } from "app/i18n"
 
 export interface HeaderProps {

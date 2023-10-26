@@ -8,7 +8,7 @@ import { useStores } from "app/models"
 import { AppStackScreenProps, goBack } from "app/navigators"
 import { appColors, boldType, spacing, typography } from "app/theme"
 import { jsonToString } from "app/utils/helpers"
-import { useHeader } from "app/utils/useHeader"
+import { useHeader } from "app/hooks/useHeader"
 import LoggingDetailItem from "./components/LoggingDetailItem"
 
 interface LoggingDetailScreenProps extends AppStackScreenProps<"LoggingDetail"> {}

@@ -1,15 +1,19 @@
-import { Instance, SnapshotOut, flow, types } from "mobx-state-tree"
+import { Instance, SnapshotOut, flow, toGenerator, types } from "mobx-state-tree"
+
+import { jsonToString } from "app/utils/helpers"
 import { withEnvironment } from "../extensions/with-environment"
 import { withSetPropAction } from "../helpers/withSetPropAction"
-import { UpgradePayload } from "./types"
+import { authServices } from "./services"
+import { AuthRequestModel } from "./types"
+import { Toast } from "app/utils/toast"
+import { clearSessionStorage, saveSessionStorage } from "app/utils/auth"
 
 export const AuthStoreModel = types
   .model("AuthStore")
   .props({
     loading: false,
     authToken: types.maybe(types.string),
-    authEmail: "test@pv.com",
-    authPassword: "12345678",
+    username: "gvl02253",
   })
   .extend(withEnvironment) // Extend environment
   .actions(withSetPropAction)
@@ -19,40 +23,33 @@ export const AuthStoreModel = types
     },
     get validationErrors() {
       return {
-        authEmail: (function () {
-          if (store.authEmail.length === 0) return "can't be blank"
-          if (store.authEmail.length < 6) return "must be at least 6 characters"
-          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(store.authEmail))
-            return "must be a valid email address"
-          return ""
-        })(),
-        authPassword: (function () {
-          if (store.authPassword.length === 0) return "can't be blank"
-          if (store.authPassword.length < 6) return "must be at least 6 characters"
+        username: (function () {
+          if (store.username.length === 0) return "can't be blank"
           return ""
         })(),
       }
     },
   }))
   .actions((self) => {
-    const loginWithPassword = flow(function* login() {
+    const loginWithUsernameAndPassword = flow(function* loginWithUsernameAndPassword(
+      payload: AuthRequestModel,
+    ) {
       self.loading = true
-    })
 
-    const setAuthToken = flow(function* login(value?: string) {
-      self.authToken = value
-    })
+      const response = yield* toGenerator(authServices.loggingWithUsernameAndPassword(payload))
 
-    const setAuthEmail = flow(function* login(value?: string) {
-      self.authEmail = value.replace(/ /g, "")
-    })
-
-    const setAuthPassword = flow(function* login(value?: string) {
-      self.authPassword = value.replace(/ /g, "")
-    })
-
-    const upgrade = flow(function* upgrade(payload: UpgradePayload) {
-      return payload
+      if (response.kind === "ok") {
+        self.setProp("authToken", response.data.accessToken)
+        saveSessionStorage(response.data.accessToken, response.data.expiresIn)
+      } else {
+        // Handler error
+        console.tron.error(`Error when login: ${jsonToString(response)}`, [])
+        Toast.error({
+          title: "Login failed",
+          subtitle: jsonToString(response),
+          visibilityTime: 100000000,
+        })
+      }
     })
 
     /**
@@ -61,17 +58,14 @@ export const AuthStoreModel = types
      */
     const logout = flow(function* logout() {
       self.authToken = undefined
-      self.authEmail = ""
-      self.authPassword = ""
+
+      // Remove local storage
+      clearSessionStorage()
     })
 
     return {
-      loginWithPassword,
+      loginWithUsernameAndPassword,
       logout,
-      upgrade,
-      setAuthToken,
-      setAuthEmail,
-      setAuthPassword,
     }
   })
 export default AuthStoreModel

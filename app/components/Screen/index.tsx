@@ -1,6 +1,6 @@
 import { useScrollToTop } from "@react-navigation/native"
 import { appColors } from "app/theme"
-import { ExtendedEdge, useSafeAreaInsetsStyle } from "app/utils/useSafeAreaInsetsStyle"
+import { ExtendedEdge, useSafeAreaInsetsStyle } from "app/hooks/useSafeAreaInsetsStyle"
 import { StatusBar, StatusBarProps } from "expo-status-bar"
 import React, { useRef, useState } from "react"
 import {

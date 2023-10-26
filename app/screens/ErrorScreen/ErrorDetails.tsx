@@ -20,10 +20,13 @@ export function ErrorDetails(props: ErrorDetailsProps) {
       <View style={$topSection}>
         <Icon icon="heart" size={64} />
         <Typography style={$heading} tx="errorScreen.title" />
-        <Typography tx="errorScreen.friendlySubtitle" />
       </View>
 
-      <ScrollView style={$errorSection} contentContainerStyle={$errorSectionContentContainer}>
+      <ScrollView
+        style={$errorSection}
+        contentContainerStyle={$errorSectionContentContainer}
+        showsVerticalScrollIndicator={false}
+      >
         <Typography style={$errorContent} text={`${props.error}`.trim()} />
         <Typography
           selectable
@@ -44,13 +47,12 @@ export function ErrorDetails(props: ErrorDetailsProps) {
 
 const $contentContainer: ViewStyle = {
   alignItems: "center",
-  paddingHorizontal: spacing.size24,
+  paddingHorizontal: spacing.size16,
   paddingTop: spacing.size32,
   flex: 1,
 }
 
 const $topSection: ViewStyle = {
-  flex: 1,
   alignItems: "center",
 }
 
@@ -60,8 +62,8 @@ const $heading: TextStyle = {
 }
 
 const $errorSection: ViewStyle = {
-  flex: 2,
-  backgroundColor: appColors.common.borderDefault,
+  flex: 1,
+  // backgroundColor: appColors.common.borderDefault,
   marginVertical: spacing.size16,
   borderRadius: 6,
 }

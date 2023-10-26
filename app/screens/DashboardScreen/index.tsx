@@ -8,7 +8,7 @@ import { System } from "app/models/system/system"
 import { MainTabScreenProps } from "app/navigators/MainNavigator"
 import { appColors, spacing } from "app/theme"
 import { delay } from "app/utils/delay"
-import { useHeader } from "app/utils/useHeader"
+import { useHeader } from "app/hooks/useHeader"
 import DashboardSystemItem from "./components/DashboardSystemItem"
 import EmptyListMessage from "app/components/EmptyListMessage"
 

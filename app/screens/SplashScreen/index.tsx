@@ -3,8 +3,7 @@ import React, { FC } from "react"
 import { Image, ImageBackground, ImageStyle, View, ViewStyle } from "react-native"
 
 import { AppImgs } from "app/assets"
-import { SvgIcon } from "app/components"
-import { appColors } from "app/theme"
+import { AnimatedLoading } from "app/components/Loading"
 import { responsiveHeight, responsiveWidth } from "app/utils/screens"
 
 interface SplashScreenProps {
@@ -25,19 +24,16 @@ export const SplashScreen: FC<SplashScreenProps> = observer(function SplashScree
     )
   }
 
-  const iconWidth = responsiveWidth(120)
-  const iconHeight = responsiveWidth(120)
-
   return (
     <View style={$container}>
-      <SvgIcon name="LogoWhite" width={iconWidth} height={iconHeight} />
+      <AnimatedLoading />
     </View>
   )
 })
 
 const $container: ViewStyle = {
   flex: 1,
-  backgroundColor: appColors.common.bgRed,
+  // backgroundColor: appColors.common.bgRed,
   width: "100%",
   height: "100%",
   justifyContent: "center",

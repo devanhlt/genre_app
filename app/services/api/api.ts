@@ -1,12 +1,8 @@
-import { ApiResponse, ApisauceInstance, create } from "apisauce"
-import { System, SystemSnapshotIn } from "app/models/system/system"
+import { ApisauceInstance, create } from "apisauce"
 import Config from "../../config"
 import type { ApiConfig } from "./api.types"
-import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
+import { loadSessionStorage } from "app/utils/auth"
 
-/**
- * Configuring the apisauce instance.
- */
 export const DEFAULT_API_CONFIG: ApiConfig = {
   url: Config.API_URL,
   timeout: 10000,
@@ -16,7 +12,7 @@ export const DEFAULT_API_CONFIG: ApiConfig = {
  * Manages all requests to the API. You can use this class to build out
  * various requests that you need to call from your backend API.
  */
-export class Api {
+export class ApiServices {
   apisauce: ApisauceInstance
   config: ApiConfig
 
@@ -32,40 +28,34 @@ export class Api {
         Accept: "application/json",
       },
     })
-  }
-
-  /**
-   * Gets a list of system
-   */
-  async getSystems(): Promise<{ kind: "ok"; systems: SystemSnapshotIn[] } | GeneralApiProblem> {
-    // make the api call
-    const timestamp = new Date().getTime()
-    const response: ApiResponse<System[]> = await this.apisauce.get(`api/v1/systems?_=${timestamp}`)
-
-    // the typical ways to die when calling an api
-    if (!response.ok) {
-      const problem = getGeneralApiProblem(response)
-      if (problem) return problem
-    }
-
-    // transform the data into the format we are expecting
-    try {
-      const rawData = response.data
-
-      // This is where we transform the data into the shape we expect for our MST model.
-      const systems: SystemSnapshotIn[] = rawData.map((raw) => ({
-        ...raw,
-      }))
-
-      return { kind: "ok", systems }
-    } catch (e) {
-      if (__DEV__) {
-        console.tron.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
-      }
-      return { kind: "bad-data" }
-    }
+    /**
+     * Request interceptor
+     */
+    this.apisauce.axiosInstance.interceptors.request.use(
+      (config) => {
+        const { accessToken } = loadSessionStorage()
+        if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`
+        return config
+      },
+      (error) => {
+        return Promise.reject(error)
+      },
+    )
+    /**
+     * Response interceptor
+     */
+    this.apisauce.axiosInstance.interceptors.response.use(
+      (response) => {
+        return response
+      },
+      (error) => {
+        return Promise.reject(error)
+      },
+    )
   }
 }
 
 // Singleton instance of the API for convenience
-export const api = new Api()
+const api = new ApiServices()
+
+export default api

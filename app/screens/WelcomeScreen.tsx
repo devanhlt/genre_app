@@ -1,13 +1,13 @@
 import { observer } from "mobx-react-lite"
 import React, { FC } from "react"
-import { Image, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
+import { Alert, Image, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
 import { Button, Typography } from "../components"
 import { useStores } from "../models"
 import { AppStackScreenProps } from "../navigators"
-import { useHeader } from "../utils/useHeader"
-import { useSafeAreaInsetsStyle } from "../utils/useSafeAreaInsetsStyle"
 import { appColors, spacing } from "app/theme"
 import { AppImgs } from "app/assets"
+import { useHeader } from "app/hooks/useHeader"
+import { useSafeAreaInsetsStyle } from "app/hooks/useSafeAreaInsetsStyle"
 
 interface WelcomeScreenProps extends AppStackScreenProps<"Main"> {}
 
@@ -21,9 +21,25 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeSc
     return null
   }
 
+  const handleLogout = () => {
+    return Alert.alert("Confirm", "Are you sure?", [
+      {
+        text: "Close",
+        onPress: () => null,
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: () => {
+          logout()
+        },
+      },
+    ])
+  }
+
   useHeader({
     rightTx: "common.logOut",
-    onRightPress: logout,
+    onRightPress: handleLogout,
   })
 
   const $bottomContainerInsets = useSafeAreaInsetsStyle(["bottom"])

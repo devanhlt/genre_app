@@ -11,9 +11,9 @@ import { radius } from "app/theme/radius"
 import Tag from "app/components/Tag"
 import { LoggingFilterStatus, LoggingFilterTypes } from "../LoggingScreen"
 import { Instance } from "mobx-state-tree"
-import { LoggingFilterModel } from "app/models/system"
 import DatePickerField from "app/components/InputField/DatePickerField"
 import { Divider } from "app/components/Divider"
+import { LoggingFilterModel } from "app/models/system/logging"
 
 export interface LoggingFilterProps {
   onApplyFilter: (filter?: Instance<typeof LoggingFilterModel>) => void
@@ -64,7 +64,7 @@ export const LoggingFilter: FC<LoggingFilterProps> = observer(function LoggingFi
     onResetFilter()
   }
 
-  const currentSystem = loggingFilter?.system
+  const currentSystem = loggingFilter?.system === "" ? "ALL" : loggingFilter?.system
   const currentLogType = loggingFilter?.logType
   const currentStatus = loggingFilter?.status
 

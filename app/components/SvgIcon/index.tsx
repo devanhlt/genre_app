@@ -1,7 +1,8 @@
-import React from "react"
+import React, { Suspense } from "react"
 
 import { SvgIcons, SvgIconsType } from "app/assets/svg"
-import { LocalSvg, SvgProps } from "react-native-svg"
+import { SvgCss, SvgProps, loadLocalRawResource } from "react-native-svg"
+import { Loading } from "../Loading"
 
 interface IconProps extends SvgProps {
   /**
@@ -21,5 +22,18 @@ export const SvgIcon = ({ name, ...rest }: IconProps) => {
   }
   const Icon = SvgIcons[name as string] as any
 
-  return <LocalSvg asset={Icon} {...rest} />
+  const [xml, setXml] = React.useState<string | null>(null)
+  React.useEffect(() => {
+    ;(async () => {
+      await loadLocalRawResource(Icon).then(setXml)
+    })()
+  }, [Icon])
+
+  if (!xml) return <Loading />
+
+  return (
+    <Suspense fallback={<Loading />}>
+      <SvgCss xml={xml} {...rest} />
+    </Suspense>
+  )
 }

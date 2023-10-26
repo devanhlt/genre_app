@@ -10,6 +10,7 @@ export const SystemModel = types
   .props({
     systemName: types.optional(types.maybeNull(types.string), null),
     baseUrl: types.optional(types.maybeNull(types.string), null),
+    groupSystem: types.optional(types.maybeNull(types.string), null),
     adminEmail: types.optional(types.maybeNull(types.string), null),
     adminPhone: types.optional(types.maybeNull(types.string), null),
     totalLog: types.optional(types.maybeNull(types.number), null),

@@ -8,15 +8,15 @@ Description: unary_function and binary_function are no longer provided in C++17 
 
 Solution 1: Edit Podfile:
 
-    ```
-    post_install do |installer|
-      installer.pods_project.targets.each do |target|
-        target.build_configurations.each do |config|
-          config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', '_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION']
-        end
-      end
+```
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', '_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION']
     end
-    ```
+  end
+end
+```
 
 Solution 2:
 Select Pods > Build Settings > In Apple Clang - Preprocessing section > under Macro section > Add "\_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION" in Release & Debug

@@ -1,14 +1,13 @@
-import { api } from "app/services/api"
 import { endOfDay, startOfDay, subDays } from "date-fns"
 import { Instance, SnapshotOut, flow, getType, toGenerator, types } from "mobx-state-tree"
 
-import { apiLogging } from "app/services/api/logging"
 import { jsonToString } from "app/utils/helpers"
 import { withEnvironment } from "../extensions/with-environment"
 import { withSetPropAction } from "../helpers/withSetPropAction"
-import { LoggingModel, LoggingSnapshotIn } from "./logging"
+import { LoggingFilterModel, LoggingModel, LoggingSnapshotIn } from "./logging"
 import { SystemModel } from "./system"
-import { apiSetting } from "app/services/api/setting"
+import { systemServices } from "./services"
+import { settingServices } from "../setting/services"
 
 const ALL_SYSTEM = {
   systemName: "ALL",
@@ -21,18 +20,6 @@ const ALL_SYSTEM = {
   totalLogError: null,
   receiveLog: false,
 }
-
-export const LoggingFilterModel = types.model("LoggingFilter", {
-  keyword: types.optional(types.maybeNull(types.string), ""),
-  pageNumber: types.optional(types.maybeNull(types.number), 1),
-  pageSize: types.optional(types.maybeNull(types.number), 10),
-  pageDraw: types.optional(types.maybeNull(types.number), 1),
-  fromDate: types.optional(types.maybeNull(types.Date), startOfDay(subDays(new Date(), 1))),
-  toDate: types.optional(types.maybeNull(types.Date), endOfDay(new Date())),
-  status: types.optional(types.maybeNull(types.string), ""),
-  system: types.optional(types.maybeNull(types.string), ""),
-  logType: types.optional(types.maybeNull(types.string), ""),
-})
 
 export const SystemStoreModel = types
   .model("SystemStore")
@@ -83,7 +70,7 @@ export const SystemStoreModel = types
   .actions((self) => ({
     fetchSystems: flow(function* fetchSystems() {
       self.setProp("isLoadingSystem", true)
-      const response = yield* toGenerator(api.getSystems())
+      const response = yield* toGenerator(systemServices.getSystems())
       if (response.kind === "ok") {
         self.setProp("systems", response.systems)
       } else {
@@ -100,7 +87,8 @@ export const SystemStoreModel = types
       if (currentFilter.system === ALL_SYSTEM.systemName) {
         delete currentFilter.system
       }
-      const response = yield* toGenerator(apiLogging.getLogging(currentFilter))
+      const response = yield* toGenerator(systemServices.getLogging(currentFilter))
+
       if (response.kind === "ok") {
         self.setProp("lstSystemLogging", response.logging)
       } else {
@@ -111,7 +99,7 @@ export const SystemStoreModel = types
     exportLogByFilter: flow(function* exportLogByFilter(
       loggingFiltering: Instance<typeof LoggingFilterModel>,
     ) {
-      const response = yield* toGenerator(apiLogging.exportLoggingByFilter(loggingFiltering))
+      const response = yield* toGenerator(systemServices.exportLoggingByFilter(loggingFiltering))
       if (response.kind === "ok") {
         return response.logging
       } else {
@@ -120,7 +108,7 @@ export const SystemStoreModel = types
     }),
 
     exportSingleLogDetail: flow(function* exportLogByFilter(logging: LoggingSnapshotIn) {
-      const response = yield* toGenerator(apiLogging.exportSingleLogDetail(logging))
+      const response = yield* toGenerator(systemServices.exportSingleLogDetail(logging))
       if (response.kind === "ok") {
         return response.data
       } else {
@@ -151,9 +139,30 @@ export const SystemStoreModel = types
      *
      */
     updateSystemConfig: flow(function* editSystemDetail(system: Instance<typeof SystemModel>) {
-      const response = yield* toGenerator(apiSetting.putSystemConfig(system))
+      const response = yield* toGenerator(settingServices.putSystemConfig(system))
       return response.kind === "ok" && response.success
     }),
+
+    /**
+     * Reset model
+     */
+    reset: () => {
+      self.setProp("loggingFilter", {
+        keyword: "",
+        pageNumber: 1,
+        pageSize: 10,
+        pageDraw: 1,
+        fromDate: startOfDay(subDays(new Date(), 1)),
+        toDate: endOfDay(new Date()),
+        status: "",
+        logType: "",
+      })
+      self.setProp("systems", [])
+      self.setProp("isLoadingSystem", false)
+      self.setProp("loggingRecordsFiltered", 0)
+      self.setProp("loggingRecordsTotal", 0)
+      self.setProp("loggingTotalCount", 0)
+    },
 
     /**
      * Handle logout

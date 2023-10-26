@@ -9,15 +9,17 @@
     "orientation": "portrait",
     "icon": "./app/assets/images/app-icon-all.png",
     "splash": {
-      "image": "./app/assets/images/splash-logo-all.png",
+      "image": "./app/assets/images/splash-logo-white.png",
       "resizeMode": "contain",
-      "backgroundColor": "#191015"
+      "backgroundColor": "#C4271C"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
     "jsEngine": "hermes",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "android": {
       "icon": "./app/assets/images/app-icon-android-legacy.png",
       "package": "com.apimanagement",
@@ -26,9 +28,9 @@
         "backgroundImage": "./app/assets/images/app-icon-android-adaptive-background.png"
       },
       "splash": {
-        "image": "./app/assets/images/splash-logo-android-universal.png",
+        "image": "./app/assets/images/splash-logo-white.png",
         "resizeMode": "contain",
-        "backgroundColor": "#191015"
+        "backgroundColor": "#C4271C"
       }
     },
     "ios": {
@@ -36,20 +38,16 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.apimanagement",
       "splash": {
-        "image": "./app/assets/images/splash-logo-ios-mobile.png",
-        "tabletImage": "./app/assets/images/splash-logo-ios-tablet.png",
+        "image": "./app/assets/images/splash-logo-white.png",
+        "tabletImage": "./app/assets/images/splash-logo-white.png",
         "resizeMode": "contain",
-        "backgroundColor": "#191015"
+        "backgroundColor": "#C4271C"
       }
     },
-    "web": {
-      "favicon": "./app/assets/images/app-icon-web-favicon.png",
-      "splash": {
-        "image": "./app/assets/images/splash-logo-web.png",
-        "resizeMode": "contain",
-        "backgroundColor": "#191015"
-      }
-    },
-    "plugins": ["expo-localization"]
+    "plugins": [
+      "expo-localization"
+    ],
+    "sdkVersion": "48.0.0",
+    "entryPoint": ".vscode/exponentIndex.js"
   }
 }
