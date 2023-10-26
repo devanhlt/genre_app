@@ -1,14 +1,15 @@
+import { FlashList } from "@shopify/flash-list"
 import { observer } from "mobx-react-lite"
 import React, { FC } from "react"
-import { FlatList, Share, TextStyle, ViewStyle } from "react-native"
+import { Share, TextStyle, ViewStyle } from "react-native"
 import RNFS from "react-native-fs"
 
 import { Screen } from "app/components"
+import { useHeader } from "app/hooks/useHeader"
 import { useStores } from "app/models"
 import { AppStackScreenProps, goBack } from "app/navigators"
 import { appColors, boldType, spacing, typography } from "app/theme"
 import { jsonToString } from "app/utils/helpers"
-import { useHeader } from "app/hooks/useHeader"
 import LoggingDetailItem from "./components/LoggingDetailItem"
 
 interface LoggingDetailScreenProps extends AppStackScreenProps<"LoggingDetail"> {}
@@ -70,12 +71,15 @@ export const LoggingDetailScreen: FC<LoggingDetailScreenProps> = observer(
 
     return (
       <Screen preset="fixed" contentContainerStyle={$screenContentContainer}>
-        <FlatList
+        <FlashList
           data={data}
+          estimatedItemSize={97}
+          extraData={data.length}
           stickyHeaderIndices={[0]}
           ListHeaderComponent={() => (
             <LoggingDetailItem field="Field" value="Value" descriptionStyle={$textBold} />
           )}
+          keyExtractor={(item, index) => `logging-item-${item}--${index}`}
           renderItem={({ index, item }) => (
             <LoggingDetailItem
               key={index}
@@ -91,6 +95,7 @@ export const LoggingDetailScreen: FC<LoggingDetailScreenProps> = observer(
 
 const $screenContentContainer: ViewStyle = {
   paddingBottom: spacing.size48,
+  flex: 1,
 }
 
 const $textBold: TextStyle = {

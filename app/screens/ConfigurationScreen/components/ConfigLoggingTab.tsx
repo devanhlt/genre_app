@@ -81,7 +81,7 @@ export const ConfigLoggingTab = observer(function ConfigLoggingTab() {
       <BottomModal
         ref={bottomSheetModalRef}
         title="Edit Logging Configuration"
-        snapPoints={["85%%"]}
+        snapPoints={["60%"]}
       >
         <ConfigLoggingModal setting={currSetting} onSubmit={onUpdateLogConfig} />
       </BottomModal>

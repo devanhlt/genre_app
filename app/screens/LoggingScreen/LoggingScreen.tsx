@@ -1,6 +1,7 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { FC, useEffect, useRef, useState } from "react"
-import { FlatList, RefreshControl, Share, TouchableOpacity, View, ViewStyle } from "react-native"
+import { RefreshControl, Share, TouchableOpacity, View, ViewStyle } from "react-native"
+import { FlashList } from "@shopify/flash-list"
 
 import { BottomModal, Screen } from "app/components"
 import { PhosphorIcon } from "app/components/Icon/PhosphorIcon"
@@ -15,12 +16,13 @@ import { LoggingFilter } from "./components/LoggingFilter"
 import LoggingItem from "./components/LoggingItem"
 
 import EmptyListMessage from "app/components/EmptyListMessage"
+import { useDebounce } from "app/hooks/useDebounce"
+import { useHeader } from "app/hooks/useHeader"
 import { jsonToString } from "app/utils/helpers"
 import { endOfDay, startOfDay, subDays } from "date-fns"
 import { observer } from "mobx-react-lite"
 import RNFS from "react-native-fs"
-import { useDebounce } from "app/hooks/useDebounce"
-import { useHeader } from "app/hooks/useHeader"
+
 
 interface LoggingScreenProps extends AppStackScreenProps<"LoggingDetail"> {}
 
@@ -197,11 +199,16 @@ export const LoggingScreen: FC<LoggingScreenProps> = observer(function LoggingSc
         </TouchableOpacity>
       </View>
 
-      <FlatList
+      <FlashList<Logging>
         centerContent
         contentContainerStyle={$flatListContentContainer}
         data={systemStore.lstSystemLogging}
         extraData={systemStore.lstSystemLogging.length}
+        renderItem={({ item }) => <LoggingItem item={item} onPressItem={onPressLoggingItem} />}
+        estimatedItemSize={200}
+        ListEmptyComponent={() => <EmptyListMessage isLoading={isLoading} />}
+        keyExtractor={(item, index) => `logging-item-${item.idStr}--${index}`}
+        showsVerticalScrollIndicator={false}
         refreshControl={
           !isLstEmpty && (
             <RefreshControl
@@ -211,10 +218,6 @@ export const LoggingScreen: FC<LoggingScreenProps> = observer(function LoggingSc
             />
           )
         }
-        ListEmptyComponent={() => <EmptyListMessage isLoading={isLoading} />}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item, index) => `logging-item-${item.idStr}--${index}`}
-        renderItem={({ item }) => <LoggingItem item={item} onPressItem={onPressLoggingItem} />}
       />
       <BottomModal ref={bottomSheetModalRef} title="Filter" snapPoints={["75%"]}>
         <LoggingFilter

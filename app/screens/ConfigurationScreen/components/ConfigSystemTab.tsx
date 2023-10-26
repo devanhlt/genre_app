@@ -78,7 +78,7 @@ export const ConfigSystemTab = observer(function ConfigSystemTab() {
           <ConfigSystemItem system={item} onEdit={onEditSystem} onUpdate={onUpdateSystem} />
         )}
       />
-      <BottomModal ref={bottomSheetModalRef} title="Edit System Configuration" snapPoints={["85%"]}>
+      <BottomModal ref={bottomSheetModalRef} title="Edit System Configuration" snapPoints={["70%"]}>
         <ConfigSystemModal system={selectedSystem} onSubmit={onUpdateSystem} />
       </BottomModal>
     </Fragment>
