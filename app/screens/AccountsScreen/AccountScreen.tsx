@@ -1,21 +1,20 @@
+import { FlashList } from "@shopify/flash-list"
+import { observer } from "mobx-react-lite"
 import React, { FC, useEffect, useState } from "react"
 import { View, ViewStyle } from "react-native"
 
 import { Screen } from "app/components"
-import SearchField from "app/components/InputField/SearchField"
-import { useStores } from "app/models"
-import { LoggingFilterModel } from "app/models/system/logging"
-import { AppStackScreenProps } from "app/navigators"
-import { appColors, spacing } from "app/theme"
-import { Instance } from "mobx-state-tree"
-
-import { FlashList } from "@shopify/flash-list"
 import EmptyListMessage from "app/components/EmptyListMessage"
+import SearchField from "app/components/InputField/SearchField"
 import { useDebounce } from "app/hooks/useDebounce"
 import { useHeader } from "app/hooks/useHeader"
 import { useSystemsQuery } from "app/hooks/useQueries/useAccountsQuery"
+import { useStores } from "app/models"
+import { LoggingFilterModel } from "app/models/system/logging"
 import { User } from "app/models/users/user"
-import { observer } from "mobx-react-lite"
+import { AppStackScreenProps } from "app/navigators"
+import { appColors, spacing } from "app/theme"
+import { Instance } from "mobx-state-tree"
 import UserItem from "./components/Usertem"
 
 interface AccountScreenProps extends AppStackScreenProps<"LoggingDetail"> {}
@@ -86,9 +85,12 @@ export const AccountsScreen: FC<AccountScreenProps> = observer(function AccountS
         data={users}
         extraData={systemStore.lstSystemLogging.length}
         renderItem={({ item }) => <UserItem item={item} />}
-        estimatedItemSize={200}
+        estimatedItemSize={69}
         ListEmptyComponent={() => <EmptyListMessage isLoading={isLoading} />}
         keyExtractor={(item, index) => `user-item-${item.userName}--${index}`}
+        getItemType={(item) => {
+          return item.userName
+        }}
         showsVerticalScrollIndicator={false}
         // refreshControl={
         //   !isLstEmpty && (

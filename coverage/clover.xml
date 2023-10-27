@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1698392607154" clover="3.2.0">
+  <project timestamp="1698392607154" name="All files">
+    <metrics statements="17" coveredstatements="16" conditionals="11" coveredconditionals="11" methods="1" coveredmethods="1" elements="29" coveredelements="28" complexity="0" loc="17" ncloc="17" packages="3" files="3" classes="3"/>
+    <package name="app.i18n">
+      <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="en.ts" path="/Users/GVL02253/workspace/Generali/APIManagement/app/i18n/en.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="74" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.services.api">
+      <metrics statements="14" coveredstatements="13" conditionals="11" coveredconditionals="11" methods="1" coveredmethods="1"/>
+      <file name="apiProblem.ts" path="/Users/GVL02253/workspace/Generali/APIManagement/app/services/api/apiProblem.ts">
+        <metrics statements="14" coveredstatements="13" conditionals="11" coveredconditionals="11" methods="1" coveredmethods="1"/>
+        <line num="46" count="1" type="stmt"/>
+        <line num="47" count="10" type="cond" truecount="7" falsecount="0"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="51" count="1" type="stmt"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="59" count="4" type="cond" truecount="4" falsecount="0"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="test">
+      <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="mockFile.ts" path="/Users/GVL02253/workspace/Generali/APIManagement/test/mockFile.ts">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="3" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>
