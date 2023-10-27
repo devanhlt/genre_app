@@ -5,7 +5,7 @@ import React from "react"
 import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { translate } from "../i18n"
-import { ConfigurationScreen, DashboardScreen } from "../screens"
+import { AccountsScreen, ConfigurationScreen, DashboardScreen } from "../screens"
 import { appColors, spacing, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
 import { LoggingStack, LoggingStackParamList } from "./LoggingNavigator"
@@ -13,6 +13,7 @@ import { LoggingStack, LoggingStackParamList } from "./LoggingNavigator"
 export type MainTabParamList = {
   Dashboard: undefined
   Logging: NavigatorScreenParams<LoggingStackParamList>
+  Accounts: undefined
   Configuration: undefined
 }
 
@@ -30,6 +31,8 @@ const Tab = createBottomTabNavigator<MainTabParamList>()
 
 export function MainNavigator() {
   const { bottom } = useSafeAreaInsets()
+
+  const isAdmin = true
 
   return (
     <Tab.Navigator
@@ -74,21 +77,47 @@ export function MainNavigator() {
         }}
       />
 
-      <Tab.Screen
-        name="Configuration"
-        component={ConfigurationScreen}
-        options={{
-          tabBarAccessibilityLabel: translate("mainNavigator.configurationTab"),
-          tabBarLabel: translate("mainNavigator.configurationTab"),
-          tabBarIcon: ({ focused, color }) => (
-            <PhosphorIcon
-              name="GearSix"
-              color={focused ? appColors.palette.red : color}
-              size={30}
-            />
-          ),
-        }}
-      />
+      {/*
+       * Only admin role access to the page
+       */}
+      {isAdmin && (
+        <Tab.Screen
+          name="Accounts"
+          component={AccountsScreen}
+          options={{
+            tabBarAccessibilityLabel: translate("mainNavigator.accountsTab"),
+            tabBarLabel: translate("mainNavigator.accountsTab"),
+            tabBarIcon: ({ focused, color }) => (
+              <PhosphorIcon
+                name="Users"
+                color={focused ? appColors.palette.red : color}
+                size={30}
+              />
+            ),
+          }}
+        />
+      )}
+
+      {/*
+       * Only admin role access to the page
+       */}
+      {isAdmin && (
+        <Tab.Screen
+          name="Configuration"
+          component={ConfigurationScreen}
+          options={{
+            tabBarAccessibilityLabel: translate("mainNavigator.configurationTab"),
+            tabBarLabel: translate("mainNavigator.configurationTab"),
+            tabBarIcon: ({ focused, color }) => (
+              <PhosphorIcon
+                name="GearSix"
+                color={focused ? appColors.palette.red : color}
+                size={30}
+              />
+            ),
+          }}
+        />
+      )}
     </Tab.Navigator>
   )
 }

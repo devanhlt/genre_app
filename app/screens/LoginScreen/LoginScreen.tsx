@@ -8,6 +8,8 @@ import { AuthRequestModel } from "app/models/auth/types"
 import { AppStackScreenProps } from "app/navigators"
 import { appColors, iconSizes, spacing } from "app/theme"
 import { responsiveWidth } from "app/utils/screens"
+import { useLoading } from "app/hooks/useLoading"
+import { delay } from "app/utils/delay"
 
 interface LoginScreenProps extends AppStackScreenProps<"LoginScreen"> {}
 
@@ -41,12 +43,13 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
   const [isSubmitted, setIsSubmitted] = useState(false)
   const {
     authStore: { username, loginWithUsernameAndPassword },
-    commonStore,
   } = useStores()
+
+  const { hide: hideLoading, show: showLoading } = useLoading()
 
   const [auth, setAuth] = useState<AuthRequestModel>({
     username,
-    password: "Dnt@26051996",
+    password: "",
   })
 
   useEffect(() => {
@@ -103,13 +106,11 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
 
     if (Object.values(authValidationErrors).some((v) => !!v)) return
 
-    // Trigger full screen loading.
-    commonStore.setGlobalLoading(true)
-
+    showLoading()
+    await delay(1000)
     // Make a request to your server to get an authentication token.
     await loginWithUsernameAndPassword(auth)
-
-    commonStore.setGlobalLoading(false)
+    hideLoading()
     // If successful, reset the fields and set the token.
     setIsSubmitted(false)
     // We'll mock this with a fake token.

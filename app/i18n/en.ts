@@ -61,11 +61,13 @@ const en = {
     dashboardTab: "Dashboard",
     loggingTab: "Logs",
     configurationTab: "Configuration",
+    accountsTab: "Accounts",
   },
   screenTitle: {
     dashboardTab: "Dashboard",
     loggingTab: "Logging",
     configurationTab: "Configuration",
+    accountsTab: "Accounts",
   },
 }
 

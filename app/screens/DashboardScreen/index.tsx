@@ -3,14 +3,14 @@ import React, { FC, useEffect } from "react"
 import { FlatList, RefreshControl, ViewStyle } from "react-native"
 
 import { Screen } from "app/components"
+import EmptyListMessage from "app/components/EmptyListMessage"
+import { useHeader } from "app/hooks/useHeader"
 import { useStores } from "app/models"
 import { System } from "app/models/system/system"
 import { MainTabScreenProps } from "app/navigators/MainNavigator"
 import { appColors, spacing } from "app/theme"
 import { delay } from "app/utils/delay"
-import { useHeader } from "app/hooks/useHeader"
 import DashboardSystemItem from "./components/DashboardSystemItem"
-import EmptyListMessage from "app/components/EmptyListMessage"
 
 interface DashboardScreenProps extends MainTabScreenProps<"Dashboard"> {}
 

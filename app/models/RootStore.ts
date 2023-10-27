@@ -3,6 +3,7 @@ import { AuthStore, AuthStoreModel } from "./auth"
 import { CommonStore, CommonStoreModel } from "./common"
 import { SettingStore, SettingStoreModel } from "./setting"
 import { SystemStore, SystemStoreModel } from "./system"
+import { UsersStoreModel } from "./users"
 
 /**
  * A RootStore model.
@@ -12,6 +13,7 @@ export const RootStoreModel = types.model("RootStore").props({
   authStore: types.optional(AuthStoreModel, {}),
   systemStore: types.optional(SystemStoreModel, {}),
   settingStore: types.optional(SettingStoreModel, {}),
+  usersStore: types.optional(UsersStoreModel, {}),
 })
 
 /**

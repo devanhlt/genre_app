@@ -1,4 +1,4 @@
-const en = {
+const vi = {
   common: {
     ok: "OK!",
     cancel: "Cancel",
@@ -61,14 +61,16 @@ const en = {
     dashboardTab: "Dashboard",
     loggingTab: "Logs",
     configurationTab: "Configuration",
+    accountsTab: "Accounts",
   },
   screenTitle: {
     dashboardTab: "Dashboard",
     loggingTab: "Logging",
     configurationTab: "Configuration",
+    accountsTab: "Accounts",
   },
 }
 
-export default en
+export default vi
 
-export type Translations = typeof en
+export type Translations = typeof vi

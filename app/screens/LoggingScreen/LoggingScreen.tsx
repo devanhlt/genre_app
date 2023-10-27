@@ -23,7 +23,6 @@ import { endOfDay, startOfDay, subDays } from "date-fns"
 import { observer } from "mobx-react-lite"
 import RNFS from "react-native-fs"
 
-
 interface LoggingScreenProps extends AppStackScreenProps<"LoggingDetail"> {}
 
 export const LoggingFilterTypes = [
@@ -43,7 +42,7 @@ export const LoggingScreen: FC<LoggingScreenProps> = observer(function LoggingSc
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
-  const { systemStore } = useStores()
+  const { systemStore, commonStore } = useStores()
   const [refreshing, setRefreshing] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
   const [searchText, setSearchText] = useState("")
@@ -90,10 +89,13 @@ export const LoggingScreen: FC<LoggingScreenProps> = observer(function LoggingSc
   }, [debouncedSearch])
 
   const onExportByFilter = async () => {
+    commonStore.setGlobalLoading(true)
     const loggings = await systemStore.exportLogByFilter({
       ...systemStore.getLoggingCurrentFilter,
       keyword: debouncedSearch,
     })
+
+    commonStore.setGlobalLoading(false)
 
     // TODO move logic code to common file
     // :warning: on iOS, you cannot write into `RNFS.MainBundlePath`,

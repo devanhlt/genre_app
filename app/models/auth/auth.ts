@@ -13,7 +13,7 @@ export const AuthStoreModel = types
   .props({
     loading: false,
     authToken: types.maybe(types.string),
-    username: "gvl02253",
+    username: "",
   })
   .extend(withEnvironment) // Extend environment
   .actions(withSetPropAction)

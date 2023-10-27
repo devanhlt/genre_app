@@ -38,6 +38,7 @@ import { customFontsToLoad } from "./theme"
 import { delay } from "./utils/delay"
 import * as storage from "./utils/storage"
 import { useAppState } from "./hooks/useAppState"
+import { LoadingProvider } from "./hooks/useLoading"
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
@@ -131,21 +132,23 @@ function App(props: AppProps) {
   // otherwise, we're ready to render the app
   return (
     <RootStoreProvider value={rootStore}>
-      <QueryClientProvider client={queryClient}>
-        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-          <BottomSheetModalProvider>
-            <ErrorBoundary catchErrors={Config.catchErrors}>
-              <AppNavigator
-                linking={linking}
-                initialState={initialNavigationState}
-                onStateChange={onNavigationStateChange}
-              />
-            </ErrorBoundary>
-            <GlobalLoading />
-            <ToastMessage />
-          </BottomSheetModalProvider>
-        </SafeAreaProvider>
-      </QueryClientProvider>
+      <LoadingProvider>
+        <QueryClientProvider client={queryClient}>
+          <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+            <BottomSheetModalProvider>
+              <ErrorBoundary catchErrors={Config.catchErrors}>
+                <AppNavigator
+                  linking={linking}
+                  initialState={initialNavigationState}
+                  onStateChange={onNavigationStateChange}
+                />
+              </ErrorBoundary>
+              <GlobalLoading />
+              <ToastMessage />
+            </BottomSheetModalProvider>
+          </SafeAreaProvider>
+        </QueryClientProvider>
+      </LoadingProvider>
     </RootStoreProvider>
   )
 }
