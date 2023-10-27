@@ -17,9 +17,21 @@ export const formatDate = (date: string, dateFormat?: string, options?: Options)
     ...options,
     locale,
   }
-  return format(parseISO(date), dateFormat ?? "yyyy-MM-dd", dateOptions)
+  const isoDate = parseISO(date)
+
+  if (isValidDate(parseISO(date))) {
+    return format(isoDate, dateFormat ?? "yyyy-MM-dd", dateOptions)
+  }
+  if (isValidDate(date)) {
+    return format(date as unknown as Date | number, dateFormat ?? "yyyy-MM-dd", dateOptions)
+  }
+  if (isValidDate(new Date(date))) {
+    return format(new Date(date), dateFormat ?? "yyyy-MM-dd", dateOptions)
+  }
+
+  return false
 }
 
-export const isValidDate = (date: unknown) => {
+export const isValidDate = (date: any) => {
   return isValid(date)
 }
