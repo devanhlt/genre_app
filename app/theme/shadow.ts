@@ -44,7 +44,7 @@ export function pvcShadow(elevation: number | Animated.Value = 0) {
 
 export const shadow = {
   low: pvcShadow(1) as StyleProp<ViewStyle>,
-  medium: pvcShadow(3) as StyleProp<ViewStyle>,
+  medium: pvcShadow() as StyleProp<ViewStyle>,
   high: pvcShadow(5) as StyleProp<ViewStyle>,
 } as const
 

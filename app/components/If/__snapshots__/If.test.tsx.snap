@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<If /> renders correctly 1`] = `
+<Text
+  style={
+    [
+      {},
+      {
+        "color": "#000F27",
+      },
+      {
+        "fontFamily": "System",
+        "fontSize": 16,
+        "fontWeight": "400",
+        "letterSpacing": 0.15,
+        "lineHeight": 24,
+      },
+      undefined,
+    ]
+  }
+>
+  Test
+</Text>
+`;
+
+exports[`<If /> renders correctly when condition is true and children is empty 1`] = `null`;
+
+exports[`<If /> should renders empty when condition is false 1`] = `null`;
+
+exports[`<If /> should renders empty when condition is false and children is empty 1`] = `null`;
+
+exports[`<If /> should renders empty when condition is undefined 1`] = `null`;

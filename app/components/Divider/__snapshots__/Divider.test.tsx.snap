@@ -1,0 +1,173 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Divider /> renders correctly horizontal type 1`] = `
+<View
+  style={
+    [
+      {
+        "flexGrow": 0,
+        "flexShrink": 0,
+      },
+      {
+        "height": 10,
+      },
+      false,
+      undefined,
+    ]
+  }
+/>
+`;
+
+exports[`<Divider /> renders correctly horizontal type and size 50 1`] = `
+<View
+  style={
+    [
+      {
+        "flexGrow": 0,
+        "flexShrink": 0,
+      },
+      {
+        "height": 50,
+      },
+      false,
+      undefined,
+    ]
+  }
+/>
+`;
+
+exports[`<Divider /> renders correctly style override 1`] = `
+<View
+  style={
+    [
+      {
+        "flexGrow": 0,
+        "flexShrink": 0,
+      },
+      {
+        "height": 10,
+      },
+      false,
+      {
+        "backgroundColor": "red",
+      },
+    ]
+  }
+/>
+`;
+
+exports[`<Divider /> renders correctly vertical type 1`] = `
+<View
+  style={
+    [
+      {
+        "flexGrow": 0,
+        "flexShrink": 0,
+      },
+      false,
+      {
+        "width": 10,
+      },
+      undefined,
+    ]
+  }
+/>
+`;
+
+exports[`<Divider /> renders correctly vertical type and size 50 1`] = `
+<View
+  style={
+    [
+      {
+        "flexGrow": 0,
+        "flexShrink": 0,
+      },
+      false,
+      {
+        "width": 50,
+      },
+      undefined,
+    ]
+  }
+/>
+`;
+
+exports[`<Divider /> renders correctly with horizontal line 1`] = `
+<View
+  style={
+    [
+      {
+        "flexGrow": 0,
+        "flexShrink": 0,
+      },
+      {
+        "height": 10,
+      },
+      false,
+      {
+        "backgroundColor": "red",
+      },
+    ]
+  }
+>
+  <View
+    style={
+      [
+        {
+          "backgroundColor": "#A1ABBB",
+          "left": "50%",
+          "position": "absolute",
+          "top": "50%",
+        },
+        {
+          "height": 1,
+          "marginStart": -75,
+          "marginTop": -1,
+          "width": 150,
+        },
+        false,
+      ]
+    }
+  />
+</View>
+`;
+
+exports[`<Divider /> renders correctly with vertical line 1`] = `
+<View
+  style={
+    [
+      {
+        "flexGrow": 0,
+        "flexShrink": 0,
+      },
+      false,
+      {
+        "width": 10,
+      },
+      {
+        "backgroundColor": "red",
+      },
+    ]
+  }
+>
+  <View
+    style={
+      [
+        {
+          "backgroundColor": "#A1ABBB",
+          "left": "50%",
+          "position": "absolute",
+          "top": "50%",
+        },
+        false,
+        {
+          "height": 50,
+          "marginStart": -1,
+          "marginTop": -25,
+          "width": 1,
+        },
+      ]
+    }
+  />
+</View>
+`;

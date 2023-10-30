@@ -11,7 +11,7 @@ const getLocale = (): Locale => {
   return locale === "vi" ? vi : locale === "en" ? en : vi
 }
 
-export const formatDate = (date: string, dateFormat?: string, options?: Options) => {
+export const formatDate = (date: any, dateFormat?: string, options?: Options) => {
   const locale = getLocale()
   const dateOptions = {
     ...options,
@@ -19,12 +19,14 @@ export const formatDate = (date: string, dateFormat?: string, options?: Options)
   }
   const isoDate = parseISO(date)
 
-  if (isValidDate(parseISO(date))) {
-    return format(isoDate, dateFormat ?? "yyyy-MM-dd", dateOptions)
-  }
   if (isValidDate(date)) {
     return format(date as unknown as Date | number, dateFormat ?? "yyyy-MM-dd", dateOptions)
   }
+
+  if (isValidDate(parseISO(date))) {
+    return format(isoDate, dateFormat ?? "yyyy-MM-dd", dateOptions)
+  }
+
   if (isValidDate(new Date(date))) {
     return format(new Date(date), dateFormat ?? "yyyy-MM-dd", dateOptions)
   }

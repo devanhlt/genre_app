@@ -1,0 +1,228 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BottomModal /> renders correctly  1`] = `
+<View
+  style={
+    [
+      {
+        "flex": 1,
+      },
+      undefined,
+    ]
+  }
+>
+  <View
+    style={
+      [
+        {
+          "alignItems": "center",
+          "borderBottomColor": "#EEF0F3",
+          "borderBottomWidth": 1,
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+          "marginBottom": 16,
+          "paddingBottom": 16,
+        },
+        {
+          "paddingHorizontal": 16,
+        },
+      ]
+    }
+  >
+    <Text
+      preset="title02"
+      style={
+        [
+          {},
+          {
+            "color": "#000F27",
+          },
+          {
+            "fontFamily": "System",
+            "fontSize": 20,
+            "fontWeight": "600",
+            "letterSpacing": 0.1,
+            "lineHeight": 28,
+          },
+          undefined,
+        ]
+      }
+    >
+      Edit System Configuration
+    </Text>
+    <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "opacity": 1,
+        }
+      }
+    >
+      <RNSVGSvgViewAndroid
+        align="xMidYMid"
+        bbHeight="24"
+        bbWidth="24"
+        color="#000"
+        focusable={false}
+        height={24}
+        meetOrSlice={0}
+        minX={0}
+        minY={0}
+        size={24}
+        style={
+          [
+            {
+              "backgroundColor": "transparent",
+              "borderWidth": 0,
+            },
+            [
+              undefined,
+              undefined,
+              {},
+            ],
+            {
+              "flex": 0,
+              "height": 24,
+              "width": 24,
+            },
+          ]
+        }
+        tintColor="#000"
+        vbHeight={256}
+        vbWidth={256}
+        width={24}
+      >
+        <RNSVGGroup
+          fill={
+            {
+              "payload": 4278190080,
+              "type": 0,
+            }
+          }
+        >
+          <RNSVGRect
+            fill={null}
+            height="256"
+            propList={
+              [
+                "fill",
+              ]
+            }
+            width="256"
+            x="0"
+            y="0"
+          />
+          <RNSVGCircle
+            cx="128"
+            cy="128"
+            fill={null}
+            propList={
+              [
+                "fill",
+                "stroke",
+                "strokeWidth",
+                "strokeMiterlimit",
+              ]
+            }
+            r="96"
+            stroke={
+              {
+                "payload": 4278190080,
+                "type": 0,
+              }
+            }
+            strokeMiterlimit={10}
+            strokeWidth="16"
+          />
+          <RNSVGLine
+            fill={null}
+            propList={
+              [
+                "fill",
+                "stroke",
+                "strokeWidth",
+                "strokeLinecap",
+                "strokeLinejoin",
+              ]
+            }
+            stroke={
+              {
+                "payload": 4278190080,
+                "type": 0,
+              }
+            }
+            strokeLinecap={1}
+            strokeLinejoin={1}
+            strokeWidth="16"
+            x1="160"
+            x2="96"
+            y1="96"
+            y2="160"
+          />
+          <RNSVGLine
+            fill={null}
+            propList={
+              [
+                "fill",
+                "stroke",
+                "strokeWidth",
+                "strokeLinecap",
+                "strokeLinejoin",
+              ]
+            }
+            stroke={
+              {
+                "payload": 4278190080,
+                "type": 0,
+              }
+            }
+            strokeLinecap={1}
+            strokeLinejoin={1}
+            strokeWidth="16"
+            x1="160"
+            x2="96"
+            y1="160"
+            y2="96"
+          />
+        </RNSVGGroup>
+      </RNSVGSvgViewAndroid>
+    </View>
+  </View>
+  <View
+    style={
+      [
+        {
+          "flex": 1,
+        },
+        undefined,
+      ]
+    }
+  />
+</View>
+`;

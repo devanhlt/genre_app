@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<UserItem /> renders correctly 1`] = `
+exports[`<UserItem /> renders correctly when item data is correctly 1`] = `
 <View
   collapsable={false}
   forwardedRef={[Function]}
@@ -314,7 +314,7 @@ exports[`<UserItem /> renders correctly 1`] = `
                 "lineHeight": 20,
               },
               {
-                "minWidth": 150,
+                "minWidth": 75,
               },
             ]
           }
@@ -386,7 +386,7 @@ exports[`<UserItem /> renders correctly 1`] = `
                 "lineHeight": 16,
               },
               {
-                "minWidth": 150,
+                "minWidth": 75,
               },
             ]
           }
@@ -458,7 +458,7 @@ exports[`<UserItem /> renders correctly 1`] = `
                 "lineHeight": 16,
               },
               {
-                "minWidth": 150,
+                "minWidth": 75,
               },
             ]
           }
@@ -509,3 +509,5 @@ exports[`<UserItem /> renders correctly 1`] = `
   </View>
 </View>
 `;
+
+exports[`<UserItem /> renders correctly when item is empty 1`] = `null`;

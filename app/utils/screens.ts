@@ -1,6 +1,7 @@
 import { Dimensions, Platform, StatusBar } from "react-native"
 
 const { width: deviceWidth, height: deviceHeight } = Dimensions.get("window")
+
 const [shortDimension, longDimension] =
   deviceWidth < deviceHeight ? [deviceWidth, deviceHeight] : [deviceHeight, deviceWidth]
 const STANDARD_WINDOW = { width: 375, height: 812 }

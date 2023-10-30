@@ -7,7 +7,7 @@ import { User } from "app/models/users/user"
 jest.mock("react-native-gesture-handler", () => undefined)
 
 describe("<UserItem />", () => {
-  it("renders correctly", () => {
+  it("renders correctly when item data is correctly", () => {
     const user = {
       active: false,
       admin: false,
@@ -25,6 +25,11 @@ describe("<UserItem />", () => {
       id: null,
     } as User
     const tree = renderer.create(<UserItem item={user} />)
+    expect(tree).toMatchSnapshot()
+  })
+
+  it("renders correctly when item is empty", () => {
+    const tree = renderer.create(<UserItem item={null} />)
     expect(tree).toMatchSnapshot()
   })
 })
