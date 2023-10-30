@@ -2,7 +2,7 @@ import React from "react"
 import { TextStyle, View, ViewStyle } from "react-native"
 import Swipeable from "react-native-gesture-handler/Swipeable"
 
-import { Typography } from "app/components"
+import { Typography } from "app/components/Typography"
 import { Divider } from "app/components/Divider"
 import { If } from "app/components/If"
 import { Pressable } from "app/components/Pressable"

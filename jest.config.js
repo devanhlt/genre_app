@@ -1,14 +1,18 @@
-const { defaults: tsjPreset } = require("ts-jest/presets")
+// const { defaults: tsjPreset } = require("ts-jest/presets")
 
 /** @type {import('@jest/types').Config.ProjectConfig} */
 module.exports = {
-  ...tsjPreset,
+  // ...tsjPreset,
   preset: "jest-expo",
   transformIgnorePatterns: [
-    "<rootDir>/node_modules/(react-clone-referenced-element|@react-native-community|react-navigation|@react-navigation/.*|@unimodules/.*|native-base|react-native-code-push)",
-    "jest-runner",
+    "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|@gorhom/bottom-sheet)",
   ],
+  coverageReporters: ["html", "text", "text-summary", "cobertura"],
+  testMatch: ["**/*.test.ts?(x)", "**/*.test.js?(x)"],
   testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/.maestro/", "@react-native"],
   testEnvironment: "jsdom",
-  setupFiles: ["<rootDir>/test/setup.ts"],
+  setupFiles: [
+    "./node_modules/react-native-gesture-handler/jestSetup.js",
+    "<rootDir>/test/setup.ts",
+  ],
 }

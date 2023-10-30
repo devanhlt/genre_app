@@ -2,6 +2,8 @@
 import * as ReactNative from "react-native"
 import mockFile from "./mockFile"
 
+import "react-native-gesture-handler/jestSetup"
+
 // libraries to mock
 jest.doMock("react-native", () => {
   // Extend ReactNative

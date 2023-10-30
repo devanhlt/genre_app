@@ -15,7 +15,7 @@ import { User } from "app/models/users/user"
 import { AppStackScreenProps } from "app/navigators"
 import { appColors, spacing } from "app/theme"
 import { Instance } from "mobx-state-tree"
-import UserItem from "./components/Usertem"
+import UserItem from "./components/UserItem"
 
 interface AccountScreenProps extends AppStackScreenProps<"LoggingDetail"> {}
 
