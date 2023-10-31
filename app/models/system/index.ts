@@ -164,7 +164,6 @@ export const SystemStoreModel = types
       self.setProp("loggingTotalCount", 0)
     }),
 
-
     /**
      * Handle logout
      * Reset store

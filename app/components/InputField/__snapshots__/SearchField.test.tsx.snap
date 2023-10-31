@@ -69,7 +69,7 @@ exports[`<SearchField /> renders with outline preset correctly 1`] = `
         }
       }
     >
-      <RNSVGSvgViewAndroid
+      <RNSVGSvgView
         align="xMidYMid"
         bbHeight="16"
         bbWidth="16"
@@ -173,7 +173,7 @@ exports[`<SearchField /> renders with outline preset correctly 1`] = `
             y2="224"
           />
         </RNSVGGroup>
-      </RNSVGSvgViewAndroid>
+      </RNSVGSvgView>
     </View>
     <TextInput
       editable={true}
@@ -286,7 +286,7 @@ exports[`<SearchField /> renders with plat preset correctly 1`] = `
         }
       }
     >
-      <RNSVGSvgViewAndroid
+      <RNSVGSvgView
         align="xMidYMid"
         bbHeight="16"
         bbWidth="16"
@@ -390,7 +390,7 @@ exports[`<SearchField /> renders with plat preset correctly 1`] = `
             y2="224"
           />
         </RNSVGGroup>
-      </RNSVGSvgViewAndroid>
+      </RNSVGSvgView>
     </View>
     <TextInput
       editable={true}
@@ -500,7 +500,7 @@ exports[`<SearchField /> should changed text is passed as an argument to the cal
         }
       }
     >
-      <RNSVGSvgViewAndroid
+      <RNSVGSvgView
         align="xMidYMid"
         bbHeight="16"
         bbWidth="16"
@@ -604,7 +604,7 @@ exports[`<SearchField /> should changed text is passed as an argument to the cal
             y2="224"
           />
         </RNSVGGroup>
-      </RNSVGSvgViewAndroid>
+      </RNSVGSvgView>
     </View>
     <TextInput
       editable={true}

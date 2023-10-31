@@ -20,8 +20,8 @@ exports[`<BottomModal /> renders correctly  1`] = `
           "borderBottomWidth": 1,
           "flexDirection": "row",
           "justifyContent": "space-between",
-          "marginBottom": 16,
-          "paddingBottom": 16,
+          "marginBottom": 26.285714285714285,
+          "paddingBottom": 26.285714285714285,
         },
         {
           "paddingHorizontal": 16,
@@ -84,7 +84,7 @@ exports[`<BottomModal /> renders correctly  1`] = `
         }
       }
     >
-      <RNSVGSvgViewAndroid
+      <RNSVGSvgView
         align="xMidYMid"
         bbHeight="24"
         bbWidth="24"
@@ -211,7 +211,7 @@ exports[`<BottomModal /> renders correctly  1`] = `
             y2="96"
           />
         </RNSVGGroup>
-      </RNSVGSvgViewAndroid>
+      </RNSVGSvgView>
     </View>
   </View>
   <View

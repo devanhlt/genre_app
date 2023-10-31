@@ -15,10 +15,7 @@ export interface LoggingItemProps {
   onPressItem?: (item: Logging) => void
 }
 
-export default function LoggingItem({
-  item,
-  onPressItem = () => null,
-}: LoggingItemProps): JSX.Element {
+export default function LoggingItem({ item, onPressItem }: LoggingItemProps): JSX.Element {
   const handlePressItem = () => {
     onPressItem?.(item)
   }
@@ -26,7 +23,7 @@ export default function LoggingItem({
   if (!item) return null
 
   return (
-    <Pressable style={$viewContainer} onPress={handlePressItem}>
+    <Pressable style={$viewContainer} onPress={handlePressItem} testID="logging-item-test-id">
       <View style={$logTypeView}>
         <Badge
           textColor={"#fff"}

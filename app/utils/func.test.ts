@@ -25,6 +25,6 @@ describe("Unit test for func utils", () => {
     expect(isString(1)).toEqual(false)
   })
   it("isString function true if argument is string", () => {
-    expect(isString('Hello world!')).toEqual(true)
+    expect(isString("Hello world!")).toEqual(true)
   })
 })

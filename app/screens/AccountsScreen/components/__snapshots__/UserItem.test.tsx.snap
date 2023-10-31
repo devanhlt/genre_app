@@ -314,7 +314,7 @@ exports[`<UserItem /> renders correctly when item data is correctly 1`] = `
                 "lineHeight": 20,
               },
               {
-                "minWidth": 75,
+                "minWidth": 150,
               },
             ]
           }
@@ -386,7 +386,7 @@ exports[`<UserItem /> renders correctly when item data is correctly 1`] = `
                 "lineHeight": 16,
               },
               {
-                "minWidth": 75,
+                "minWidth": 150,
               },
             ]
           }
@@ -458,7 +458,7 @@ exports[`<UserItem /> renders correctly when item data is correctly 1`] = `
                 "lineHeight": 16,
               },
               {
-                "minWidth": 75,
+                "minWidth": 150,
               },
             ]
           }
