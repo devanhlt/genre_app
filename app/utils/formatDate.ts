@@ -6,8 +6,8 @@ import vi from "date-fns/locale/vi"
 
 type Options = Parameters<typeof format>[2]
 
-const getLocale = (): Locale => {
-  const locale = I18n.currentLocale().split("-")[0]
+export const getLocale = (): Locale => {
+  const locale = I18n.currentLocale()?.split?.("-")?.[0]
   return locale === "vi" ? vi : locale === "en" ? en : vi
 }
 
@@ -19,12 +19,12 @@ export const formatDate = (date: any, dateFormat?: string, options?: Options) =>
   }
   const isoDate = parseISO(date)
 
-  if (isValidDate(date)) {
-    return format(date as unknown as Date | number, dateFormat ?? "yyyy-MM-dd", dateOptions)
-  }
-
   if (isValidDate(parseISO(date))) {
     return format(isoDate, dateFormat ?? "yyyy-MM-dd", dateOptions)
+  }
+
+  if (isValidDate(date)) {
+    return format(date as unknown as Date | number, dateFormat ?? "yyyy-MM-dd", dateOptions)
   }
 
   if (isValidDate(new Date(date))) {

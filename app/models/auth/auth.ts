@@ -47,7 +47,7 @@ export const AuthStoreModel = types
         Toast.error({
           title: "Login failed",
           subtitle: jsonToString(response),
-          visibilityTime: 100000000,
+          visibilityTime: 1000,
         })
       }
     })

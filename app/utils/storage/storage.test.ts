@@ -1,35 +1,19 @@
-import { MMKV } from "react-native-mmkv"
-
+import { clear, load, loadString, remove, save, saveString } from "./storage"
 describe("MMKV Storage", () => {
-  let storage: MMKV
-
-  beforeAll(() => {
-    storage = new MMKV()
+  it("functions correctly", () => {
+    expect(saveString("testKey", "testValue")).toStrictEqual(true)
+    expect(loadString("testKey")).toStrictEqual("testValue")
+    expect(save("testSave", { username: "HelloWorld" })).toStrictEqual(true)
+    expect(load("testSave")).toStrictEqual({ username: "HelloWorld" })
+    remove("testSave")
+    expect(load("testSave")).toStrictEqual(null)
   })
 
-  it("functions correctly", () => {
-    storage.set("testString", "value")
-    storage.set("testNumber", 99)
-    storage.set("testBoolean", false)
-
-    expect(storage.getString("testString")).toStrictEqual("value")
-    expect(storage.getNumber("testString")).toBeUndefined()
-    expect(storage.getBoolean("testString")).toBeUndefined()
-    expect(storage.getString("testNumber")).toBeUndefined()
-    expect(storage.getNumber("testNumber")).toStrictEqual(99)
-    expect(storage.getBoolean("testNumber")).toBeUndefined()
-    expect(storage.getString("testBoolean")).toBeUndefined()
-    expect(storage.getNumber("testBoolean")).toBeUndefined()
-    expect(storage.getBoolean("testBoolean")).toStrictEqual(false)
-    expect(storage.getAllKeys()).toEqual(
-      expect.arrayContaining(["testString", "testNumber", "testBoolean"]),
-    )
-
-    storage.delete("testBoolean")
-    expect(storage.contains("testBoolean")).toBeFalsy()
-    expect(storage.getAllKeys()).toEqual(expect.arrayContaining(["testString", "testNumber"]))
-
-    storage.clearAll()
-    expect(storage.toString()).toStrictEqual("MMKV (mmkv.default): []")
+  it("should return false when saving with value is not correctly", () => {
+    expect(save("testSave", 2n)).toStrictEqual(false)
+  })
+  it("should remove all value when call clear storage function", () => {
+    clear()
+    expect(load("testSave")).toStrictEqual(null)
   })
 })

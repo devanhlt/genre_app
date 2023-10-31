@@ -32,7 +32,6 @@ export const ConfigurationScreen: FC<ConfigurationScreenProps> = observer(
             commonStore.setGlobalLoading(true)
             await delay(1000)
             await authStore.logout()
-            await authStore.logout()
             await settingStore.reset()
             await systemStore.reset()
             commonStore.setGlobalLoading(false)

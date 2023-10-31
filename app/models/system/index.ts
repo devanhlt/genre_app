@@ -146,7 +146,7 @@ export const SystemStoreModel = types
     /**
      * Reset model
      */
-    reset: () => {
+    reset: flow(function* reset() {
       self.setProp("loggingFilter", {
         keyword: "",
         pageNumber: 1,
@@ -162,7 +162,8 @@ export const SystemStoreModel = types
       self.setProp("loggingRecordsFiltered", 0)
       self.setProp("loggingRecordsTotal", 0)
       self.setProp("loggingTotalCount", 0)
-    },
+    }),
+
 
     /**
      * Handle logout

@@ -43,7 +43,6 @@ export function save(key: string, value: any): boolean {
     storage.set(key, JSON.stringify(value))
     return true
   } catch (error) {
-    console.log("error", error)
     return false
   }
 }
