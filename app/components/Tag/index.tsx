@@ -2,7 +2,7 @@ import React from "react"
 import { ColorValue, TextStyle, View, ViewStyle } from "react-native"
 
 import { shape, spacing } from "app/theme"
-import Badge from "../Badge"
+import Badge from "../Badge/Badge"
 import { Divider } from "../Divider"
 import { IconTypes } from "../Icon/PhosphorIcon"
 import { Typography } from "../Typography"

@@ -1,37 +1,49 @@
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { act, fireEvent, render, screen } from "@testing-library/react-native"
 import React from "react"
-import renderer, { act } from "react-test-renderer"
-
+import { Typography } from "../Typography"
 import { BottomModal } from "./BottomModal"
-import { BottomSheetModal } from "@gorhom/bottom-sheet"
 
 describe("<BottomModal />", () => {
   beforeEach(() => {
     jest.restoreAllMocks()
-    jest.resetAllMocks()
   })
 
   test("renders correctly ", () => {
-    const tree = renderer.create(
-      <BottomModal title="Edit System Configuration" snapPoints={["70%"]}>
-        <></>
+    const ref = React.createRef<BottomSheetModalMethods>()
+    render(
+      <BottomModal ref={ref} title="Edit System Configuration" snapPoints={["70%"]}>
+        <Typography text="Test" />
       </BottomModal>,
     )
-    expect(tree).toMatchSnapshot()
+    expect(screen.toJSON()).toMatchSnapshot()
+    const wrapper = screen.getByTestId("modal-header-close-button")
+    act(() => ref.current.close())
+    expect(screen.queryByTestId("modal-header-close-button")).toBeVisible()
+
+    fireEvent.press(wrapper)
   })
 
-  test("should close function to be called", () => {
-    const ref = React.createRef<BottomSheetModal>()
-
-    renderer.create(
+  test("should close when press close modal ", () => {
+    const ref = React.createRef<BottomSheetModalMethods>()
+    render(
       <BottomModal ref={ref} title="Edit System Configuration" snapPoints={["70%"]}>
-        <></>
+        <Typography text="Test" />
       </BottomModal>,
     )
-    const close = jest.spyOn(ref.current, "close")
-    act(() => {
-      ref.current.close()
-    })
+    const wrapper = screen.getByTestId("modal-header-close-button")
+    fireEvent.press(wrapper)
+    expect(screen.queryByTestId("modal-header-close-button")).toBeVisible()
+  })
 
-    expect(close).toBeCalled()
+  test("should renderers correctly without props", () => {
+    render(
+      <BottomModal>
+        <Typography text="Test" />
+      </BottomModal>,
+    )
+    const wrapper = screen.getByTestId("modal-header-close-button")
+    fireEvent.press(wrapper)
+    expect(screen.queryByTestId("modal-header-close-button")).toBeVisible()
   })
 })

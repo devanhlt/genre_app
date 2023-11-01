@@ -43,6 +43,14 @@ test("handles unauthorized errors", () => {
   })
 })
 
+test("handles bad-data errors", () => {
+  expect(
+    getGeneralApiProblem({ problem: "CLIENT_ERROR", status: 400 } as ApiErrorResponse<null>),
+  ).toEqual({
+    kind: "bad-data",
+  })
+})
+
 test("handles forbidden errors", () => {
   expect(
     getGeneralApiProblem({ problem: "CLIENT_ERROR", status: 403 } as ApiErrorResponse<null>),
@@ -69,4 +77,11 @@ test("handles other client errors", () => {
 
 test("handles cancellation errors", () => {
   expect(getGeneralApiProblem({ problem: "CANCEL_ERROR" } as ApiErrorResponse<null>)).toBeNull()
+})
+
+test("handles unknown errors", () => {
+  expect(getGeneralApiProblem({ problem: "unknown" } as unknown as ApiErrorResponse<null>)).toEqual({
+    kind: "unknown",
+    temporary: true,
+  })
 })

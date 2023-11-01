@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Badge /> renders correctly 1`] = `
+<Text
+  collapsable={false}
+  numberOfLines={1}
+  style={
+    {
+      "alignSelf": "flex-end",
+      "backgroundColor": "#C5281C",
+      "borderRadius": 4,
+      "color": "#fff",
+      "fontSize": 10,
+      "height": 20,
+      "lineHeight": 10,
+      "minWidth": 20,
+      "opacity": 1,
+      "overflow": "hidden",
+      "paddingHorizontal": 4,
+      "textAlign": "center",
+      "textAlignVertical": "center",
+    }
+  }
+  testID="test-id-badge"
+>
+  Test
+</Text>
+`;

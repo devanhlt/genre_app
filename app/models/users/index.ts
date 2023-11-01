@@ -3,7 +3,7 @@ import { Instance, SnapshotOut, flow, getType, toGenerator, types } from "mobx-s
 import { withEnvironment } from "../extensions/with-environment"
 import { withRootStore } from "../helpers/withRootStore"
 import { withSetPropAction } from "../helpers/withSetPropAction"
-import { UsersServices } from "./services"
+import { UsersServices } from "./users.services"
 import { UserModel } from "./user"
 
 export const UsersStoreModel = types

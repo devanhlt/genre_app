@@ -83,6 +83,7 @@ exports[`<BottomModal /> renders correctly  1`] = `
           "opacity": 1,
         }
       }
+      testID="modal-header-close-button"
     >
       <RNSVGSvgView
         align="xMidYMid"
@@ -223,6 +224,27 @@ exports[`<BottomModal /> renders correctly  1`] = `
         undefined,
       ]
     }
-  />
+  >
+    <Text
+      style={
+        [
+          {},
+          {
+            "color": "#000F27",
+          },
+          {
+            "fontFamily": "System",
+            "fontSize": 16,
+            "fontWeight": "400",
+            "letterSpacing": 0.15,
+            "lineHeight": 24,
+          },
+          undefined,
+        ]
+      }
+    >
+      Test
+    </Text>
+  </View>
 </View>
 `;

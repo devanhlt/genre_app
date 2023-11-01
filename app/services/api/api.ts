@@ -46,17 +46,19 @@ export class ApiServices {
       },
     )
 
+    this.apisauce.addResponseTransform(async (response) => {
+      if (response.status === HttpStatus.UNAUTHORIZED) {
+        if (this.store?.authStore) {
+          await this.store.authStore.logout()
+        }
+      }
+    })
+
     /**
      * Response interceptor
      */
     this.apisauce.axiosInstance.interceptors.response.use(
-      async (response) => {
-        if (response.status === HttpStatus.UNAUTHORIZED) {
-          if (this.store?.authStore) {
-            return await this.store.authStore.logout()
-          }
-          return response
-        }
+      (response) => {
         return response
       },
       (error) => {

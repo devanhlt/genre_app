@@ -3,10 +3,9 @@ import React, { forwardRef, useCallback, useImperativeHandle, useMemo, useRef } 
 import { View, ViewStyle } from "react-native"
 
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { spacing } from "app/theme"
 import { ModalBackdrop } from "./ModalBackdrop"
 import { ModalHeader } from "./ModalHeader"
-import { spacing } from "app/theme"
-import { isFunction } from "app/utils/func"
 
 interface BottomModalProps extends BottomSheetModalProps {
   ModalFooterComponent?: JSX.Element
@@ -15,7 +14,7 @@ interface BottomModalProps extends BottomSheetModalProps {
   title?: string
   id?: string
   children: React.ReactNode
-  snapPoints: string[]
+  snapPoints?: string[]
 }
 
 export const BottomModal = forwardRef<BottomSheetModalMethods, BottomModalProps>(
@@ -37,9 +36,7 @@ export const BottomModal = forwardRef<BottomSheetModalMethods, BottomModalProps>
     const snapPoints = useMemo(() => bottomModalSnapPoints, [bottomModalSnapPoints])
 
     const onCloseModal = () => {
-      if (isFunction(bottomSheetModalRef?.current?.close)) {
-        bottomSheetModalRef.current.close()
-      }
+      bottomSheetModalRef.current?.close?.()
     }
 
     const onDismissModal = () => null
@@ -54,7 +51,6 @@ export const BottomModal = forwardRef<BottomSheetModalMethods, BottomModalProps>
       [],
     )
 
-    const content = children || <></>
     return (
       <BottomSheetModal
         name={id}
@@ -67,7 +63,7 @@ export const BottomModal = forwardRef<BottomSheetModalMethods, BottomModalProps>
       >
         <View style={[$modalContainer, $containerStyleOverride]}>
           <ModalHeader label={title} onCLose={onCloseModal} style={$modalHeader} />
-          <View style={[$modalContent, $contentStyleOverride]}>{content}</View>
+          <View style={[$modalContent, $contentStyleOverride]}>{children}</View>
           {ModalFooterComponent}
         </View>
       </BottomSheetModal>

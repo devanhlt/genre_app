@@ -2,7 +2,7 @@ import React from "react"
 import { TextStyle, View, ViewStyle } from "react-native"
 
 import { Typography } from "app/components"
-import Badge from "app/components/Badge"
+import Badge from "app/components/Badge/Badge"
 import { Divider } from "app/components/Divider"
 import { Pressable } from "app/components/Pressable"
 import { Logging } from "app/models/system/logging"

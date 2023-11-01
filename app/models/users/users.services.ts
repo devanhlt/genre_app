@@ -10,13 +10,12 @@ export class UsersServices extends ApiServices {
    */
   async getUsers(): Promise<{ kind: "ok"; users: User[] } | GeneralApiProblem> {
     // make the api call
-    const timestamp = new Date().getTime()
-    const response: ApiResponse<User[]> = await this.apisauce.get(`api/v1/users?_=${timestamp}`)
+    // const timestamp = new Date().getTime()
+    const response: ApiResponse<User[]> = await this.apisauce.get(`api/v1/users`)
 
     // the typical ways to die when calling an api
     if (!response.ok) {
-      const problem = getGeneralApiProblem(response)
-      if (problem) return problem
+      return getGeneralApiProblem(response)
     }
 
     // transform the data into the format we are expecting
@@ -30,9 +29,9 @@ export class UsersServices extends ApiServices {
 
       return { kind: "ok", users }
     } catch (e) {
-      if (__DEV__) {
-        console.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
-      }
+      // if (__DEV__) {
+      //   console.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
+      // }
       return { kind: "bad-data" }
     }
   }

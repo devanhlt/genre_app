@@ -35,7 +35,7 @@ export function ModalHeader(props: ModalHeaderProps) {
   return (
     <View style={styles}>
       <Typography text={label} preset="title02" />
-      <TouchableOpacity onPress={onCLose}>
+      <TouchableOpacity testID="modal-header-close-button" onPress={onCLose}>
         <PhosphorIcon name="XCircle" />
       </TouchableOpacity>
     </View>
