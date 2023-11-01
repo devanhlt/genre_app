@@ -1,11 +1,13 @@
 import { ApisauceInstance, create } from "apisauce"
+import { IRootStore } from "app/models"
+import { loadSessionStorage } from "app/utils/auth"
 import Config from "../../config"
 import type { ApiConfig } from "./api.types"
-import { loadSessionStorage } from "app/utils/auth"
+import { HttpStatus } from "./httpStatus"
 
 export const DEFAULT_API_CONFIG: ApiConfig = {
   url: Config.API_URL,
-  timeout: 10000,
+  timeout: 5000,
 }
 
 /**
@@ -15,11 +17,13 @@ export const DEFAULT_API_CONFIG: ApiConfig = {
 export class ApiServices {
   apisauce: ApisauceInstance
   config: ApiConfig
+  store: IRootStore
 
   /**
    * Set up our API instance. Keep this lightweight!
    */
-  constructor(config: ApiConfig = DEFAULT_API_CONFIG) {
+  constructor(store?: IRootStore, config: ApiConfig = DEFAULT_API_CONFIG) {
+    this.store = store
     this.config = config
     this.apisauce = create({
       baseURL: this.config.url,
@@ -46,7 +50,13 @@ export class ApiServices {
      * Response interceptor
      */
     this.apisauce.axiosInstance.interceptors.response.use(
-      (response) => {
+      async (response) => {
+        if (response.status === HttpStatus.UNAUTHORIZED) {
+          if (this.store?.authStore) {
+            return await this.store.authStore.logout()
+          }
+          return response
+        }
         return response
       },
       (error) => {
@@ -55,8 +65,3 @@ export class ApiServices {
     )
   }
 }
-
-// Singleton instance of the API for convenience
-const api = new ApiServices()
-
-export default api

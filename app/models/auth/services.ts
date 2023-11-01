@@ -4,7 +4,7 @@ import { ApiServices } from "app/services/api"
 import { GeneralApiProblem, getGeneralApiProblem } from "app/services/api/apiProblem"
 import { AuthRequestModel, AuthResponseModel } from "./types"
 
-class AuthServices extends ApiServices {
+export class AuthServices extends ApiServices {
   /**
    * Login with username and password
    */
@@ -29,7 +29,7 @@ class AuthServices extends ApiServices {
       return { kind: "ok", data: response.data }
     } catch (e) {
       if (__DEV__) {
-        console.tron.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
+        console.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
       }
       return { kind: "bad-data" }
     }
@@ -59,12 +59,9 @@ class AuthServices extends ApiServices {
       return { kind: "ok", data: response.data }
     } catch (e) {
       if (__DEV__) {
-        console.tron.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
+        console.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
       }
       return { kind: "bad-data" }
     }
   }
 }
-
-// Singleton instance of the services for convenience
-export const authServices = new AuthServices()

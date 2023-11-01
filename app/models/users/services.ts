@@ -4,14 +4,7 @@ import { ApiServices } from "app/services/api"
 import { GeneralApiProblem, getGeneralApiProblem } from "app/services/api/apiProblem"
 import { User } from "./user"
 
-// interface ApiAccountsResponse {
-//   accounts: User[]
-//   totalCount: number
-//   recordsFiltered: number
-//   recordsTotal: number
-// }
-
-class UsersServices extends ApiServices {
+export class UsersServices extends ApiServices {
   /**
    * Gets a list of system
    */
@@ -38,12 +31,9 @@ class UsersServices extends ApiServices {
       return { kind: "ok", users }
     } catch (e) {
       if (__DEV__) {
-        console.tron.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
+        console.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
       }
       return { kind: "bad-data" }
     }
   }
 }
-
-// Singleton instance of the services for convenience
-export const usersServices = new UsersServices()

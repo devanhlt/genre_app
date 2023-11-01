@@ -3,10 +3,10 @@ import { Instance, SnapshotOut, flow, toGenerator, types } from "mobx-state-tree
 import { jsonToString } from "app/utils/helpers"
 import { withEnvironment } from "../extensions/with-environment"
 import { withSetPropAction } from "../helpers/withSetPropAction"
-import { authServices } from "./services"
 import { AuthRequestModel } from "./types"
 import { Toast } from "app/utils/toast"
 import { clearSessionStorage, saveSessionStorage } from "app/utils/auth"
+import { AuthServices } from "./services"
 
 export const AuthStoreModel = types
   .model("AuthStore")
@@ -35,7 +35,7 @@ export const AuthStoreModel = types
       payload: AuthRequestModel,
     ) {
       self.loading = true
-
+      const authServices = new AuthServices()
       const response = yield* toGenerator(authServices.loggingWithUsernameAndPassword(payload))
 
       if (response.kind === "ok") {
@@ -43,7 +43,7 @@ export const AuthStoreModel = types
         saveSessionStorage(response.data.accessToken, response.data.expiresIn)
       } else {
         // Handler error
-        console.tron.error(`Error when login: ${jsonToString(response)}`, [])
+        console.error(`Error when login: ${jsonToString(response)}`, [])
         Toast.error({
           title: "Login failed",
           subtitle: jsonToString(response),

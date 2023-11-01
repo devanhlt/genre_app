@@ -5,7 +5,7 @@ import { GeneralApiProblem, getGeneralApiProblem } from "app/services/api/apiPro
 import { Setting, SettingSnapshotIn, SettingSnapshotOut } from "./setting"
 import { SystemSnapshotOut } from "../system/system"
 
-class SettingServices extends ApiServices {
+export default class SettingServices extends ApiServices {
   /**
    * Gets a list of system
    */
@@ -79,6 +79,3 @@ class SettingServices extends ApiServices {
     return { kind: "ok", success: response.data }
   }
 }
-
-// Singleton instance of the services for convenience
-export const settingServices = new SettingServices()

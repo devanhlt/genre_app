@@ -50,7 +50,7 @@ export default function LoggingItem({ item, onPressItem }: LoggingItemProps): JS
         />
       </View> */}
       <View style={$rowItem}>
-        <Typography text="Event time:" preset="body04" style={$titleText} />
+        <Typography text="Event time:" preset="body02" style={$titleText} />
         <Divider size={spacing.size12} type="vertical" />
         <Typography
           text={`${formatDate(new Date(item.createdDate).toISOString(), "yyyy-MM-dd HH:mm:ss")}`}

@@ -3,8 +3,9 @@ import { Instance, SnapshotOut, flow, getType, toGenerator, types } from "mobx-s
 import { jsonToString } from "app/utils/helpers"
 import { withEnvironment } from "../extensions/with-environment"
 import { withSetPropAction } from "../helpers/withSetPropAction"
-import { settingServices } from "./services"
 import { SettingModel } from "./setting"
+import SettingServices from "./services"
+import { withRootStore } from "../helpers/withRootStore"
 
 export const SettingStoreModel = types
   .model("SettingStore")
@@ -12,7 +13,7 @@ export const SettingStoreModel = types
     settings: types.array(SettingModel),
   })
   .extend(withEnvironment) // Extend environment
-  // .extend(withRootStore)
+  .extend(withRootStore)
   .actions(withSetPropAction)
   .views((self) => {
     return {
@@ -32,6 +33,7 @@ export const SettingStoreModel = types
   })
   .actions((self) => ({
     fetchSettings: flow(function* fetchSettings() {
+      const settingServices = new SettingServices(self.rootStore)
       const response = yield* toGenerator(settingServices.getLoggingSetting())
       if (response.kind === "ok") {
         self.setProp("settings", response.logging)
@@ -48,6 +50,7 @@ export const SettingStoreModel = types
     updateLoggingSetting: flow(function* updateLoggingSetting(
       setting: Instance<typeof SettingModel>,
     ) {
+      const settingServices = new SettingServices(self.rootStore)
       const response = yield* toGenerator(settingServices.updateLoggingSetting(setting))
       return response.kind === "ok" && response.success
     }),

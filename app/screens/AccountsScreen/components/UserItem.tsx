@@ -22,20 +22,20 @@ export default function UserItem({ item }: UserItemProps): JSX.Element {
     <Swipeable key={`user-item-${item.userName}`} renderRightActions={LeftSwipeActions}>
       <View style={$viewContainer}>
         <View style={$rowItem}>
-          <Typography text="Full name:" preset="body03" style={$titleText} />
+          <Typography text="Full name:" preset="body04" style={$titleText} />
           <Divider size={spacing.size12} type="vertical" />
-          <Typography text={item.fullName} preset="body03" style={$valueText} />
+          <Typography text={item.fullName} preset="body04" style={$valueText} />
         </View>
         <View style={$rowItem}>
-          <Typography text="Username:" preset="support01" style={$titleText} />
+          <Typography text="Username:" preset="body02" style={$titleText} />
           <Divider size={spacing.size12} type="vertical" />
-          <Typography text={item.userName} preset="support01" style={$valueText} />
+          <Typography text={item.userName} preset="body02" style={$valueText} />
         </View>
         <If condition={!!item.email}>
           <View style={$rowItem}>
-            <Typography text="Email:" preset="support01" style={$titleText} />
+            <Typography text="Email:" preset="body02" style={$titleText} />
             <Divider size={spacing.size12} type="vertical" />
-            <Typography text={item.email} preset="support01" style={$valueText} />
+            <Typography text={item.email} preset="body02" style={$valueText} />
           </View>
         </If>
       </View>

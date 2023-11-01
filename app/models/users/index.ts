@@ -1,10 +1,10 @@
 import { Instance, SnapshotOut, flow, getType, toGenerator, types } from "mobx-state-tree"
 
-import { jsonToString } from "app/utils/helpers"
 import { withEnvironment } from "../extensions/with-environment"
+import { withRootStore } from "../helpers/withRootStore"
 import { withSetPropAction } from "../helpers/withSetPropAction"
+import { UsersServices } from "./services"
 import { UserModel } from "./user"
-import { usersServices } from "./services"
 
 export const UsersStoreModel = types
   .model("SystemStore")
@@ -12,7 +12,7 @@ export const UsersStoreModel = types
     users: types.optional(types.maybeNull(types.array(UserModel)), []),
   })
   .extend(withEnvironment) // Extend environment
-  // .extend(withRootStore)
+  .extend(withRootStore)
   .actions(withSetPropAction)
   .views((self) => {
     return {
@@ -23,13 +23,9 @@ export const UsersStoreModel = types
   })
   .actions((self) => ({
     fetchAccounts: flow(function* fetchAccounts() {
+      const usersServices = new UsersServices(self.rootStore)
       const response = yield* toGenerator(usersServices.getUsers())
-      if (response.kind === "ok") {
-        return response.users
-      } else {
-        console.tron.error(`Error fetching systems: ${jsonToString(response)}`, [])
-        return []
-      }
+      return response.kind === "ok" ? response.users : []
     }),
 
     /**

@@ -15,7 +15,7 @@ interface ApiSystemLoggingResponse {
   recordsTotal: number
 }
 
-class SystemServices extends ApiServices {
+export default class SystemServices extends ApiServices {
   /**
    * Gets a list of system
    */
@@ -42,7 +42,7 @@ class SystemServices extends ApiServices {
       return { kind: "ok", systems }
     } catch (e) {
       if (__DEV__) {
-        console.tron.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
+        console.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
       }
       return { kind: "bad-data" }
     }
@@ -78,7 +78,7 @@ class SystemServices extends ApiServices {
       return { kind: "ok", logging }
     } catch (e) {
       if (__DEV__) {
-        console.tron.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
+        console.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
       }
       return { kind: "bad-data" }
     }
@@ -108,7 +108,7 @@ class SystemServices extends ApiServices {
       return { kind: "ok", data: rawData }
     } catch (e) {
       if (__DEV__) {
-        console.tron.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
+        console.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
       }
       return { kind: "bad-data" }
     }
@@ -154,6 +154,3 @@ class SystemServices extends ApiServices {
     }
   }
 }
-
-// Singleton instance of the services for convenience
-export const systemServices = new SystemServices()

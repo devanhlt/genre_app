@@ -3,11 +3,12 @@ import { Instance, SnapshotOut, flow, getType, toGenerator, types } from "mobx-s
 
 import { jsonToString } from "app/utils/helpers"
 import { withEnvironment } from "../extensions/with-environment"
+import { withRootStore } from "../helpers/withRootStore"
 import { withSetPropAction } from "../helpers/withSetPropAction"
 import { LoggingFilterModel, LoggingModel, LoggingSnapshotIn } from "./logging"
+import SystemServices from "./services"
 import { SystemModel } from "./system"
-import { systemServices } from "./services"
-import { settingServices } from "../setting/services"
+import SettingServices from "../setting/services"
 
 const ALL_SYSTEM = {
   systemName: "ALL",
@@ -43,7 +44,7 @@ export const SystemStoreModel = types
     }),
   })
   .extend(withEnvironment) // Extend environment
-  // .extend(withRootStore)
+  .extend(withRootStore)
   .actions(withSetPropAction)
   .views((self) => {
     return {
@@ -70,6 +71,7 @@ export const SystemStoreModel = types
   .actions((self) => ({
     fetchSystems: flow(function* fetchSystems() {
       self.setProp("isLoadingSystem", true)
+      const systemServices = new SystemServices(self.rootStore)
       const response = yield* toGenerator(systemServices.getSystems())
       if (response.kind === "ok") {
         self.setProp("systems", response.systems)
@@ -87,6 +89,7 @@ export const SystemStoreModel = types
       if (currentFilter.system === ALL_SYSTEM.systemName) {
         delete currentFilter.system
       }
+      const systemServices = new SystemServices(self.rootStore)
       const response = yield* toGenerator(systemServices.getLogging(currentFilter))
 
       if (response.kind === "ok") {
@@ -99,6 +102,7 @@ export const SystemStoreModel = types
     exportLogByFilter: flow(function* exportLogByFilter(
       loggingFiltering: Instance<typeof LoggingFilterModel>,
     ) {
+      const systemServices = new SystemServices(self.rootStore)
       const response = yield* toGenerator(systemServices.exportLoggingByFilter(loggingFiltering))
       if (response.kind === "ok") {
         return response.logging
@@ -108,6 +112,7 @@ export const SystemStoreModel = types
     }),
 
     exportSingleLogDetail: flow(function* exportLogByFilter(logging: LoggingSnapshotIn) {
+      const systemServices = new SystemServices(self.rootStore)
       const response = yield* toGenerator(systemServices.exportSingleLogDetail(logging))
       if (response.kind === "ok") {
         return response.data
@@ -139,6 +144,7 @@ export const SystemStoreModel = types
      *
      */
     updateSystemConfig: flow(function* editSystemDetail(system: Instance<typeof SystemModel>) {
+      const settingServices = new SettingServices(self.rootStore)
       const response = yield* toGenerator(settingServices.putSystemConfig(system))
       return response.kind === "ok" && response.success
     }),

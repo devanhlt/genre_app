@@ -299,7 +299,7 @@ exports[`<UserItem /> renders correctly when item data is correctly 1`] = `
         }
       >
         <Text
-          preset="body03"
+          preset="body04"
           style={
             [
               {},
@@ -308,10 +308,10 @@ exports[`<UserItem /> renders correctly when item data is correctly 1`] = `
               },
               {
                 "fontFamily": "System",
-                "fontSize": 14,
+                "fontSize": 16,
                 "fontWeight": "600",
                 "letterSpacing": 0.15,
-                "lineHeight": 20,
+                "lineHeight": 24,
               },
               {
                 "minWidth": 150,
@@ -337,7 +337,7 @@ exports[`<UserItem /> renders correctly when item data is correctly 1`] = `
           }
         />
         <Text
-          preset="body03"
+          preset="body04"
           style={
             [
               {},
@@ -346,10 +346,10 @@ exports[`<UserItem /> renders correctly when item data is correctly 1`] = `
               },
               {
                 "fontFamily": "System",
-                "fontSize": 14,
+                "fontSize": 16,
                 "fontWeight": "600",
                 "letterSpacing": 0.15,
-                "lineHeight": 20,
+                "lineHeight": 24,
               },
               {
                 "flexWrap": "wrap",
@@ -371,7 +371,7 @@ exports[`<UserItem /> renders correctly when item data is correctly 1`] = `
         }
       >
         <Text
-          preset="support01"
+          preset="body02"
           style={
             [
               {},
@@ -380,10 +380,10 @@ exports[`<UserItem /> renders correctly when item data is correctly 1`] = `
               },
               {
                 "fontFamily": "System",
-                "fontSize": 12,
+                "fontSize": 16,
                 "fontWeight": "400",
-                "letterSpacing": 0.25,
-                "lineHeight": 16,
+                "letterSpacing": 0.15,
+                "lineHeight": 24,
               },
               {
                 "minWidth": 150,
@@ -409,7 +409,7 @@ exports[`<UserItem /> renders correctly when item data is correctly 1`] = `
           }
         />
         <Text
-          preset="support01"
+          preset="body02"
           style={
             [
               {},
@@ -418,10 +418,10 @@ exports[`<UserItem /> renders correctly when item data is correctly 1`] = `
               },
               {
                 "fontFamily": "System",
-                "fontSize": 12,
+                "fontSize": 16,
                 "fontWeight": "400",
-                "letterSpacing": 0.25,
-                "lineHeight": 16,
+                "letterSpacing": 0.15,
+                "lineHeight": 24,
               },
               {
                 "flexWrap": "wrap",
@@ -443,7 +443,7 @@ exports[`<UserItem /> renders correctly when item data is correctly 1`] = `
         }
       >
         <Text
-          preset="support01"
+          preset="body02"
           style={
             [
               {},
@@ -452,10 +452,10 @@ exports[`<UserItem /> renders correctly when item data is correctly 1`] = `
               },
               {
                 "fontFamily": "System",
-                "fontSize": 12,
+                "fontSize": 16,
                 "fontWeight": "400",
-                "letterSpacing": 0.25,
-                "lineHeight": 16,
+                "letterSpacing": 0.15,
+                "lineHeight": 24,
               },
               {
                 "minWidth": 150,
@@ -481,7 +481,7 @@ exports[`<UserItem /> renders correctly when item data is correctly 1`] = `
           }
         />
         <Text
-          preset="support01"
+          preset="body02"
           style={
             [
               {},
@@ -490,10 +490,10 @@ exports[`<UserItem /> renders correctly when item data is correctly 1`] = `
               },
               {
                 "fontFamily": "System",
-                "fontSize": 12,
+                "fontSize": 16,
                 "fontWeight": "400",
-                "letterSpacing": 0.25,
-                "lineHeight": 16,
+                "letterSpacing": 0.15,
+                "lineHeight": 24,
               },
               {
                 "flexWrap": "wrap",

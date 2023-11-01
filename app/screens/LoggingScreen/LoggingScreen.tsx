@@ -254,6 +254,5 @@ const $searchFilter: ViewStyle = {
 }
 
 const $flatListContentContainer: ViewStyle = {
-  paddingTop: spacing.size16,
   paddingBottom: spacing.size16,
 }

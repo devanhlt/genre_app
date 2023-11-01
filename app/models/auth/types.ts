@@ -22,8 +22,8 @@ export type AuthRequestModel = {
 }
 
 export type AuthResponseModel = {
-  accessToken: string
+  accessToken?: string
   tokenType: string
-  expiresIn: number
-  message: string
+  expiresIn?: number
+  message?: string
 }

@@ -32,7 +32,6 @@ export const UserModel = types
     ),
   })
   .actions(withSetPropAction)
-  .views(() => ({}))
 
 export interface User extends Instance<typeof UserModel> {}
 export interface UserSnapshotOut extends SnapshotOut<typeof UserModel> {}
