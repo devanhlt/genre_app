@@ -40,7 +40,7 @@ elsif podfile_properties.key?('ios.flipper') then
   end
 end
 
-target 'APIManagement' do
+target 'GenRe' do
   use_expo_modules!
   config = use_native_modules!
 
@@ -66,7 +66,7 @@ target 'APIManagement' do
 
   pod 'RNFS', :path => '../node_modules/react-native-fs'
   
-  target 'APIManagementTests' do
+  target 'GenReTests' do
     inherit! :complete
     # Pods for testing
   end

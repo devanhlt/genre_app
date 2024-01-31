@@ -1,4 +1,4 @@
-package com.apimanagement;
+package vn.com.generalilife.genre;
 
 import android.app.Application;
 import android.content.res.Configuration;

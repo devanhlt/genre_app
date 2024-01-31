@@ -1,10 +1,10 @@
 {
-  "name": "APIManagement",
-  "displayName": "APIManagement",
+  "name": "GenRe",
+  "displayName": "GenRe",
   "expo": {
-    "name": "APIManagement",
-    "slug": "APIManagement",
-    "scheme": "apimanagement",
+    "name": "GenRe",
+    "slug": "GenRe",
+    "scheme": "genre",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/images/app-icon-all.png",
@@ -22,7 +22,7 @@
     ],
     "android": {
       "icon": "./app/assets/images/app-icon-android-legacy.png",
-      "package": "com.apimanagement",
+      "package": "vn.com.generalilife.genre",
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/images/app-icon-android-adaptive-foreground.png",
         "backgroundImage": "./app/assets/images/app-icon-android-adaptive-background.png"
@@ -36,7 +36,7 @@
     "ios": {
       "icon": "./app/assets/images/app-icon-ios.png",
       "supportsTablet": true,
-      "bundleIdentifier": "com.apimanagement",
+      "bundleIdentifier": "vn.com.generalilife.genre",
       "splash": {
         "image": "./app/assets/images/splash-logo-white.png",
         "tabletImage": "./app/assets/images/splash-logo-white.png",
